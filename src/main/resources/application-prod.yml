@@ -1,0 +1,49 @@
+spring:
+  profiles:
+    active: prod
+  datasource:
+    url: jdbc:mysql://beep-db-instance.c96ms6m44sen.ap-northeast-2.rds.amazonaws.com:3306/beepDatabase
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: beep_user
+    password: qwer1234
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  cache:
+    type: redis
+
+  mail:
+    username: heunseo9@gmail.com
+    password: cyje eoaq uxsv upst
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        debug: true
+        smtp.auth: true
+        smtp.timeout: 50000 # SMTP ??? ??? ???? ??? ???? ?? ??? 50,000ms
+        smtp.starttls.enable: true
+
+  data:
+    redis:
+      token:
+        host: localhost
+        port: 6379
+      mail:
+        host: localhost # ?? ???? ???? ???? ?? ??
+        port: 6380
+
+server:
+  port: 9090
+
+jwt:
+  refresh-exp: 2592000000
+  access-exp: 60000
+  prefix: Bearer
+  header: Authorization
+  secret-key: eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY5ODA2OTUyMiwiaWF0IjoxNjk4MDY5NTIyfQ.HcGnidly9R-FK13BH40ETzgZx5JegHgUPAakQU0WP0A
