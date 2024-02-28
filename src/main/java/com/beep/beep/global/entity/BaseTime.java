@@ -20,10 +20,10 @@ public abstract class BaseTime {
     @CreatedDate
     @Column(updatable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    protected LocalDateTime createdDateTime;
+    protected LocalDateTime createdDate;
 
     @LastModifiedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    protected LocalDateTime modifiedDateTime;
+    protected LocalDateTime modifiedDate;
 
 }
