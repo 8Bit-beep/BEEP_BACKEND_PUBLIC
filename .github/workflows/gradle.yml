@@ -40,4 +40,8 @@ jobs:
       - name: Delete old container
         run: docker rm -f beep-container
       - name: Run docker container
-        run: docker run -d -p 8080:8080 --name beep-container ${{ secrets.DOCKER_USERNAME }}/beep
+        run:
+#          docker run -d -p 8080:8080 --name beep-container ${{ secrets.DOCKER_USERNAME }}/beep
+          docker-compose up -d
+          docker image prune -f
+
