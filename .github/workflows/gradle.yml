@@ -43,7 +43,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }} # pem 키
           script:
             docker pull ${{ secrets.DOCKER_USERNAME }}/beep:latest
-            docker rm --force beep-container
+            docker rm -f beep-container
             docker-compose up -d
-            docker image prune --force
+            docker image prune -f
 
