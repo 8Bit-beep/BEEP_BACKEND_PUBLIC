@@ -45,5 +45,5 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/beep:latest
             docker rm -f beep-container
             docker-compose up -d
-            docker image prune -a -f 
+            docker image prune --force
 
