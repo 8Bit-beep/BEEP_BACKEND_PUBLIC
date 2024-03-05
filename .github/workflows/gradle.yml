@@ -32,16 +32,19 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/beep:latest
 
   deploy:
-    needs: build
     runs-on: [aws-ec2]
+    needs: build
     steps:
-      - name: Pull Image From Docker hub
-        run: docker pull ${{ secrets.DOCKER_USERNAME }}/beep:latest
-      - name: Delete old container
-        run: docker rm -f beep-container
-      - name: Run docker container
+      - name: AWS Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }} # EC2 인스턴스 퍼블릭 DNS
+          username: ec2-user
+          key: ${{ secrets.PRIVATE_KEY }} # pem 키
         run:
+          docker pull ${{ secrets.DOCKER_USERNAME }}/beep:latest
+          docker rm -f beep-container
 #          docker run -d -p 8080:8080 --name beep-container ${{ secrets.DOCKER_USERNAME }}/beep
           docker-compose up -d
-          docker image prune -f
+          docker image prune --force
 
