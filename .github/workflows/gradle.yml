@@ -42,8 +42,16 @@ jobs:
           username: ec2-user
           key: ${{ secrets.PRIVATE_KEY }} # pem 키
           script: |
+            docker stop $(docker ps -a -q)
+            docker rm $(docker ps --filter 'status=exited' -a -q)
+            docker image prune -a -f
+            
             docker pull ${{ secrets.DOCKER_USERNAME }}/beep:latest
-            docker rm -f beep-container
-            docker-compose up -d
-            docker image prune -f
+            docker pull redis:
 
+            docker run --name redis -p 6379:6379 --network redis-network -it -d redis
+            
+            docker run -d --name beep_redis redis
+
+            docker run -d --name beep_app --log-driver=syslog -p 80:8080 \
+              ${{ secrets.DOCKER_USERNAME }}/beep:latest
