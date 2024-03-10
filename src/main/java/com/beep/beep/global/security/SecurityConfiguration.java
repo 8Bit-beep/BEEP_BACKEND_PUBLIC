@@ -30,17 +30,18 @@ public class SecurityConfiguration {
         http
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                )
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // 프리플라이트 :  브라우저에서 사전에 요청하는 프리플라이트 요청
-//                                .requestMatchers("/auth/**").permitAll()
-//                                .requestMatchers("/student/**").authenticated()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(new LogFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 }
