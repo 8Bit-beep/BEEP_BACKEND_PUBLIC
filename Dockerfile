@@ -1,7 +1,5 @@
-FROM openjdk:17-jdk
-WORKDIR /app
-ARG JAR_FILE=build/libs/beep-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} /beep.jar
-EXPOSE 8080
-
-ENTRYPOINT ["java","-jar","/beep.jar"]
+FROM openjdk:17
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} app.jar
+ENV TZ=Asia/Seoul
+ENTRYPOINT ["java","-jar","/app.jar","-Duser.timezone=Asia/Seoul"]
