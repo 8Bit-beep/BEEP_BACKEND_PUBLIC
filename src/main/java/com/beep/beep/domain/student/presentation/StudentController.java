@@ -3,8 +3,6 @@ package com.beep.beep.domain.student.presentation;
 
 import com.beep.beep.domain.student.presentation.dto.response.StudentInfoResponse;
 import com.beep.beep.domain.student.service.StudentService;
-import com.beep.beep.domain.user.domain.enums.UserType;
-import com.beep.beep.global.annotation.AuthCheck;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +23,6 @@ public class StudentController {
 
     @GetMapping("/info")
     @ResponseStatus(HttpStatus.OK)
-    @AuthCheck(role = UserType.ROLE_STUDENT)
     @Operation(summary = "Get StudentInfo API")
     public StudentInfoResponse getInfo(
             @RequestHeader(name = "Authorization") String token

@@ -3,17 +3,22 @@ package com.beep.beep.domain.auth.presentation;
 
 import com.beep.beep.domain.auth.presentation.dto.request.SignInRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpRequest;
+import com.beep.beep.domain.auth.presentation.dto.request.TokenRefreshRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.WithdrawalRequest;
 import com.beep.beep.domain.auth.presentation.dto.response.SignInResponse;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshResponse;
 import com.beep.beep.domain.auth.service.AuthService;
+import com.beep.beep.domain.user.presentation.dto.request.ChangePwRequest;
+import com.beep.beep.domain.user.presentation.dto.response.UserIdResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,29 +64,38 @@ public class AuthController {
     @GetMapping("/refresh")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Total Token-Refresh API")
-    public TokenRefreshResponse accessRefreshToken(
-            @RequestHeader(name = "Authorization") String accessToken
+    public TokenRefreshResponse refresh(
+            @Validated @RequestBody TokenRefreshRequest request
     ) {
-        return authService.tokenRefresh(accessToken);
+        return authService.refresh(request);
     }
 
-    @DeleteMapping("/logout")
+    @GetMapping("/id")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Total Logout API")
-    public void logout(
-            @RequestHeader(name = "Authorization") String accessToken
+    @Operation(summary = "Get UserId API")
+    public UserIdResponse findId(
+            @RequestParam String email
     ){
-        authService.logout(accessToken);
+        return authService.findId(email);
     }
 
-    @DeleteMapping("/withdrawal")
+    @GetMapping("/check")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Total Withdrawal API")
-    public void withdrawal(
-            @RequestHeader(name = "Authorization") String accessToken,
-            @RequestBody WithdrawalRequest request
-    ){
-        authService.withdrawal(accessToken,request);
+    @Operation(summary = "Check Id-Email API")
+    public void checkIdEmail(
+            @RequestParam String id,
+            @RequestParam String email
+    ) {
+        authService.checkIdEmail(id,email);
+    }
+
+    @PutMapping("/pw")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Changing Password API")
+    public void changePw(
+            @RequestBody ChangePwRequest request
+    ) {
+        authService.changePw(request);
     }
 
 

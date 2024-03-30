@@ -8,8 +8,6 @@ import com.beep.beep.domain.beep.presentation.dto.response.GetRoomResponse;
 import com.beep.beep.domain.beep.presentation.dto.response.GetStudentResponse;
 import com.beep.beep.domain.beep.presentation.dto.response.SearchStudentResponse;
 import com.beep.beep.domain.beep.service.BeepService;
-import com.beep.beep.domain.user.domain.enums.UserType;
-import com.beep.beep.global.annotation.AuthCheck;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +35,6 @@ public class BeepController {
 
     @PutMapping("/enter")
     @ResponseStatus(HttpStatus.CREATED)
-    @AuthCheck(role = UserType.ROLE_STUDENT)
     @Operation(summary = "Entering Room API")
     public void enterRoom(
             @RequestHeader(name = "Authorization") String token,
@@ -48,7 +45,6 @@ public class BeepController {
 
     @PutMapping("/exit")
     @ResponseStatus(HttpStatus.CREATED)
-    @AuthCheck(role = UserType.ROLE_STUDENT)
     @Operation(summary = "Exiting Room API")
     public void exitRoom(
             @RequestHeader(name = "Authorization") String token,
@@ -59,7 +55,6 @@ public class BeepController {
 
     @GetMapping("/rooms")
     @ResponseStatus(HttpStatus.OK)
-    @AuthCheck(role = UserType.ROLE_TEACHER)
     @Operation(summary = "Searching Rooms API")
     public List<GetRoomResponse> getRooms(
             @RequestParam String name
@@ -69,7 +64,6 @@ public class BeepController {
 
     @GetMapping("/attendance")
     @ResponseStatus(HttpStatus.OK)
-    @AuthCheck(role = UserType.ROLE_TEACHER)
     @Operation(summary = "Get Attendance of Room API")
     public List<GetAttendanceResponse> getAttendance(
             @RequestParam String code
@@ -79,7 +73,6 @@ public class BeepController {
 
     @GetMapping("/students")
     @ResponseStatus(HttpStatus.OK)
-    @AuthCheck(role = UserType.ROLE_TEACHER)
     @Operation(summary = "Get Students' Info By Grade-Cls API")
     public List<GetStudentResponse> getStudents(
             @RequestParam int grade,
@@ -90,7 +83,6 @@ public class BeepController {
 
     @GetMapping("/{name}/students")
     @ResponseStatus(HttpStatus.OK)
-    @AuthCheck(role = UserType.ROLE_TEACHER)
     @Operation(summary = "Search Students API")
     public List<SearchStudentResponse> searchStudents(
             @PathVariable String name

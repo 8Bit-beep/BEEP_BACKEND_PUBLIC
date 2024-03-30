@@ -1,4 +1,4 @@
-package com.beep.beep.global.security.jwt;
+package com.beep.beep.global.security.jwt.config;
 
 
 import lombok.AllArgsConstructor;

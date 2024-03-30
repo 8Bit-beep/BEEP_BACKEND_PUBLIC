@@ -1,8 +1,10 @@
 package com.beep.beep.domain.user.service;
 
 
+import com.beep.beep.domain.auth.presentation.dto.request.WithdrawalRequest;
 import com.beep.beep.domain.student.facade.StudentFacade;
 import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.exception.PasswordWrongException;
 import com.beep.beep.domain.user.facade.UserFacade;
 import com.beep.beep.domain.user.presentation.dto.request.ChangePwRequest;
 import com.beep.beep.domain.user.presentation.dto.response.UserIdResponse;
@@ -17,26 +19,16 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserFacade userFacade;
-    private final StudentFacade studentIdFacade;
     private final PasswordEncoder encoder;
     private final JwtProvider jwtProvider;
 
-    public UserIdResponse findId(String email) {
-        String id = userFacade.findIdByEmail(email);
+    public void withdrawal(String token,WithdrawalRequest request) {
+        User user = userFacade.findUserByEmail(jwtProvider.getTokenSubject(token));
 
-        return UserIdResponse.builder()
-                .id(id).build();
-    }
+        if (!encoder.matches(request.getPassword(), user.getPassword()))
+            throw PasswordWrongException.EXCEPTION;
 
-    public void checkIdEmail(String id,String email) {
-        userFacade.existsByIdAndEmail(id,email);
-    }
-
-    @Transactional
-    public void changePw(ChangePwRequest request){
-        User user = userFacade.findUserById(request.getId());
-
-        user.updateUser(encoder.encode(request.getPassword()));
+        userFacade.delete(user);
     }
 
 

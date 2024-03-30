@@ -18,6 +18,8 @@ jobs:
 
     - name: set chmod
       run: chmod +x ./gradlew
+
+
         
     - name: Build with Gradle
       run: ./gradlew bootJar
@@ -42,3 +44,5 @@ jobs:
           docker rmi ${{ secrets.DOCKER_USERNAME }}/beep:latest
           docker pull ${{ secrets.DOCKER_USERNAME }}/beep:latest
           docker run -d -p 8080:8080 --name beep ${{ secrets.DOCKER_USERNAME }}/beep:latest
+
+        # 레디스 network 해줘야됨

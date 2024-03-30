@@ -1,18 +1,25 @@
 package com.beep.beep.domain.auth.service;
 
-import com.beep.beep.domain.auth.domain.Token;
-import com.beep.beep.domain.auth.facade.TokenFacade;
 import com.beep.beep.domain.auth.presentation.dto.request.SignInRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpRequest;
+import com.beep.beep.domain.auth.presentation.dto.request.TokenRefreshRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.WithdrawalRequest;
 import com.beep.beep.domain.auth.presentation.dto.response.SignInResponse;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshResponse;
 import com.beep.beep.domain.beep.facade.BeepFacade;
 import com.beep.beep.domain.student.facade.StudentFacade;
 import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.domain.enums.UserType;
 import com.beep.beep.domain.user.exception.PasswordWrongException;
 import com.beep.beep.domain.user.facade.UserFacade;
+import com.beep.beep.domain.user.presentation.dto.request.ChangePwRequest;
+import com.beep.beep.domain.user.presentation.dto.response.UserIdResponse;
 import com.beep.beep.global.security.jwt.JwtProvider;
+import com.beep.beep.global.security.jwt.enums.JwtType;
+import com.beep.beep.global.security.jwt.exception.TokenTypeException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,7 +33,6 @@ public class AuthService {
     private final UserFacade userFacade;
     private final StudentFacade studentFacade;
     private final BeepFacade beepFacade;
-    private final TokenFacade tokenFacade;
 
     public void idCheck(String id) {
         userFacade.existsById(id);
@@ -46,40 +52,41 @@ public class AuthService {
         if (!encoder.matches(request.getPassword(), user.getPassword()))
             throw PasswordWrongException.EXCEPTION;
 
-        String accessToken  =  jwtProvider.generateAccessToken(user.getId());
-        String refreshToken =  jwtProvider.generateRefreshToken(user.getId());
-
-        tokenFacade.saveTokenInfo(user.getId(),refreshToken,accessToken);
+        String accessToken  =  jwtProvider.generateAccessToken(user.getEmail(),user.getAuthority());
+        String refreshToken =  jwtProvider.generateRefreshToken(user.getEmail(),user.getAuthority());
 
         return SignInResponse.builder()
-                .accessToken(accessToken).build();
+                .accessToken(accessToken)
+                .refreshToken(refreshToken).build();
     }
 
-    public TokenRefreshResponse tokenRefresh(String accessToken){
-        accessToken = jwtProvider.validateAccessToken(accessToken);
+    public TokenRefreshResponse refresh(TokenRefreshRequest request){
+        Jws<Claims> claims = jwtProvider.getClaims(jwtProvider.extractToken(request.getToken())); // 토큰 정보 발췌
+
+        if (jwtProvider.isWrongType(claims, JwtType.REFRESH)) // refresh가 아니면
+            throw TokenTypeException.EXCEPTION;
 
         return TokenRefreshResponse.builder()
-                .accessToken(accessToken).build();
+                .accessToken(jwtProvider.generateAccessToken(claims.getBody().getSubject(), (UserType) claims.getHeader().get("authority"))).build();
     }
 
-    public void logout(String accessToken){
-        Token tokenInfo = tokenFacade.findByAccessToken(jwtProvider.parseToken(accessToken));
-        jwtProvider.validateRefreshToken(tokenInfo.getRefreshToken());
+    public UserIdResponse findId(String email) {
+        String id = userFacade.findIdByEmail(email);
 
-        tokenFacade.delete(tokenInfo);
+        return UserIdResponse.builder()
+                .id(id).build();
     }
 
-    public void withdrawal(String accessToken, WithdrawalRequest request) {
-        User user = userFacade.findUserById(jwtProvider.getTokenSubject(jwtProvider.parseToken(accessToken)));
-
-        if (!encoder.matches(request.getPassword(), user.getPassword()))
-            throw PasswordWrongException.EXCEPTION;
-
-        userFacade.delete(user);
-
+    public void checkIdEmail(String id,String email) {
+        userFacade.existsByIdAndEmail(id,email);
     }
 
+    @Transactional
+    public void changePw(ChangePwRequest request){
+        User user = userFacade.findUserById(request.getId());
 
+        user.updateUser(encoder.encode(request.getPassword()));
+    }
 
 
 }

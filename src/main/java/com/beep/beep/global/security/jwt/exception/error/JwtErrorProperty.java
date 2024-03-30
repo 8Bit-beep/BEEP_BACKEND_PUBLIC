@@ -10,12 +10,11 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum JwtErrorProperty implements ErrorProperty {
-    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
-    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
-    TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "토큰이 존재하지 않습니다."),
-    REFRESH_NOT_FOUND(HttpStatus.NOT_FOUND,"리프레시 토큰이 존재하지 않습니다."),
-    REFRESH_EXPIRED(HttpStatus.UNAUTHORIZED,"리프레시 토큰이 만료되었습니다."),
-    UNEXPIRED_TOKEN(HttpStatus.UNAUTHORIZED,"만료되지 않은 토큰입니다.");
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 토큰"),
+    ILLEGAL_TOKEN(HttpStatus.UNAUTHORIZED, "잘못된 토큰"),
+    TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "토큰이 존재하지 않음"),
+    TOKEN_TYPE_ERROR(HttpStatus.BAD_REQUEST,"잘못된 타입"),
+    UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED,"지원되지 않는 토큰");
 
     private final HttpStatus status;
     private final String message;

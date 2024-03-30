@@ -40,7 +40,8 @@ public class UserFacade {
     }
 
     public String findIdByEmail(String email){
-        return userRepository.findByEmail(email).getId();
+        return userRepository.findByEmail(email)
+                .get().getId();
     }
 
     public void existsByIdAndEmail(String id,String email) {

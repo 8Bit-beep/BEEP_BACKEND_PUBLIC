@@ -17,6 +17,7 @@ public class StudentSignUpRequest {
     private String email;
     private String firstname;
     private String lastname;
+    private UserType authority;
 
     private int grade;
     private int cls;

@@ -3,8 +3,6 @@ package com.beep.beep.domain.teacher.presentation;
 
 import com.beep.beep.domain.teacher.presentation.dto.response.TeacherInfoResponse;
 import com.beep.beep.domain.teacher.service.TeacherService;
-import com.beep.beep.domain.user.domain.enums.UserType;
-import com.beep.beep.global.annotation.AuthCheck;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +23,13 @@ public class TeacherController {
 
     @GetMapping("/info")
     @ResponseStatus(HttpStatus.OK)
-    @AuthCheck(role = UserType.ROLE_TEACHER)
     @Operation(summary = "Get TeacherInfo API")
     public TeacherInfoResponse getInfo(
             @RequestHeader String token
     ) {
         return teacherService.getTeacherInfo(token);
     }
+
 
 
 }
