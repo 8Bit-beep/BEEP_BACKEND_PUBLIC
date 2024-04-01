@@ -4,7 +4,6 @@ package com.beep.beep.domain.auth.presentation;
 import com.beep.beep.domain.auth.presentation.dto.request.SignInRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.TokenRefreshRequest;
-import com.beep.beep.domain.auth.presentation.dto.request.WithdrawalRequest;
 import com.beep.beep.domain.auth.presentation.dto.response.SignInResponse;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshResponse;
 import com.beep.beep.domain.auth.service.AuthService;
@@ -15,14 +14,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,11 +31,11 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @GetMapping("/id-check")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Student Id-Check API")
     public void studentIdCheck(
-            @RequestParam String id
+            @PathVariable String id
     ) {
         authService.idCheck(id);
     }
@@ -53,10 +50,9 @@ public class AuthController {
     }
 
     @PostMapping("/sign-in")
-    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Total Sign-In API")
     public SignInResponse signIn(
-            @RequestBody SignInRequest request
+            @Validated @RequestBody SignInRequest request
     ) {
         return authService.signIn(request);
     }
@@ -70,21 +66,21 @@ public class AuthController {
         return authService.refresh(request);
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{email}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get UserId API")
     public UserIdResponse findId(
-            @RequestParam String email
+            @PathVariable String email
     ){
         return authService.findId(email);
     }
 
-    @GetMapping("/check")
+    @GetMapping("/{email}/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Check Id-Email API")
     public void checkIdEmail(
-            @RequestParam String id,
-            @RequestParam String email
+            @PathVariable String email,
+            @PathVariable String id
     ) {
         authService.checkIdEmail(id,email);
     }
@@ -97,8 +93,6 @@ public class AuthController {
     ) {
         authService.changePw(request);
     }
-
-
 
 
 }

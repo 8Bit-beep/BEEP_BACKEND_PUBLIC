@@ -23,6 +23,7 @@ public class AdminTeacherResponse {
         return AdminTeacherResponse.builder()
                 .idx(user.getIdx())
                 .id(user.getId())
+                .email(user.getEmail())
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .department(job.getDepartment())

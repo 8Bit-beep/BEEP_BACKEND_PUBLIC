@@ -16,4 +16,8 @@ public class TeacherFacade {
         return jobRepository.findByUserIdx(userIdx);
     }
 
+    public void save(Job job){
+        jobRepository.save(job);
+    }
+
 }

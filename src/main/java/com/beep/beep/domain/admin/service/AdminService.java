@@ -1,6 +1,7 @@
 package com.beep.beep.domain.admin.service;
 
 
+import com.beep.beep.domain.admin.presentation.dto.request.TeacherSignUpRequest;
 import com.beep.beep.domain.admin.presentation.dto.response.AdminStudentResponse;
 import com.beep.beep.domain.admin.presentation.dto.response.AdminTeacherResponse;
 import com.beep.beep.domain.student.facade.StudentFacade;
@@ -8,6 +9,7 @@ import com.beep.beep.domain.teacher.domain.facade.TeacherFacade;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class AdminService {
     private final UserFacade userFacade;
     private final StudentFacade studentFacade;
     private final TeacherFacade teacherFacade;
+    private final PasswordEncoder encoder;
 
     public List<AdminStudentResponse> studentList(){
         List<User> studentList = userFacade.findAllStudents();
@@ -37,4 +40,13 @@ public class AdminService {
                         AdminTeacherResponse.of(teacher,teacherFacade.findByUserIdx(teacher.getIdx())))
                 .toList();
     }
+
+    public void teacherSignUp(TeacherSignUpRequest request){
+        userFacade.save(request.toUserEntity(encoder.encode(request.getPassword())));
+        User user = userFacade.findUserById(request.getId());
+
+        teacherFacade.save(request.toJobEntity(user));
+    }
+
+
 }

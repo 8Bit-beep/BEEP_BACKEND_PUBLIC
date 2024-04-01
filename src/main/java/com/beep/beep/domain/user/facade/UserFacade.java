@@ -35,6 +35,7 @@ public class UserFacade {
     }
 
     public User findUserById(String id) {
+        System.out.println(id);
         return userRepository.findById(id)
                 .orElseThrow(() -> UserNotFoundException.EXCEPTION );
     }
@@ -46,6 +47,12 @@ public class UserFacade {
 
     public void existsByIdAndEmail(String id,String email) {
         userRepository.findByIdEmail(id,email)
+                .orElseThrow(() ->
+                        UserNotFoundException.EXCEPTION);
+    }
+
+    public User findUserByEmail(String email){
+        return userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         UserNotFoundException.EXCEPTION);
     }
