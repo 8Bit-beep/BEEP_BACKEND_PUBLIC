@@ -33,15 +33,14 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
-//                .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(handlingConfigures -> handlingConfigures.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(requests -> requests
-//                        .requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
-//                        .requestMatchers("/auth/**","/email/**").permitAll()
-//                        .requestMatchers("/student/**").hasAuthority("ROLE_STUDENT")
-//                        .requestMatchers("/teacher/**").hasAuthority("ROLE_TEACHER")
-//                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
+                        .requestMatchers("/auth/**","/email/**").permitAll()
+                        .requestMatchers("/student/**").hasAuthority("ROLE_STUDENT")
+                        .requestMatchers("/teacher/**").hasAuthority("ROLE_TEACHER")
+                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
