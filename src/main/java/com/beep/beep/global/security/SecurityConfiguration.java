@@ -37,7 +37,7 @@ public class SecurityConfiguration {
                 .exceptionHandling(handlingConfigures -> handlingConfigures.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
-                        .requestMatchers("/auth/**","/email/**").permitAll()
+                        .requestMatchers("/auth/**","/email/**","/test/**").permitAll()
                         .requestMatchers("/student/**").hasAuthority("ROLE_STUDENT")
                         .requestMatchers("/teacher/**").hasAuthority("ROLE_TEACHER")
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
