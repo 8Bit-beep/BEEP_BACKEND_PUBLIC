@@ -18,11 +18,9 @@ jobs:
 
     - name: set chmod
       run: chmod +x ./gradlew
-
-
         
     - name: Build with Gradle
-      run: ./gradlew bootJar
+      run: ./gradlew clean bootJar -Pprofile=prod
 
     - name: Docker build & push to prod
       run: |
