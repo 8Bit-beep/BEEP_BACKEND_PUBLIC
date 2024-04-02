@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -75,12 +76,12 @@ public class AuthController {
         return authService.findId(email);
     }
 
-    @GetMapping("/{email}/{id}")
+    @GetMapping("/email/id")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Check Id-Email API")
     public void checkIdEmail(
-            @PathVariable String email,
-            @PathVariable String id
+            @RequestParam String email,
+            @RequestParam String id
     ) {
         authService.checkIdEmail(id,email);
     }
