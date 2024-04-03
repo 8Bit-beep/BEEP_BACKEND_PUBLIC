@@ -20,6 +20,7 @@ public class GetStudentResponse {
     private int num;
 
     private String room;
+    private String floor;
 
     public static GetStudentResponse of(StudentId studentId,User user,Room room) {
         return GetStudentResponse.builder()
@@ -28,7 +29,8 @@ public class GetStudentResponse {
                 .grade(studentId.getGrade())
                 .cls(studentId.getCls())
                 .num(studentId.getNum())
-                .room(room.getName()).build();
+                .room(room.getName())
+                .floor(room.getFloor()).build();
     }
 
 }

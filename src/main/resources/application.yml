@@ -1,14 +1,12 @@
 spring:
-  profiles:
-    active: local
   datasource:
-    url: jdbc:mysql://localhost:3306/beep
+    url: jdbc:mysql://beep-db-instance.c96ms6m44sen.ap-northeast-2.rds.amazonaws.com:3306/beepDatabase
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: beepuser
-    password: 1
+    username: beep_user
+    password: qwer1234
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
@@ -32,13 +30,28 @@ spring:
   data:
     redis:
       mail:
-        host: localhost # ?? ???? ???? ???? ?? ??
-        port: 6379
+        host: redis # ?? ???? ???? ???? ?? ??
+        port: 6380
 
 jwt:
-  refresh-exp: 2592000000
-  access-exp: 60000
+  refresh-exp: 2592000000 #30일
+  access-exp: 86400000 # 24시간
   prefix: Bearer
   header: Authorization
   secret-key: 5ef05a8c246eb343d8d94e777b56eb386d403be81cfeabba90035e429a4e808c
+
+springdoc:
+  api-docs:
+    enabled: true
+    version: openapi_3_0
+    path: /v3/api-docs
+
+  default-consumes-media-type: application/json
+  auto-tag-classes: true
+  groups:
+    enabled: false
+
+  swagger-ui:
+    operationsSorter: method
+    path: /swagger-ui.html
 
