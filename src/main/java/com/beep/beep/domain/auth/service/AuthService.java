@@ -52,12 +52,13 @@ public class AuthService {
         if (!encoder.matches(request.getPassword(), user.getPassword()))
             throw PasswordWrongException.EXCEPTION;
 
-        String accessToken  =  jwtProvider.generateAccessToken(user.getEmail(),user.getAuthority());
-        String refreshToken =  jwtProvider.generateRefreshToken(user.getEmail(),user.getAuthority());
+//        String accessToken  =  jwtProvider.generateAccessToken(user.getEmail(),user.getAuthority());
+//        String refreshToken =  jwtProvider.generateRefreshToken(user.getEmail(),user.getAuthority());
 
         return SignInResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken).build();
+                .accessToken(jwtProvider.generateAccessToken(user.getEmail(),user.getAuthority()))
+                .refreshToken(jwtProvider.generateRefreshToken(user.getEmail(),user.getAuthority()))
+                .build();
     }
 
     public TokenRefreshResponse refresh(TokenRefreshRequest request){

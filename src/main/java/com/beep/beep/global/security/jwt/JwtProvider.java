@@ -112,37 +112,6 @@ public class JwtProvider {
         return token; // 토큰 이상하면 그냥 token return
     }
 
-
-    public String resolveToken(HttpServletRequest request){
-        return parseToken(request.getHeader(jwtProperties.getHeader()));
-    }
-
-    public User userValidateToken(String token){
-        return userRepository.findById(getTokenSubject(token))
-                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
-    }
-
-    public void validateRefreshToken(String refreshToken) {
-        try {
-            System.out.println(refreshToken);
-            Jwts.parserBuilder().setSigningKey(getSigningKey(jwtProperties.getSecretKey()))
-                    .build().parseClaimsJws(refreshToken);
-        } catch (ExpiredJwtException e) {
-//            throw ExpiredRefreshTokenException.EXCEPTION;
-        } catch (Exception e) {
-            throw IllegalTokenException.EXCEPTION;
-        }
-    }
-
-    private String generateToken(String userId,Long exp){
-        return Jwts.builder()
-                .setSubject(userId)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + exp))
-                .signWith(getSigningKey(jwtProperties.getSecretKey()), SignatureAlgorithm.HS256)
-                .compact();
-    }
-
     public String parseToken(String bearerToken) {
         if (bearerToken != null && bearerToken.startsWith(jwtProperties.getPrefix())){
             return bearerToken.replace(jwtProperties.getPrefix(),"").replaceAll("\\s", "");
@@ -152,24 +121,6 @@ public class JwtProvider {
 
 
     public String getTokenSubject(String token){
-        return getTokenBody(token).getSubject();
-    }
-
-
-    private Claims getTokenBody(String token){
-        try {
-            return Jwts.parserBuilder().setSigningKey(getSigningKey(jwtProperties.getSecretKey()))
-                    .build().parseClaimsJws(token).getBody();
-        } catch (ExpiredTokenException e) {
-            throw ExpiredTokenException.EXCEPTION;
-       } catch (Exception e){
-            System.out.println("??");
-            throw IllegalTokenException.EXCEPTION;
-        }
-    }
-
-    private Key getSigningKey(String secretKey){
-        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
-        return Keys.hmacShaKeyFor(keyBytes);
+        return getClaims(token).getBody().getSubject();
     }
 }

@@ -27,7 +27,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @DeleteMapping("/withdrawal")
+    @DeleteMapping()
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Total Withdrawal API")
     public void withdrawal(

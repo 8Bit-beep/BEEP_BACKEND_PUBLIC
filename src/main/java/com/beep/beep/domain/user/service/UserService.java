@@ -9,6 +9,8 @@ import com.beep.beep.domain.user.facade.UserFacade;
 import com.beep.beep.domain.user.presentation.dto.request.ChangePwRequest;
 import com.beep.beep.domain.user.presentation.dto.response.UserIdResponse;
 import com.beep.beep.global.security.jwt.JwtProvider;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +25,7 @@ public class UserService {
     private final JwtProvider jwtProvider;
 
     public void withdrawal(String token,WithdrawalRequest request) {
-        User user = userFacade.findUserByEmail(jwtProvider.getTokenSubject(token));
+        User user = userFacade.findUserByEmail(jwtProvider.getTokenSubject(jwtProvider.parseToken(token)));
 
         if (!encoder.matches(request.getPassword(), user.getPassword()))
             throw PasswordWrongException.EXCEPTION;

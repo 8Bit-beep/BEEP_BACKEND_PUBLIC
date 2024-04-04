@@ -1,4 +1,4 @@
-package com.beep.beep.domain.beep.presentation.dto.request;
+package com.beep.beep.domain.student.presentation.dto.request;
 
 
 import lombok.AccessLevel;
