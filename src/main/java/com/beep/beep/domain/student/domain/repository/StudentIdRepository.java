@@ -17,4 +17,10 @@ public interface StudentIdRepository extends CrudRepository<StudentId,String> {
     @Query("SELECT s FROM StudentId s WHERE s.grade = :grade AND s.cls = :cls")
     List<StudentId> findByGradeAndCls(@Param("grade") int grade, @Param("cls") int cls);
 
+    @Query("SELECT DISTINCT s.cls FROM StudentId s WHERE s.grade = :grade")
+    List<Integer> findClsByGrade(@Param("grade") int grade);
+
+    @Query("SELECT COUNT(s) FROM StudentId s WHERE s.grade = :grade AND s.cls = :cls")
+    int countByCls(@Param("grade") int grade,@Param("cls") int cls);
+
 }
