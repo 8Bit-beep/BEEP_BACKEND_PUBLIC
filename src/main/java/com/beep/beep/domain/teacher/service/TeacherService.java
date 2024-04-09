@@ -10,6 +10,7 @@ import com.beep.beep.domain.student.domain.StudentId;
 import com.beep.beep.domain.student.facade.StudentFacade;
 import com.beep.beep.domain.teacher.domain.Job;
 import com.beep.beep.domain.teacher.domain.facade.TeacherFacade;
+import com.beep.beep.domain.teacher.presentation.dto.response.GetClsResponse;
 import com.beep.beep.domain.teacher.presentation.dto.response.TeacherInfoResponse;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.facade.UserFacade;
@@ -74,6 +75,16 @@ public class TeacherService {
                     return SearchStudentResponse.of(user, studentFacade.findByUserIdx(userIdx), beepFacade.findRoomByUserIdx(userIdx));
                 })
                 .toList();
+    }
+
+    public List<GetClsResponse> getCls(int grade){
+        List<Integer> clsList = studentFacade.findAllClsByGrade(grade);
+
+        return clsList.stream()
+                .map( cls -> {
+                    int headCount = studentFacade.countStudentsByCls(grade,cls);
+                    return GetClsResponse.of(cls,headCount);
+                }).toList();
     }
 
 

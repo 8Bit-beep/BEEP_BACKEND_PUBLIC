@@ -5,6 +5,7 @@ import com.beep.beep.domain.student.presentation.dto.response.GetAttendanceRespo
 import com.beep.beep.domain.student.presentation.dto.response.GetRoomResponse;
 import com.beep.beep.domain.student.presentation.dto.response.GetStudentResponse;
 import com.beep.beep.domain.student.presentation.dto.response.SearchStudentResponse;
+import com.beep.beep.domain.teacher.presentation.dto.response.GetClsResponse;
 import com.beep.beep.domain.teacher.presentation.dto.response.TeacherInfoResponse;
 import com.beep.beep.domain.teacher.service.TeacherService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,7 +67,7 @@ public class TeacherController {
         return teacherService.getStudents(grade,cls);
     }
 
-    @GetMapping("/students")
+    @GetMapping("/students/name")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Search Students API")
     public List<SearchStudentResponse> searchStudents(
@@ -74,5 +75,15 @@ public class TeacherController {
     ){
         return teacherService.searchStudents(name);
     }
+
+    @GetMapping("/students/{grade}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "get Cls API")
+    public List<GetClsResponse> getCls(
+            @PathVariable int grade
+    ){
+        return teacherService.getCls(grade);
+    }
+
 
 }

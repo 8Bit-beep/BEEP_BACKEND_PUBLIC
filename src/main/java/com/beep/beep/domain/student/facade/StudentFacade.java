@@ -22,6 +22,14 @@ public class StudentFacade {
         return studentIdRepository.findByGradeAndCls(grade,cls);
     }
 
+    public List<Integer> findAllClsByGrade(int grade){
+        return studentIdRepository.findClsByGrade(grade);
+    }
+
+    public int countStudentsByCls(int grade,int cls){
+        return studentIdRepository.countByCls(grade,cls);
+    }
+
     public void save(StudentId studentId){
         studentIdRepository.save(studentId);
     }
