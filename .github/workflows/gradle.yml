@@ -18,6 +18,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: make application-prod.yml
+        run: |
+          cd ./src/main/resources-prod
+          touch ./application.yml
+          echo "${{ secrets.APPLICATION_PROD }}" > ./application.yml
+
       - name: set chmod
         run: chmod +x ./gradlew
 
