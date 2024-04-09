@@ -18,11 +18,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: make application-prod.yml
-        run: |
-          cd ./src/main/resources-prod
-          touch ./application.yml
-          echo "${{ secrets.APPLICATION_PROD }}" > ./application.yml
+      - name: Copy application.yml
+        env:
+          OCCUPY_SECRET: ${{ secrets.APPLICATION_PROD }}
+          OCCUPY_SECRET_DIR: src/main/resources
+          OCCUPY_SECRET_TEST_DIR: src/test/resources-prod
+          OCCUPY_SECRET_DIR_FILE_NAME: application-secret.yml
+        run: echo $OCCUPY_SECRET | base64 --decode > $OCCUPY_SECRET_DIR/$OCCUPY_SECRET_DIR_FILE_NAME &&
+          echo $OCCUPY_SECRET | base64 --decode > $OCCUPY_SECRET_TEST_DIR/$OCCUPY_SECRET_DIR_FILE_NAME
 
       - name: set chmod
         run: chmod +x ./gradlew
