@@ -51,5 +51,4 @@ jobs:
             docker rm beep
             docker rmi ${{ secrets.DOCKER_USERNAME }}/beep:0.0.1-SNAPSHOT
             docker pull ${{ secrets.DOCKER_USERNAME }}/beep:0.0.1-SNAPSHOT
-#            docker run -d -p 8080:8080 --name beep ${{ secrets.DOCKER_USERNAME }}/beep:0.0.1-SNAPSHOT
             docker run -d --log-driver=syslog -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod ${{ secrets.DOCKER_USERNAME }}/beep:0.0.1-SNAPSHOT
