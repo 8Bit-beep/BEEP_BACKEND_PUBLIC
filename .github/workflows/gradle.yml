@@ -18,19 +18,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Copy application.yml
-        run: |
-          cd ./src/main
-          mkdir -p resources-prod
-          cd ./resources-prod
-          touch ./application.yml
-          echo "${{ secrets.APPLICATION_PROD }}" > ./application.yml
-
       - name: set chmod
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: ./gradlew build
 
       - name: Docker build & push to prod
         run: |
@@ -47,8 +39,8 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }} # EC2 private key
           envs: GITHUB_SHA
           script: |
+            docker stop beep
+            docker rm beep
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/beep:0.0.1-SNAPSHOT
             docker pull ${{ secrets.DOCKER_USERNAME }}/beep:0.0.1-SNAPSHOT
-            docker stop $(docker ps -a -q)
-            docker run -d --log-driver=syslog -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod ${{ secrets.DOCKER_USERNAME }}/beep:0.0.1-SNAPSHOT
-            docker rm $(docker ps --filter 'status=exited' -a -q)
-            docker image prune -a -f
+            docker run -d -p 8080:8080 --name beep ${{ secrets.DOCKER_USERNAME }}/beep:0.0.1-SNAPSHOT
