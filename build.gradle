@@ -7,6 +7,18 @@ plugins {
 group = 'com.8beep'
 version = '0.0.1-SNAPSHOT'
 
+// Default는 dev 로 지정
+ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
+
+// 리소스 폴더 지정
+sourceSets {
+	main {
+		resources {
+			srcDirs "src/main/resources", "src/main/resources-${profile}"
+		}
+	}
+}
+
 java {
 	sourceCompatibility = '17'
 }
