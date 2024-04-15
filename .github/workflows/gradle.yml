@@ -39,8 +39,15 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }} # EC2 private key
           envs: GITHUB_SHA
           script: |
-            docker stop beep
-            docker rm beep
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/beep:0.0.1-SNAPSHOT
-            docker pull ${{ secrets.DOCKER_USERNAME }}/beep:0.0.1-SNAPSHOT
-            docker run -d -p 8080:8080 --name beep ${{ secrets.DOCKER_USERNAME }}/beep:0.0.1-SNAPSHOT
+            docker stop $(docker ps -a -q)
+            docker rm $(docker ps --filter 'status=exited' -a -q)
+            docker image prune -a -f
+            
+            docker pull ${{ secrets.DOCKER_USERNAME }}/beep:latest
+            docker pull redis:
+            
+            docker run --name redis -p 6379:6379 --network redis-network -it -d redis
+            
+            docker run -d --name beep_redis redis
+
+            docker run -d --name beep_app --log-driver=syslog -p 80:8080 \${{ secrets.DOCKER_USERNAME }}/beep:latest
