@@ -1,13 +1,13 @@
 package com.beep.beep.domain.admin.presentation.dto.request;
 
-
-import com.beep.beep.domain.student.domain.StudentId;
 import com.beep.beep.domain.teacher.domain.Job;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.UserType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
