@@ -19,7 +19,7 @@ public interface UserRepository extends CrudRepository<User,Long> {
     @Query("SELECT s FROM User s WHERE s.id = :id AND s.email = :email")
     Optional<User> findByIdEmail(@Param("id") String id,@Param("email") String email);
 
-    @Query("SELECT s FROM User s WHERE (CONCAT(s.firstname, s.lastname) LIKE CONCAT('%', :name, '%')) AND (s.authority = :authority)")
+    @Query("SELECT s FROM User s WHERE (s.authority = :authority) AND (s.name LIKE %:name%)")
     List<User> findByName(@Param("name") String name,@Param("authority") UserType authority);
 
     @Query("SELECT s FROM User s WHERE s.authority = :authority")
