@@ -11,8 +11,7 @@ import lombok.Getter;
 @Builder @AllArgsConstructor
 public class GetAttendanceResponse {
 
-    private String firstname;
-    private String lastname;
+    private String name;
 
     private int grade;
     private int cls;
@@ -20,8 +19,7 @@ public class GetAttendanceResponse {
 
     public static GetAttendanceResponse of(User user,StudentId studentId) {
         return GetAttendanceResponse.builder()
-                .firstname(user.getFirstname())
-                .lastname(user.getLastname())
+                .name(user.getName())
                 .grade(studentId.getGrade())
                 .cls(studentId.getCls())
                 .num(studentId.getNum()).build();

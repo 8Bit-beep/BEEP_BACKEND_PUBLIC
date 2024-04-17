@@ -10,8 +10,7 @@ import lombok.Getter;
 @Getter
 @Builder @AllArgsConstructor
 public class TeacherInfoResponse {
-    private String firstname;
-    private String lastname;
+    private String name;
     private String email;
 
     private String department;
@@ -19,8 +18,7 @@ public class TeacherInfoResponse {
 
     public static TeacherInfoResponse of(User user, Job job) {
         return TeacherInfoResponse.builder()
-                .firstname(user.getFirstname())
-                .lastname(user.getLastname())
+                .name(user.getName())
                 .email(user.getEmail())
                 .department(job.getDepartment())
                 .job(job.getJob()).build();

@@ -15,9 +15,7 @@ public class TeacherSignUpRequest {
     private String id;
     private String password;
     private String email;
-    private String firstname;
-    private String lastname;
-    private UserType authority;
+    private String name;
 
     private String department;
     private String job;
@@ -27,8 +25,7 @@ public class TeacherSignUpRequest {
                 .id(this.id)
                 .password(encodedPassword)
                 .email(this.email)
-                .firstname(this.firstname)
-                .lastname(this.lastname)
+                .name(this.name)
                 .authority(UserType.ROLE_TEACHER).build();
     }
 

@@ -12,8 +12,7 @@ public class AdminTeacherResponse {
 
     private Long idx;
     private String id;
-    private String firstname;
-    private String lastname;
+    private String name;
     private String email;
 
     private String department;
@@ -24,8 +23,7 @@ public class AdminTeacherResponse {
                 .idx(user.getIdx())
                 .id(user.getId())
                 .email(user.getEmail())
-                .firstname(user.getFirstname())
-                .lastname(user.getLastname())
+                .name(user.getName())
                 .department(job.getDepartment())
                 .job(job.getJob()).build();
     }

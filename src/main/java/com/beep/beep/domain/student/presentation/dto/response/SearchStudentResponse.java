@@ -12,8 +12,7 @@ import lombok.Getter;
 @Builder @AllArgsConstructor
 public class SearchStudentResponse {
 
-    private String firstname;
-    private String lastname;
+    private String name;
 
     private int grade;
     private int cls;
@@ -23,8 +22,7 @@ public class SearchStudentResponse {
 
     public static SearchStudentResponse of(User user,StudentId studentId, Room room) {
         return SearchStudentResponse.builder()
-                .firstname(user.getFirstname())
-                .lastname(user.getLastname())
+                .name(user.getName())
                 .grade(studentId.getGrade())
                 .cls(studentId.getCls())
                 .num(studentId.getNum())
