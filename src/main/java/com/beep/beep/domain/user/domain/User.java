@@ -30,19 +30,16 @@ public class User {
 
     @Column(nullable = false)
     private String password;
-    private String firstname;
-    private String lastname;
-
+    private String name;
 
     @Enumerated(EnumType.STRING)
     private UserType authority;
 
     @Builder
-    public User(String id, String password,String lastname,String firstname, String email, UserType authority){
+    public User(String id, String password,String name, String email, UserType authority){
         this.id = id;
         this.password = password;
-        this.firstname = firstname;
-        this.lastname = lastname;
+        this.name = name;
         this.email = email;
         this.authority = authority;
     }
