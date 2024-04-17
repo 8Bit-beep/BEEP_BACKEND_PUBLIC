@@ -1,7 +1,5 @@
 package com.beep.beep.domain.admin.presentation.dto.request;
 
-
-import com.beep.beep.domain.student.domain.StudentId;
 import com.beep.beep.domain.teacher.domain.Job;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.UserType;
@@ -9,15 +7,15 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeacherSignUpRequest {
     private String id;
     private String password;
     private String email;
-    private String firstname;
-    private String lastname;
-    private UserType authority;
+    private String name;
 
     private String department;
     private String job;
@@ -27,8 +25,7 @@ public class TeacherSignUpRequest {
                 .id(this.id)
                 .password(encodedPassword)
                 .email(this.email)
-                .firstname(this.firstname)
-                .lastname(this.lastname)
+                .name(this.name)
                 .authority(UserType.ROLE_TEACHER).build();
     }
 

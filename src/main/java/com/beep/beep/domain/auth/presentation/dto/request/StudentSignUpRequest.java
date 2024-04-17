@@ -15,9 +15,7 @@ public class StudentSignUpRequest {
     private String id;
     private String password;
     private String email;
-    private String firstname;
-    private String lastname;
-    private UserType authority;
+    private String name;
 
     private int grade;
     private int cls;
@@ -28,8 +26,7 @@ public class StudentSignUpRequest {
                 .id(this.id)
                 .password(encodedPassword)
                 .email(this.email)
-                .firstname(this.firstname)
-                .lastname(this.lastname)
+                .name(this.name)
                 .authority(UserType.ROLE_STUDENT).build();
     }
 

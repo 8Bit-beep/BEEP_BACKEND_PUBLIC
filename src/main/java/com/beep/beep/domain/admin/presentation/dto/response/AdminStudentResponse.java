@@ -12,8 +12,7 @@ import lombok.Getter;
 public class AdminStudentResponse {
     private Long idx;
     private String id;
-    private String firstname;
-    private String lastname;
+    private String name;
     private String email;
 
     private int grade;
@@ -24,8 +23,7 @@ public class AdminStudentResponse {
         return AdminStudentResponse.builder()
                 .idx(user.getIdx())
                 .id(user.getId())
-                .firstname(user.getFirstname())
-                .lastname(user.getLastname())
+                .name(user.getName())
                 .email(user.getEmail())
                 .grade(studentId.getGrade())
                 .cls(studentId.getCls())
