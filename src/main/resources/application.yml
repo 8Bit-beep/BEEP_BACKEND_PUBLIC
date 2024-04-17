@@ -54,4 +54,3 @@ springdoc:
   swagger-ui:
     operationsSorter: method
     path: /swagger-ui.html
-
