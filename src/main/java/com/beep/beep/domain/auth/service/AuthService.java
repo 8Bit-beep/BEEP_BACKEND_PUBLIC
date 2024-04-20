@@ -1,13 +1,15 @@
 package com.beep.beep.domain.auth.service;
 
+import com.beep.beep.domain.auth.presentation.dto.request.AdminSignUpRequest;
+import com.beep.beep.domain.auth.presentation.dto.request.TeacherSignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.SignInRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.TokenRefreshRequest;
-import com.beep.beep.domain.auth.presentation.dto.request.WithdrawalRequest;
 import com.beep.beep.domain.auth.presentation.dto.response.SignInResponse;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshResponse;
 import com.beep.beep.domain.beep.facade.BeepFacade;
 import com.beep.beep.domain.student.facade.StudentFacade;
+import com.beep.beep.domain.teacher.domain.facade.TeacherFacade;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.UserType;
 import com.beep.beep.domain.user.exception.PasswordWrongException;
@@ -32,6 +34,7 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final UserFacade userFacade;
     private final StudentFacade studentFacade;
+    private final TeacherFacade teacherFacade;
     private final BeepFacade beepFacade;
 
     public void idCheck(String id) {
@@ -46,14 +49,23 @@ public class AuthService {
         beepFacade.save(request.toAttendanceEntity(user));
     }
 
+    public void teacherSignUp(TeacherSignUpRequest request){
+        userFacade.save(request.toUserEntity(encoder.encode(request.getPassword())));
+        User user = userFacade.findUserById(request.getId());
+
+        teacherFacade.save(request.toJobEntity(user));
+    }
+
+    public void adminSignUp(AdminSignUpRequest request){
+        User user = request.toEntity(encoder.encode(request.getPassword()));
+        userFacade.save(user);
+    }
+
     public SignInResponse signIn(SignInRequest request){
         User user = userFacade.findUserById(request.getId());
 
         if (!encoder.matches(request.getPassword(), user.getPassword()))
             throw PasswordWrongException.EXCEPTION;
-
-//        String accessToken  =  jwtProvider.generateAccessToken(user.getEmail(),user.getAuthority());
-//        String refreshToken =  jwtProvider.generateRefreshToken(user.getEmail(),user.getAuthority());
 
         return SignInResponse.builder()
                 .accessToken(jwtProvider.generateAccessToken(user.getEmail(),user.getAuthority()))
