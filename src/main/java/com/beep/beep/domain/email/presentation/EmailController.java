@@ -21,14 +21,14 @@ import java.security.NoSuchAlgorithmException;
 @RestController
 @RequestMapping(value = "/email")
 @RequiredArgsConstructor
-@Tag(name = "Student Server (Email)")
+@Tag(name = "이메일", description = "이메일 인증 API")
 public class EmailController {
 
     private final EmailService emailService;
 
     @PostMapping("/send")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Email Sending API")
+    @Operation(summary = "이메일 전송", description = "이메일을 전송합니다. (unauthenticated)")
     public void sendEmail(
             @RequestBody EmailSendingRequest request
     ) throws MessagingException, NoSuchAlgorithmException {
@@ -37,7 +37,7 @@ public class EmailController {
 
     @GetMapping("/verify")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Email Verify API")
+    @Operation(summary = "이메일 인증", description = "이메일에 전송한 코드와 param으로 받은 코드를 대조하여 인증합니다. (unauthenticated)")
     public void verifyEmail(
             @RequestParam String email,
             @RequestParam String code
@@ -47,7 +47,7 @@ public class EmailController {
 
     @GetMapping("/check")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Check Email Exists API")
+    @Operation(summary = "이메일 존재여부 확인", description = "이 이메일이 이미 유저계정 중에 사용 중인것인지 확인합니다. (unauthenticated)")
     public void checkEmail(
             @RequestParam String email
     ){

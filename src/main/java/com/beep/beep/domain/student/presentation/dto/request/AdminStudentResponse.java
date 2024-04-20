@@ -1,4 +1,4 @@
-package com.beep.beep.domain.admin.presentation.dto.response;
+package com.beep.beep.domain.student.presentation.dto.request;
 
 
 import com.beep.beep.domain.student.domain.StudentId;

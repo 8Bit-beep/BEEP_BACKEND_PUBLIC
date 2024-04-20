@@ -4,10 +4,10 @@ package com.beep.beep.domain.auth.presentation.dto.request;
 import com.beep.beep.domain.beep.domain.Attendance;
 import com.beep.beep.domain.student.domain.StudentId;
 import com.beep.beep.domain.user.domain.User;
-import com.beep.beep.domain.user.domain.enums.UserType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,7 +27,7 @@ public class StudentSignUpRequest {
                 .password(encodedPassword)
                 .email(this.email)
                 .name(this.name)
-                .authority(UserType.ROLE_STUDENT).build();
+                .authority(STUDENT).build();
     }
 
     public StudentId toStudentIdEntity(User user) {

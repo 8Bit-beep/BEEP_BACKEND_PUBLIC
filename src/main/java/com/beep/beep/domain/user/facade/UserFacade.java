@@ -58,7 +58,7 @@ public class UserFacade {
     }
 
     public List<User> findStudentsByName(String name){
-        return userRepository.findByName(name, UserType.ROLE_STUDENT);
+        return userRepository.findByName(name, UserType.STUDENT);
     }
 
     public User findUserByIdx(Long idx){
@@ -66,11 +66,11 @@ public class UserFacade {
     }
 
     public List<User> findAllStudents(){
-        return userRepository.findAllByAuthority(UserType.ROLE_STUDENT);
+        return userRepository.findAllByAuthority(UserType.STUDENT);
     }
 
     public List<User> findAllTeachers(){
-        return userRepository.findAllByAuthority(UserType.ROLE_TEACHER);
+        return userRepository.findAllByAuthority(UserType.TEACHER);
     }
 
     public void save(User user){

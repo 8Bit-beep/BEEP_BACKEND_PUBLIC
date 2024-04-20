@@ -1,4 +1,4 @@
-package com.beep.beep.domain.admin.presentation.dto.response;
+package com.beep.beep.domain.teacher.presentation.dto.response;
 
 import com.beep.beep.domain.teacher.domain.Job;
 import com.beep.beep.domain.user.domain.User;

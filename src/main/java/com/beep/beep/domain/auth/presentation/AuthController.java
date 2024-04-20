@@ -1,6 +1,8 @@
 package com.beep.beep.domain.auth.presentation;
 
 
+import com.beep.beep.domain.auth.presentation.dto.request.AdminSignUpRequest;
+import com.beep.beep.domain.auth.presentation.dto.request.TeacherSignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.SignInRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.TokenRefreshRequest;
@@ -27,31 +29,50 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/auth")
 @RequiredArgsConstructor
-@Tag(name = " Total Server (Auth)")
+@Tag(name = "AUTH", description = "auth API")
 public class AuthController {
 
     private final AuthService authService;
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Student Id-Check API")
+    @Operation(summary = "아이디 확인", description = "아이디 존재여부 확인 (unauthenticated)")
     public void studentIdCheck(
             @PathVariable String id
     ) {
         authService.idCheck(id);
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("/student/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Student Sign-UP API")
+    @Operation(summary = "학생 회원가입", description = "학생계정으로 회원가입합니다. (unauthenticated)")
     public void studentSignUp(
             @RequestBody StudentSignUpRequest request
     ){
         authService.studentSignUp(request);
     }
 
+    @PostMapping("/teacher/sign-up")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "선생님 회원가입", description = "선생님계정으로 회원가입합니다. (unauthenticated)")
+    public void studentSignUp(
+            @RequestBody TeacherSignUpRequest request
+    ){
+        authService.teacherSignUp(request);
+    }
+
+    @PostMapping("/admin/sign-up")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "관리자 회원가입", description = "관리자계정으로 회원가입합니다. (unauthenticated)")
+    public void adminSignUp(
+            @RequestBody AdminSignUpRequest request
+    ){
+        authService.adminSignUp(request);
+    }
+
     @PostMapping("/sign-in")
-    @Operation(summary = "Total Sign-In API")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "로그인", description = "모든 계정이 이 요청을 통해 로그인 합니다. (unauthenticated)")
     public SignInResponse signIn(
             @Validated @RequestBody SignInRequest request
     ) {
@@ -60,7 +81,7 @@ public class AuthController {
 
     @GetMapping("/refresh")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Total Token-Refresh API")
+    @Operation(summary = "토큰 재발급", description = "access 토큰 재발급 (student,teacher,admin)")
     public TokenRefreshResponse refresh(
             @Validated @RequestBody TokenRefreshRequest request
     ) {
@@ -69,7 +90,7 @@ public class AuthController {
 
     @GetMapping("/{email}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Get UserId API")
+    @Operation(summary = "아이디 찾기", description = "검증된 이메일로 아이디를 찾습니다. (unauthenticated)")
     public UserIdResponse findId(
             @PathVariable String email
     ){
@@ -78,7 +99,7 @@ public class AuthController {
 
     @GetMapping("/email/id")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Check Id-Email API")
+    @Operation(summary = "이메일-유저아이디에 일치하는 유저존재여부 조회", description = "이메일-유저아이디에 일치하는 유저가 존재하는지를 조회합니다.(unauthenticated)")
     public void checkIdEmail(
             @RequestParam String email,
             @RequestParam String id
@@ -88,7 +109,7 @@ public class AuthController {
 
     @PutMapping("/pw")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Changing Password API")
+    @Operation(summary = "비밀번호 찾기", description = "아이디와 변경할 비번 값을 받아 비번을 변경해줍니다.(unauthenticated)")
     public void changePw(
             @RequestBody ChangePwRequest request
     ) {

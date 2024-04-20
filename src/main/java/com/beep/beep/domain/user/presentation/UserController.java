@@ -22,14 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/user")
 @RequiredArgsConstructor
-@Tag(name = "UserInfo Server (User)")
+@Tag(name = "유저", description = "유저 API")
 public class UserController {
 
     private final UserService userService;
 
     @DeleteMapping()
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Total Withdrawal API")
+    @Operation(summary = "회원탈퇴", description = "회원탈퇴 요청합니다. (student,teacher,admin)")
     public void withdrawal(
             @RequestHeader("Authorization") String token,
             @RequestBody WithdrawalRequest request
