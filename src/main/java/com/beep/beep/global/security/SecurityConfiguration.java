@@ -15,6 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.beep.beep.domain.user.domain.enums.UserType.ADMIN;
+import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
+import static com.beep.beep.domain.user.domain.enums.UserType.TEACHER;
+
 
 @Configuration
 @EnableWebSecurity
@@ -37,10 +41,21 @@ public class SecurityConfiguration {
                 .exceptionHandling(handlingConfigures -> handlingConfigures.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
-                        .requestMatchers("/auth/**","/email/**","/test/**").permitAll()
-                        .requestMatchers("/student/**").hasAuthority("ROLE_STUDENT")
-                        .requestMatchers("/teacher/**").hasAuthority("ROLE_TEACHER")
-                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/auth/**","/email/**").permitAll()
+
+                        .requestMatchers("/beep/enter").hasAuthority(STUDENT.getAuthority())
+                        .requestMatchers("/beep/exit").hasAuthority(STUDENT.getAuthority())
+                        .requestMatchers("/beep/rooms/**").hasAuthority(STUDENT.getAuthority())
+                        .requestMatchers("/beep/attendance/**").hasAuthority(STUDENT.getAuthority())
+
+                        .requestMatchers("/teachers").hasAuthority(ADMIN.getAuthority())
+                        .requestMatchers("/teacher").hasAuthority(TEACHER.getAuthority())
+
+                        .requestMatchers("/students").hasAuthority(ADMIN.getAuthority())
+                        .requestMatchers("/student").hasAuthority(STUDENT.getAuthority())
+                        .requestMatchers("/students/**").hasAuthority(TEACHER.getAuthority())
+                        .requestMatchers("/user/**").authenticated()
+
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
