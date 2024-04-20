@@ -1,4 +1,4 @@
-package com.beep.beep.domain.admin.presentation.dto.request;
+package com.beep.beep.domain.auth.presentation.dto.request;
 
 import com.beep.beep.domain.teacher.domain.Job;
 import com.beep.beep.domain.user.domain.User;
@@ -26,7 +26,7 @@ public class TeacherSignUpRequest {
                 .password(encodedPassword)
                 .email(this.email)
                 .name(this.name)
-                .authority(UserType.ROLE_TEACHER).build();
+                .authority(UserType.TEACHER).build();
     }
 
     public Job toJobEntity(User user) {
