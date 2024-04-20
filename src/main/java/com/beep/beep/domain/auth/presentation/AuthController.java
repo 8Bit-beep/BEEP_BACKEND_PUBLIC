@@ -1,6 +1,8 @@
 package com.beep.beep.domain.auth.presentation;
 
 
+import com.beep.beep.domain.auth.presentation.dto.request.AdminSignUpRequest;
+import com.beep.beep.domain.auth.presentation.dto.request.TeacherSignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.SignInRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.TokenRefreshRequest;
@@ -41,13 +43,31 @@ public class AuthController {
         authService.idCheck(id);
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("/student/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Student Sign-UP API")
     public void studentSignUp(
             @RequestBody StudentSignUpRequest request
     ){
         authService.studentSignUp(request);
+    }
+
+    @PostMapping("/teacher/sign-up")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Teacher Sign-UP API")
+    public void studentSignUp(
+            @RequestBody TeacherSignUpRequest request
+    ){
+        authService.teacherSignUp(request);
+    }
+
+    @PostMapping("/admin/sign-up")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Admin Sign-UP API")
+    public void adminSignUp(
+            @RequestBody AdminSignUpRequest request
+    ){
+        authService.adminSignUp(request);
     }
 
     @PostMapping("/sign-in")
