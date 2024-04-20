@@ -22,21 +22,21 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Get Info Server (Student)")
+@Tag(name = "학생", description = "학생 조회 API")
 public class StudentController {
 
     private final StudentService studentService;
 
     @GetMapping("/students")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Get StudentList API")
+    @Operation(summary = "학생계정 조회", description = "학생계정 전부 조회합니다. (admin)")
     public List<AdminStudentResponse> studentList(){
         return studentService.studentList();
     }
 
     @GetMapping("student")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Get StudentInfo API")
+    @Tag(name = "학생프로필 조회", description = "학생프로필 조회입니다 (student)")
     public StudentInfoResponse getInfo(
             @RequestHeader(name = "Authorization") String token
     ) {
@@ -45,7 +45,7 @@ public class StudentController {
 
     @GetMapping("/students/{grade}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "get Cls API")
+    @Tag(name = "반 조회", description = "학년 param로 반을 조회합니다.(teacher)")
     public List<GetClsResponse> getCls(
             @PathVariable int grade
     ){
@@ -54,7 +54,7 @@ public class StudentController {
 
     @GetMapping("/students/{grade}/{cls}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Get Students' Info By Grade-Cls API")
+    @Tag(name = "반 구성원 조회", description = "학년-반으로 반 구성원 목록을 조회합니다. (teacher)")
     public List<GetStudentResponse> getStudents(
             @PathVariable int grade,
             @PathVariable int cls
@@ -64,7 +64,7 @@ public class StudentController {
 
     @GetMapping("/students/name")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Search Students API")
+    @Tag(name = "학생 조회", description = "학생이름으로 학생을 조회합니다.(teacher)")
     public List<SearchStudentResponse> searchStudents(
             @RequestParam String name
     ){

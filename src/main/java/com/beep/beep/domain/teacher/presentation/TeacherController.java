@@ -17,21 +17,21 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Get Info Server (Teacher)")
+@Tag(name = "선생님", description = "선생님 조회 API")
 public class TeacherController {
 
     private final TeacherService teacherService;
 
     @GetMapping("/teachers")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Get TeacherList API")
+    @Operation(summary = "선생님계정 조회", description = "선생님계정 전부 조회합니다. (admin)")
     public List<AdminTeacherResponse> teacherList(){
         return teacherService.teacherList();
     }
 
     @GetMapping("/teacher")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Get TeacherInfo API")
+    @Operation(summary = "선생님프로필 조회", description = "선생님프로필 조회합니다. (teacher)")
     public TeacherInfoResponse getInfo(
             @RequestHeader("Authorization") String token
     ) {
