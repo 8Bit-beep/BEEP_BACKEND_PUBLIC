@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum UserType {
-    ROLE_STUDENT("STUDENT"),
-    ROLE_TEACHER("TEACHER"),
-    ROLE_ADMIN("ADMIN");
+    STUDENT("STUDENT"),
+    TEACHER("TEACHER"),
+    ADMIN("ADMIN");
 
     private final String authority;
 }
