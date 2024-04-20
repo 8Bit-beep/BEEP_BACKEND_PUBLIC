@@ -36,7 +36,7 @@ public class StudentController {
 
     @GetMapping("student")
     @ResponseStatus(HttpStatus.OK)
-    @Tag(name = "학생프로필 조회", description = "학생프로필 조회입니다 (student)")
+    @Operation(summary = "학생프로필 조회", description = "학생프로필 조회입니다 (student)")
     public StudentInfoResponse getInfo(
             @RequestHeader(name = "Authorization") String token
     ) {
@@ -45,7 +45,7 @@ public class StudentController {
 
     @GetMapping("/students/{grade}")
     @ResponseStatus(HttpStatus.OK)
-    @Tag(name = "반 조회", description = "학년 param로 반을 조회합니다.(teacher)")
+    @Operation(summary = "반 조회", description = "학년 param로 반을 조회합니다.(teacher)")
     public List<GetClsResponse> getCls(
             @PathVariable int grade
     ){
@@ -54,7 +54,7 @@ public class StudentController {
 
     @GetMapping("/students/{grade}/{cls}")
     @ResponseStatus(HttpStatus.OK)
-    @Tag(name = "반 구성원 조회", description = "학년-반으로 반 구성원 목록을 조회합니다. (teacher)")
+    @Operation(summary = "반 구성원 조회", description = "학년-반으로 반 구성원 목록을 조회합니다. (teacher)")
     public List<GetStudentResponse> getStudents(
             @PathVariable int grade,
             @PathVariable int cls
@@ -64,7 +64,7 @@ public class StudentController {
 
     @GetMapping("/students/name")
     @ResponseStatus(HttpStatus.OK)
-    @Tag(name = "학생 조회", description = "학생이름으로 학생을 조회합니다.(teacher)")
+    @Operation(summary = "학생 조회", description = "학생이름으로 학생을 조회합니다.(teacher)")
     public List<SearchStudentResponse> searchStudents(
             @RequestParam String name
     ){
