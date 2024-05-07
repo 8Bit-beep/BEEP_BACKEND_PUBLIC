@@ -42,6 +42,8 @@ public class AuthService {
     }
 
     public void studentSignUp(StudentSignUpRequest request){
+        userFacade.existsById(request.getId());
+
         userFacade.save(request.toUserEntity(encoder.encode(request.getPassword())));
         User user = userFacade.findUserById(request.getId());
 
