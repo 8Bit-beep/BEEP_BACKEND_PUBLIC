@@ -1,5 +1,6 @@
 package com.beep.beep.domain.auth.service;
 
+import com.beep.beep.domain.auth.mapper.AuthMapper;
 import com.beep.beep.domain.auth.presentation.dto.request.AdminSignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.TeacherSignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.SignInRequest;
@@ -36,6 +37,7 @@ public class AuthService {
     private final StudentFacade studentFacade;
     private final TeacherFacade teacherFacade;
     private final BeepFacade beepFacade;
+    private final AuthMapper authMapper;
 
     public void idCheck(String id) {
         userFacade.existsById(id);
@@ -44,22 +46,22 @@ public class AuthService {
     public void studentSignUp(StudentSignUpRequest request){
         userFacade.existsById(request.getId());
 
-        userFacade.save(request.toUserEntity(encoder.encode(request.getPassword())));
+        userFacade.save(authMapper.toStudent(encoder.encode(request.getPassword()),request));
         User user = userFacade.findUserById(request.getId());
 
-        studentFacade.save(request.toStudentIdEntity(user));
-        beepFacade.save(request.toAttendanceEntity(user));
+        studentFacade.save(authMapper.toStudentId(user,request));
+        beepFacade.save(authMapper.toAttendance(user));
     }
 
     public void teacherSignUp(TeacherSignUpRequest request){
-        userFacade.save(request.toUserEntity(encoder.encode(request.getPassword())));
+        userFacade.save(authMapper.toTeacher(encoder.encode(request.getPassword()),request));
         User user = userFacade.findUserById(request.getId());
 
-        teacherFacade.save(request.toJobEntity(user));
+        teacherFacade.save(authMapper.toJob(user,request));
     }
 
     public void adminSignUp(AdminSignUpRequest request){
-        User user = request.toEntity(encoder.encode(request.getPassword()));
+        User user = authMapper.toAdmin(encoder.encode(request.getPassword()),request);
         userFacade.save(user);
     }
 
