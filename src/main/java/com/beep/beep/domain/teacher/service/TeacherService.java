@@ -1,5 +1,6 @@
 package com.beep.beep.domain.teacher.service;
 
+import com.beep.beep.domain.teacher.mapper.TeacherMapper;
 import com.beep.beep.domain.teacher.presentation.dto.response.AdminTeacherResponse;
 import com.beep.beep.domain.beep.facade.BeepFacade;
 import com.beep.beep.domain.student.facade.StudentFacade;
@@ -27,7 +28,7 @@ public class TeacherService {
 
         return teacherList.stream()
                 .map(teacher ->
-                        AdminTeacherResponse.of(teacher,teacherFacade.findByUserIdx(teacher.getIdx())))
+                        TeacherMapper.toAdminTeacherDto(teacher,teacherFacade.findByUserIdx(teacher.getIdx())))
                 .toList();
     }
 
@@ -35,7 +36,7 @@ public class TeacherService {
         User user = userFacade.findUserByEmail(jwtProvider.getTokenSubject(jwtProvider.parseToken(token)));
         Job job = teacherFacade.findByUserIdx(user.getIdx());
 
-        return TeacherInfoResponse.of(user,job);
+        return TeacherMapper.toTeacherInfoDto(user,job);
     }
 
 
