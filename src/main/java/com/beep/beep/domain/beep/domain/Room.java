@@ -9,10 +9,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_room")
+@SuperBuilder
 public class Room {
     @Id
     private String code;
@@ -22,11 +24,4 @@ public class Room {
 
     @Column(nullable = false)
     private String floor;
-
-    @Builder
-    public Room(String code,String name,String floor){
-        this.code = code;
-        this.name = name;
-        this.floor = floor;
-    }
 }

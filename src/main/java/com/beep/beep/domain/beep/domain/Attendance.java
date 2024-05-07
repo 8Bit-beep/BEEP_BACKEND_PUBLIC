@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 
 @Entity
@@ -22,7 +23,7 @@ public class Attendance extends BaseTime {
     private String code;
 
     @Builder
-    public Attendance(Long userIdx,String code){
+    public Attendance(Long userIdx, String code) {
         this.userIdx = userIdx;
         this.code = code;
     }
