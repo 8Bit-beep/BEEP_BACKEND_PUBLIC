@@ -20,13 +20,4 @@ public class SearchStudentResponse {
 
     private String room;
 
-    public static SearchStudentResponse of(User user,StudentId studentId, Room room) {
-        return SearchStudentResponse.builder()
-                .name(user.getName())
-                .grade(studentId.getGrade())
-                .cls(studentId.getCls())
-                .num(studentId.getNum())
-                .room(room.getName()).build();
-    }
-
 }

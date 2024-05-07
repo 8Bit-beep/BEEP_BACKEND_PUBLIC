@@ -20,14 +20,4 @@ public class StudentInfoResponse {
 
     private String room;
 
-    public static StudentInfoResponse of(User user, StudentId studentId, Room room) {
-        return StudentInfoResponse.builder()
-                .name(user.getName())
-                .email(user.getEmail())
-                .grade(studentId.getGrade())
-                .cls(studentId.getCls())
-                .num(studentId.getNum())
-                .room(room.getName()).build();
-    }
-
 }

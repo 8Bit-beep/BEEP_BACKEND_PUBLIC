@@ -2,11 +2,11 @@ package com.beep.beep.domain.student.presentation;
 
 
 import com.beep.beep.domain.student.presentation.dto.response.AdminStudentResponse;
+import com.beep.beep.domain.student.presentation.dto.response.GetClsResponse;
 import com.beep.beep.domain.student.presentation.dto.response.GetStudentResponse;
 import com.beep.beep.domain.student.presentation.dto.response.SearchStudentResponse;
 import com.beep.beep.domain.student.presentation.dto.response.StudentInfoResponse;
 import com.beep.beep.domain.student.service.StudentService;
-import com.beep.beep.domain.teacher.presentation.dto.response.GetClsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

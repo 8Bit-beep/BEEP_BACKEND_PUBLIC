@@ -1,14 +1,16 @@
 package com.beep.beep.domain.student.service;
 
+import com.beep.beep.domain.student.mapper.StudentMapper;
 import com.beep.beep.domain.student.presentation.dto.response.AdminStudentResponse;
 import com.beep.beep.domain.beep.domain.Room;
 import com.beep.beep.domain.beep.facade.BeepFacade;
 import com.beep.beep.domain.student.domain.StudentId;
 import com.beep.beep.domain.student.facade.StudentFacade;
+import com.beep.beep.domain.beep.presentation.dto.response.GetRoomResponse;
+import com.beep.beep.domain.student.presentation.dto.response.GetClsResponse;
 import com.beep.beep.domain.student.presentation.dto.response.GetStudentResponse;
 import com.beep.beep.domain.student.presentation.dto.response.SearchStudentResponse;
 import com.beep.beep.domain.student.presentation.dto.response.StudentInfoResponse;
-import com.beep.beep.domain.teacher.presentation.dto.response.GetClsResponse;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.facade.UserFacade;
 import com.beep.beep.global.security.jwt.JwtProvider;
@@ -31,7 +33,7 @@ public class StudentService {
 
         return studentList.stream()
                 .map(student ->
-                        AdminStudentResponse.of(student,studentFacade.findByUserIdx(student.getIdx())))
+                        StudentMapper.toAdminStudentDto(student,studentFacade.findByUserIdx(student.getIdx())))
                 .toList();
     }
 
@@ -43,7 +45,7 @@ public class StudentService {
         StudentId studentId = studentFacade.findByUserIdx(userIdx);
         Room room = beepFacade.findByCode(beepFacade.findAttendanceByIdx(userIdx).getCode());
 
-        return StudentInfoResponse.of(user,studentId,room);
+        return StudentMapper.toStudentInfoDto(user,studentId,room);
     }
 
     public List<GetStudentResponse> getStudents(int grade, int cls){
@@ -52,7 +54,7 @@ public class StudentService {
         return studentIdList.stream()
                 .map(studentId -> {
                     Long userIdx = studentId.getUserIdx();
-                    return GetStudentResponse.of(studentId, userFacade.findUserByIdx(userIdx), beepFacade.findRoomByUserIdx(userIdx));
+                    return StudentMapper.toGetStudentDto(studentId, userFacade.findUserByIdx(userIdx), beepFacade.findRoomByUserIdx(userIdx));
                 })
                 .toList();
     }
@@ -63,7 +65,7 @@ public class StudentService {
         return userList.stream()
                 .map(user -> {
                     Long userIdx = user.getIdx();
-                    return SearchStudentResponse.of(user, studentFacade.findByUserIdx(userIdx), beepFacade.findRoomByUserIdx(userIdx));
+                    return StudentMapper.toSearchStudentDto(user, studentFacade.findByUserIdx(userIdx), beepFacade.findRoomByUserIdx(userIdx));
                 })
                 .toList();
     }
@@ -74,7 +76,7 @@ public class StudentService {
         return clsList.stream()
                 .map( cls -> {
                     int headCount = studentFacade.countStudentsByCls(grade,cls);
-                    return GetClsResponse.of(cls,headCount);
+                    return StudentMapper.toGetClsDto(cls,headCount);
                 }).toList();
     }
 

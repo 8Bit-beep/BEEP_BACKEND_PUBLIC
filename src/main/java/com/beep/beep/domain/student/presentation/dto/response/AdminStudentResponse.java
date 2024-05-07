@@ -18,18 +18,4 @@ public class AdminStudentResponse {
     private int grade;
     private int cls;
     private int num;
-
-    public static AdminStudentResponse of(User user, StudentId studentId) {
-        return AdminStudentResponse.builder()
-                .idx(user.getIdx())
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .grade(studentId.getGrade())
-                .cls(studentId.getCls())
-                .num(studentId.getNum()).build();
-    }
-
-
-
 }
