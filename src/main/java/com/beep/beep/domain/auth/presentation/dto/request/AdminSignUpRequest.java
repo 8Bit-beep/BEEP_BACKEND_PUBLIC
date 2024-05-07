@@ -9,8 +9,6 @@ import lombok.Getter;
 import static com.beep.beep.domain.user.domain.enums.UserType.ADMIN;
 
 @Getter
-@Builder
-@AllArgsConstructor
 public class AdminSignUpRequest {
     private String id;
     private String password;

@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudentSignUpRequest {
     private String id;
     private String password;

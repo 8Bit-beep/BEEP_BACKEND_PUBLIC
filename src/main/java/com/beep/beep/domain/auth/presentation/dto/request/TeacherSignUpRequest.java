@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeacherSignUpRequest {
     private String id;
     private String password;
