@@ -6,11 +6,12 @@ import com.beep.beep.domain.beep.domain.Room;
 import com.beep.beep.domain.beep.exception.NonExitException;
 import com.beep.beep.domain.beep.exception.NotCurrentRoomException;
 import com.beep.beep.domain.beep.facade.BeepFacade;
+import com.beep.beep.domain.beep.mapper.BeepMapper;
 import com.beep.beep.domain.student.facade.StudentFacade;
 import com.beep.beep.domain.student.presentation.dto.request.EnterRoomRequest;
 import com.beep.beep.domain.student.presentation.dto.request.ExitRoomRequest;
-import com.beep.beep.domain.student.presentation.dto.response.GetAttendanceResponse;
-import com.beep.beep.domain.student.presentation.dto.response.GetRoomResponse;
+import com.beep.beep.domain.beep.presentation.dto.response.GetAttendanceResponse;
+import com.beep.beep.domain.beep.presentation.dto.response.GetRoomResponse;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.facade.UserFacade;
 import com.beep.beep.global.security.jwt.JwtProvider;
@@ -62,7 +63,7 @@ public class BeepService {
         List<Room> roomList = beepFacade.findRoomsByName(name);
 
         return roomList.stream()
-                .map(GetRoomResponse::of)
+                .map(BeepMapper::toGetRoomDto)
                 .toList();
     }
 
@@ -72,7 +73,7 @@ public class BeepService {
                 .toList();
 
         return userList.stream()
-                .map(user -> GetAttendanceResponse.of(user,studentFacade.findByUserIdx(user.getIdx())))
+                .map(user -> BeepMapper.toGetAttendanceDto(user,studentFacade.findByUserIdx(user.getIdx())))
                 .toList();
     }
 
