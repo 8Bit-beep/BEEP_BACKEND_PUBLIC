@@ -1,7 +1,7 @@
 package com.beep.beep.domain.student.presentation;
 
 
-import com.beep.beep.domain.student.presentation.dto.request.AdminStudentResponse;
+import com.beep.beep.domain.student.presentation.dto.response.AdminStudentResponse;
 import com.beep.beep.domain.student.presentation.dto.response.GetStudentResponse;
 import com.beep.beep.domain.student.presentation.dto.response.SearchStudentResponse;
 import com.beep.beep.domain.student.presentation.dto.response.StudentInfoResponse;

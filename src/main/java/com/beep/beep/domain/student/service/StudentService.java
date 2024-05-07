@@ -1,13 +1,8 @@
 package com.beep.beep.domain.student.service;
 
-import com.beep.beep.domain.student.presentation.dto.request.AdminStudentResponse;
-import com.beep.beep.domain.beep.domain.Attendance;
+import com.beep.beep.domain.student.presentation.dto.response.AdminStudentResponse;
 import com.beep.beep.domain.beep.domain.Room;
-import com.beep.beep.domain.beep.exception.NonExitException;
-import com.beep.beep.domain.beep.exception.NotCurrentRoomException;
 import com.beep.beep.domain.beep.facade.BeepFacade;
-import com.beep.beep.domain.student.presentation.dto.request.EnterRoomRequest;
-import com.beep.beep.domain.student.presentation.dto.request.ExitRoomRequest;
 import com.beep.beep.domain.student.domain.StudentId;
 import com.beep.beep.domain.student.facade.StudentFacade;
 import com.beep.beep.domain.student.presentation.dto.response.GetStudentResponse;
@@ -17,12 +12,10 @@ import com.beep.beep.domain.teacher.presentation.dto.response.GetClsResponse;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.facade.UserFacade;
 import com.beep.beep.global.security.jwt.JwtProvider;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
