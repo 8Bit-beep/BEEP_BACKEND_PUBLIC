@@ -34,16 +34,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "아이디 확인", description = "아이디 존재여부 확인 (unauthenticated)")
-    public void studentIdCheck(
-            @PathVariable String id
-    ) {
-        authService.idCheck(id);
-    }
-
-    @PostMapping("/student/sign-up")
+    @PostMapping("/sign-up/student")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "학생 회원가입", description = "학생계정으로 회원가입합니다. (unauthenticated)")
     public void studentSignUp(
@@ -52,7 +43,7 @@ public class AuthController {
         authService.studentSignUp(request);
     }
 
-    @PostMapping("/teacher/sign-up")
+    @PostMapping("/sign-up/teacher")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "선생님 회원가입", description = "선생님계정으로 회원가입합니다. (unauthenticated)")
     public void studentSignUp(
@@ -61,7 +52,7 @@ public class AuthController {
         authService.teacherSignUp(request);
     }
 
-    @PostMapping("/admin/sign-up")
+    @PostMapping("/sign-up/admin")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "관리자 회원가입", description = "관리자계정으로 회원가입합니다. (unauthenticated)")
     public void adminSignUp(
@@ -86,34 +77,6 @@ public class AuthController {
             @Validated @RequestBody TokenRefreshRequest request
     ) {
         return authService.refresh(request);
-    }
-
-    @GetMapping("/{email}")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "아이디 찾기", description = "검증된 이메일로 아이디를 찾습니다. (unauthenticated)")
-    public UserIdResponse findId(
-            @PathVariable String email
-    ){
-        return authService.findId(email);
-    }
-
-    @GetMapping("/email/id")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "이메일-유저아이디에 일치하는 유저존재여부 조회", description = "이메일-유저아이디에 일치하는 유저가 존재하는지를 조회합니다.(unauthenticated)")
-    public void checkIdEmail(
-            @RequestParam String email,
-            @RequestParam String id
-    ) {
-        authService.checkIdEmail(id,email);
-    }
-
-    @PutMapping("/pw")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "비밀번호 찾기", description = "아이디와 변경할 비번 값을 받아 비번을 변경해줍니다.(unauthenticated)")
-    public void changePw(
-            @RequestBody ChangePwRequest request
-    ) {
-        authService.changePw(request);
     }
 
 

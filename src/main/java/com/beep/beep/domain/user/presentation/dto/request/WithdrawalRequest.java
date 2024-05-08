@@ -1,4 +1,4 @@
-package com.beep.beep.domain.auth.presentation.dto.request;
+package com.beep.beep.domain.user.presentation.dto.request;
 
 import lombok.Getter;
 

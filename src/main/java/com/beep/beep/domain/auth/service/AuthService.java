@@ -8,21 +8,19 @@ import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.TokenRefreshRequest;
 import com.beep.beep.domain.auth.presentation.dto.response.SignInResponse;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshResponse;
-import com.beep.beep.domain.beep.facade.BeepFacade;
-import com.beep.beep.domain.student.facade.StudentFacade;
-import com.beep.beep.domain.teacher.domain.facade.TeacherFacade;
+import com.beep.beep.domain.beep.domain.repository.AttendanceRepository;
+import com.beep.beep.domain.student.domain.repository.StudentIdRepository;
+import com.beep.beep.domain.teacher.domain.repository.JobRepository;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.UserType;
+import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.exception.PasswordWrongException;
 import com.beep.beep.domain.user.facade.UserFacade;
-import com.beep.beep.domain.user.presentation.dto.request.ChangePwRequest;
-import com.beep.beep.domain.user.presentation.dto.response.UserIdResponse;
 import com.beep.beep.global.security.jwt.JwtProvider;
 import com.beep.beep.global.security.jwt.enums.JwtType;
 import com.beep.beep.global.security.jwt.exception.TokenTypeException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,35 +32,32 @@ public class AuthService {
     private final PasswordEncoder encoder;
     private final JwtProvider jwtProvider;
     private final UserFacade userFacade;
-    private final StudentFacade studentFacade;
-    private final TeacherFacade teacherFacade;
-    private final BeepFacade beepFacade;
     private final AuthMapper authMapper;
-
-    public void idCheck(String id) {
-        userFacade.existsById(id);
-    }
+    private final AttendanceRepository attendanceRepository;
+    private final StudentIdRepository studentIdRepository;
+    private final JobRepository jobRepository;
+    private final UserRepository userRepository;
 
     public void studentSignUp(StudentSignUpRequest request){
         userFacade.existsById(request.getId());
 
-        userFacade.save(authMapper.toStudent(encoder.encode(request.getPassword()),request));
+        userRepository.save(authMapper.toStudent(encoder.encode(request.getPassword()),request));
         User user = userFacade.findUserById(request.getId());
 
-        studentFacade.save(authMapper.toStudentId(user,request));
-        beepFacade.save(authMapper.toAttendance(user));
+        studentIdRepository.save(authMapper.toStudentId(user,request));
+        attendanceRepository.save(authMapper.toAttendance(user));
     }
 
     public void teacherSignUp(TeacherSignUpRequest request){
-        userFacade.save(authMapper.toTeacher(encoder.encode(request.getPassword()),request));
+        userRepository.save(authMapper.toTeacher(encoder.encode(request.getPassword()),request));
         User user = userFacade.findUserById(request.getId());
 
-        teacherFacade.save(authMapper.toJob(user,request));
+        jobRepository.save(authMapper.toJob(user,request));
     }
 
     public void adminSignUp(AdminSignUpRequest request){
         User user = authMapper.toAdmin(encoder.encode(request.getPassword()),request);
-        userFacade.save(user);
+        userRepository.save(user);
     }
 
     public SignInResponse signIn(SignInRequest request){
@@ -85,24 +80,6 @@ public class AuthService {
 
         return TokenRefreshResponse.builder()
                 .accessToken(jwtProvider.generateAccessToken(claims.getBody().getSubject(), (UserType) claims.getHeader().get("authority"))).build();
-    }
-
-    public UserIdResponse findId(String email) {
-        String id = userFacade.findIdByEmail(email);
-
-        return UserIdResponse.builder()
-                .id(id).build();
-    }
-
-    public void checkIdEmail(String id,String email) {
-        userFacade.existsByIdAndEmail(id,email);
-    }
-
-    @Transactional
-    public void changePw(ChangePwRequest request){
-        User user = userFacade.findUserById(request.getId());
-
-        user.updateUser(encoder.encode(request.getPassword()));
     }
 
 
