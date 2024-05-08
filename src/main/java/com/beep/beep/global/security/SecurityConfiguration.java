@@ -45,16 +45,20 @@ public class SecurityConfiguration {
 
                         .requestMatchers("/beep/enter").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers("/beep/exit").hasAuthority(STUDENT.getAuthority())
-                        .requestMatchers("/beep/rooms/**").hasAuthority(STUDENT.getAuthority())
-                        .requestMatchers("/beep/attendance/**").hasAuthority(STUDENT.getAuthority())
+                        .requestMatchers("/beep/rooms").hasAuthority(TEACHER.getAuthority())
+                        .requestMatchers("/beep/attendances").hasAuthority(TEACHER.getAuthority())
 
                         .requestMatchers("/teachers").hasAuthority(ADMIN.getAuthority())
-                        .requestMatchers("/teacher").hasAuthority(TEACHER.getAuthority())
+                        .requestMatchers("/teachers/info").hasAuthority(TEACHER.getAuthority())
 
                         .requestMatchers("/students").hasAuthority(ADMIN.getAuthority())
-                        .requestMatchers("/student").hasAuthority(STUDENT.getAuthority())
-                        .requestMatchers("/students/**").hasAuthority(TEACHER.getAuthority())
-                        .requestMatchers("/user/**").authenticated()
+                        .requestMatchers("/students/info").hasAuthority(STUDENT.getAuthority())
+                        .requestMatchers("/students/cls").hasAuthority(TEACHER.getAuthority())
+                        .requestMatchers("/students/cls-member").hasAuthority(TEACHER.getAuthority())
+                        .requestMatchers("/students/name").hasAuthority(TEACHER.getAuthority())
+
+                        .requestMatchers("/users/find-user","/users/change-pw","/users/find-id","/id-check").permitAll()
+                        .requestMatchers("/users").authenticated()
 
                         .anyRequest().permitAll()
                 )
