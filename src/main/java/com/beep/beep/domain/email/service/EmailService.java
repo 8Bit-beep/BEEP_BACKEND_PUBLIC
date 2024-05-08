@@ -2,9 +2,11 @@ package com.beep.beep.domain.email.service;
 
 
 import com.beep.beep.domain.email.dao.EmailCertificationDao;
+import com.beep.beep.domain.email.exception.EmailAlreadyExistsException;
 import com.beep.beep.domain.email.exception.EmailNotFoundException;
 import com.beep.beep.domain.email.exception.InvalidCodeException;
 import com.beep.beep.domain.email.presentation.dto.request.EmailSendingRequest;
+import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.facade.UserFacade;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -24,13 +26,15 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private final EmailCertificationDao emailDao;
     private final UserFacade userFacade;
+    private final UserRepository userRepository;
 
     public void sendEmail(EmailSendingRequest request) throws NoSuchAlgorithmException, MessagingException {
         String code = createCode();
         String content = String.format("반가워요,삑입니다:D \n 이메일 인증번호 : %s" , code);
         String email = request.getEmail();
 
-        userFacade.existsByEmail(email);
+        if(userRepository.existsByEmail(email))
+            throw EmailAlreadyExistsException.EXCEPTION;
 
         emailDao.saveCode(email,code);
         sendMail(email,content);
@@ -45,7 +49,8 @@ public class EmailService {
     }
 
     public void checkEmail(String email){
-            userFacade.emailExists(email);
+        if(!userRepository.existsByEmail(email))
+            throw EmailNotFoundException.EXCEPTION;
     }
 
     private String createCode() throws NoSuchAlgorithmException {

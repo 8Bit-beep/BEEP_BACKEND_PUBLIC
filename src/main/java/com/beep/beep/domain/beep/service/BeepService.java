@@ -3,16 +3,19 @@ package com.beep.beep.domain.beep.service;
 
 import com.beep.beep.domain.beep.domain.Attendance;
 import com.beep.beep.domain.beep.domain.Room;
+import com.beep.beep.domain.beep.domain.repository.AttendanceRepository;
+import com.beep.beep.domain.beep.domain.repository.RoomRepository;
 import com.beep.beep.domain.beep.exception.NonExitException;
 import com.beep.beep.domain.beep.exception.NotCurrentRoomException;
 import com.beep.beep.domain.beep.facade.BeepFacade;
 import com.beep.beep.domain.beep.mapper.BeepMapper;
-import com.beep.beep.domain.student.facade.StudentFacade;
-import com.beep.beep.domain.student.presentation.dto.request.EnterRoomRequest;
-import com.beep.beep.domain.student.presentation.dto.request.ExitRoomRequest;
+import com.beep.beep.domain.student.domain.repository.StudentIdRepository;
+import com.beep.beep.domain.beep.presentation.dto.request.EnterRoomRequest;
+import com.beep.beep.domain.beep.presentation.dto.request.ExitRoomRequest;
 import com.beep.beep.domain.beep.presentation.dto.response.GetAttendanceResponse;
 import com.beep.beep.domain.beep.presentation.dto.response.GetRoomResponse;
 import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.facade.UserFacade;
 import com.beep.beep.global.security.jwt.JwtProvider;
 import jakarta.transaction.Transactional;
@@ -28,8 +31,11 @@ public class BeepService {
 
     private final BeepFacade beepFacade;
     private final UserFacade userFacade;
-    private final StudentFacade studentFacade;
+    private final RoomRepository roomRepository;
+    private final AttendanceRepository attendanceRepository;
     private final JwtProvider jwtProvider;
+    private final StudentIdRepository studentIdRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public void enter(String token, EnterRoomRequest request){
@@ -60,7 +66,7 @@ public class BeepService {
     }
 
     public List<GetRoomResponse> getRooms(String name){
-        List<Room> roomList = beepFacade.findRoomsByName(name);
+        List<Room> roomList = roomRepository.findAllByName(name);
 
         return roomList.stream()
                 .map(BeepMapper::toGetRoomDto)
@@ -68,12 +74,12 @@ public class BeepService {
     }
 
     public List<GetAttendanceResponse> getAttendance(String code){
-        List<User> userList = beepFacade.findAttendancesByCode(code).stream()
-                .map(attendance -> userFacade.findUserByIdx(attendance.getUserIdx()))
+        List<User> userList = attendanceRepository.findAllByCode(code).stream()
+                .map(attendance -> userRepository.findByIdx(attendance.getUserIdx()))
                 .toList();
 
         return userList.stream()
-                .map(user -> BeepMapper.toGetAttendanceDto(user,studentFacade.findByUserIdx(user.getIdx())))
+                .map(user -> BeepMapper.toGetAttendanceDto(user,studentIdRepository.findByUserIdx(user.getIdx())))
                 .toList();
     }
 

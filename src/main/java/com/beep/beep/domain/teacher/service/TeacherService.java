@@ -1,13 +1,13 @@
 package com.beep.beep.domain.teacher.service;
 
+import com.beep.beep.domain.teacher.domain.repository.JobRepository;
 import com.beep.beep.domain.teacher.mapper.TeacherMapper;
 import com.beep.beep.domain.teacher.presentation.dto.response.AdminTeacherResponse;
-import com.beep.beep.domain.beep.facade.BeepFacade;
-import com.beep.beep.domain.student.facade.StudentFacade;
 import com.beep.beep.domain.teacher.domain.Job;
-import com.beep.beep.domain.teacher.domain.facade.TeacherFacade;
 import com.beep.beep.domain.teacher.presentation.dto.response.TeacherInfoResponse;
 import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.domain.enums.UserType;
+import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.facade.UserFacade;
 import com.beep.beep.global.security.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -21,20 +21,21 @@ public class TeacherService {
 
     private final JwtProvider jwtProvider;
     private final UserFacade userFacade;
-    private final TeacherFacade teacherFacade;
+    private final JobRepository jobRepository;
+    private final UserRepository userRepository;
 
     public List<AdminTeacherResponse> teacherList() {
-        List<User> teacherList = userFacade.findAllTeachers();
+        List<User> teacherList = userRepository.findAllByAuthority(UserType.TEACHER);
 
         return teacherList.stream()
                 .map(teacher ->
-                        TeacherMapper.toAdminTeacherDto(teacher,teacherFacade.findByUserIdx(teacher.getIdx())))
+                        TeacherMapper.toAdminTeacherDto(teacher,jobRepository.findByUserIdx(teacher.getIdx())))
                 .toList();
     }
 
     public TeacherInfoResponse getTeacherInfo(String token){
         User user = userFacade.findUserByEmail(jwtProvider.getTokenSubject(jwtProvider.parseToken(token)));
-        Job job = teacherFacade.findByUserIdx(user.getIdx());
+        Job job = jobRepository.findByUserIdx(user.getIdx());
 
         return TeacherMapper.toTeacherInfoDto(user,job);
     }
