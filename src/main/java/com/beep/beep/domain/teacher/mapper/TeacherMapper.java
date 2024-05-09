@@ -1,9 +1,9 @@
 package com.beep.beep.domain.teacher.mapper;
 
-import com.beep.beep.domain.teacher.domain.Job;
+import com.beep.beep.domain.teacher.presentation.dto.Job;
 import com.beep.beep.domain.teacher.presentation.dto.response.AdminTeacherResponse;
 import com.beep.beep.domain.teacher.presentation.dto.response.TeacherInfoResponse;
-import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.presentation.dto.User;
 import org.springframework.stereotype.Component;
 
 

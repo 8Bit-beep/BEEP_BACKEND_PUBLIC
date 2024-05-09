@@ -1,28 +1,27 @@
 package com.beep.beep.domain.beep.mapper;
 
 
-import com.beep.beep.domain.beep.domain.Room;
+import com.beep.beep.domain.beep.domain.RoomEntity;
 import com.beep.beep.domain.beep.presentation.dto.response.GetAttendanceResponse;
 import com.beep.beep.domain.beep.presentation.dto.response.GetRoomResponse;
-import com.beep.beep.domain.student.domain.StudentId;
-import com.beep.beep.domain.student.presentation.dto.response.GetClsResponse;
-import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.student.domain.StudentIdEntity;
+import com.beep.beep.domain.user.domain.UserEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BeepMapper {
 
-    public static GetAttendanceResponse toGetAttendanceDto(User user, StudentId studentId) {
+    public static GetAttendanceResponse toGetAttendanceDto(UserEntity userEntity, StudentIdEntity studentIdEntity) {
         return GetAttendanceResponse.builder()
-                .name(user.getName())
-                .grade(studentId.getGrade())
-                .cls(studentId.getCls())
-                .num(studentId.getNum()).build();
+                .name(userEntity.getName())
+                .grade(studentIdEntity.getGrade())
+                .cls(studentIdEntity.getCls())
+                .num(studentIdEntity.getNum()).build();
     }
 
-    public static GetRoomResponse toGetRoomDto(Room room) {
+    public static GetRoomResponse toGetRoomDto(RoomEntity roomEntity) {
         return GetRoomResponse.builder()
-                .room(room.getName()).build();
+                .room(roomEntity.getName()).build();
     }
 
 }

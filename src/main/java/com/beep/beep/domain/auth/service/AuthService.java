@@ -11,7 +11,7 @@ import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshResponse;
 import com.beep.beep.domain.beep.domain.repository.AttendanceRepository;
 import com.beep.beep.domain.student.domain.repository.StudentIdRepository;
 import com.beep.beep.domain.teacher.domain.repository.JobRepository;
-import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.domain.UserEntity;
 import com.beep.beep.domain.user.domain.enums.UserType;
 import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.exception.PasswordWrongException;
@@ -42,33 +42,33 @@ public class AuthService {
         userFacade.existsById(request.getId());
 
         userRepository.save(authMapper.toStudent(encoder.encode(request.getPassword()),request));
-        User user = userFacade.findUserById(request.getId());
+        UserEntity userEntity = userFacade.findUserById(request.getId());
 
-        studentIdRepository.save(authMapper.toStudentId(user,request));
-        attendanceRepository.save(authMapper.toAttendance(user));
+        studentIdRepository.save(authMapper.toStudentId(userEntity,request));
+        attendanceRepository.save(authMapper.toAttendance(userEntity));
     }
 
     public void teacherSignUp(TeacherSignUpRequest request){
         userRepository.save(authMapper.toTeacher(encoder.encode(request.getPassword()),request));
-        User user = userFacade.findUserById(request.getId());
+        UserEntity userEntity = userFacade.findUserById(request.getId());
 
-        jobRepository.save(authMapper.toJob(user,request));
+        jobRepository.save(authMapper.toJob(userEntity,request));
     }
 
     public void adminSignUp(AdminSignUpRequest request){
-        User user = authMapper.toAdmin(encoder.encode(request.getPassword()),request);
-        userRepository.save(user);
+        UserEntity userEntity = authMapper.toAdmin(encoder.encode(request.getPassword()),request);
+        userRepository.save(userEntity);
     }
 
     public SignInResponse signIn(SignInRequest request){
-        User user = userFacade.findUserById(request.getId());
+        UserEntity userEntity = userFacade.findUserById(request.getId());
 
-        if (!encoder.matches(request.getPassword(), user.getPassword()))
+        if (!encoder.matches(request.getPassword(), userEntity.getPassword()))
             throw PasswordWrongException.EXCEPTION;
 
         return SignInResponse.builder()
-                .accessToken(jwtProvider.generateAccessToken(user.getEmail(),user.getAuthority()))
-                .refreshToken(jwtProvider.generateRefreshToken(user.getEmail(),user.getAuthority()))
+                .accessToken(jwtProvider.generateAccessToken(userEntity.getEmail(), userEntity.getAuthority()))
+                .refreshToken(jwtProvider.generateRefreshToken(userEntity.getEmail(), userEntity.getAuthority()))
                 .build();
     }
 

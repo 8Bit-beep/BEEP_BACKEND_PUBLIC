@@ -1,14 +1,12 @@
 package com.beep.beep.domain.beep.facade;
 
-import com.beep.beep.domain.beep.domain.Attendance;
-import com.beep.beep.domain.beep.domain.Room;
+import com.beep.beep.domain.beep.domain.AttendanceEntity;
+import com.beep.beep.domain.beep.domain.RoomEntity;
 import com.beep.beep.domain.beep.domain.repository.AttendanceRepository;
 import com.beep.beep.domain.beep.domain.repository.RoomRepository;
 import com.beep.beep.domain.beep.exception.RoomNotExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -22,12 +20,12 @@ public class BeepFacade {
             throw RoomNotExistsException.EXCEPTION;
     }
 
-    public Attendance findAttendanceByIdx(Long userIdx) {
+    public AttendanceEntity findAttendanceByIdx(Long userIdx) {
         return attendanceRepository.findByUserIdx(userIdx);
     }
 
-    public Room findRoomByUserIdx(Long userIdx) {
-        Attendance attendance = attendanceRepository.findByUserIdx(userIdx);
+    public RoomEntity findRoomByUserIdx(Long userIdx) {
+        AttendanceEntity attendance = findAttendanceByIdx(userIdx);
         return attendance == null ? null : roomRepository.findByCode(attendance.getCode());
     }
 
