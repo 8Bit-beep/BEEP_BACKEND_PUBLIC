@@ -1,4 +1,4 @@
-package com.beep.beep.global.entity;
+package com.beep.beep.global.common.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
