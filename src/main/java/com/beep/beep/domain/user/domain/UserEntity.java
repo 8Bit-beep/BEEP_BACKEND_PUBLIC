@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_user")
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +36,7 @@ public class User {
     private UserType authority;
 
     @Builder
-    public User(String id, String password,String name, String email, UserType authority){
+    public UserEntity(String id, String password, String name, String email, UserType authority){
         this.id = id;
         this.password = password;
         this.name = name;

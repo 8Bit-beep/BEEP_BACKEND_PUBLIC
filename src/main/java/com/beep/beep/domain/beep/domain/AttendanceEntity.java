@@ -1,6 +1,6 @@
 package com.beep.beep.domain.beep.domain;
 
-import com.beep.beep.global.entity.BaseTime;
+import com.beep.beep.global.common.entity.BaseTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,13 +9,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 
 @Entity
 @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_attendance")
-public class Attendance extends BaseTime {
+public class AttendanceEntity extends BaseTime {
     @Id
     private Long userIdx;
 
@@ -23,7 +22,7 @@ public class Attendance extends BaseTime {
     private String code;
 
     @Builder
-    public Attendance(Long userIdx, String code) {
+    public AttendanceEntity(Long userIdx, String code) {
         this.userIdx = userIdx;
         this.code = code;
     }

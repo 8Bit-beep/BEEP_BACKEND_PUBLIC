@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -14,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Getter @SuperBuilder
 @Table(name = "tb_job")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Job {
+public class JobEntity {
     @Id
     private Long userIdx;
 
