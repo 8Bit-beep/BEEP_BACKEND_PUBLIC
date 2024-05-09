@@ -1,14 +1,13 @@
 package com.beep.beep.global.security.jwt;
 
-import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.domain.UserEntity;
 import com.beep.beep.domain.user.domain.enums.UserType;
 import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.exception.UserNotFoundException;
+import com.beep.beep.domain.user.presentation.dto.User;
 import com.beep.beep.global.security.auth.AuthDetails;
 import com.beep.beep.global.security.jwt.config.JwtProperties;
 import com.beep.beep.global.security.jwt.enums.JwtType;
-import com.beep.beep.global.security.jwt.exception.ExpiredTokenException;
-import com.beep.beep.global.security.jwt.exception.IllegalTokenException;
 import com.beep.beep.global.security.jwt.exception.TokenTypeException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -27,7 +26,6 @@ import org.springframework.security.core.Authentication;
 import io.jsonwebtoken.Jws;
 
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
