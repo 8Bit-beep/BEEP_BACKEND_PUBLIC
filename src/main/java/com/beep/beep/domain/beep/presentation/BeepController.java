@@ -32,20 +32,18 @@ public class BeepController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "입실 요청", description = "입실을 요청합니다.(student)")
     public void enterRoom(
-            @RequestHeader(name = "Authorization") String token,
             @RequestBody EnterRoomRequest request
     ) {
-        beepService.enter(token,request);
+        beepService.enter(request);
     }
 
     @PutMapping("/exit")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "퇴실 요청", description = "퇴실을 요청합니다.(student)")
     public void exitRoom(
-            @RequestHeader(name = "Authorization") String token,
             @RequestBody ExitRoomRequest request
     ) {
-        beepService.exit(token,request);
+        beepService.exit(request);
     }
 
     @GetMapping("/rooms")

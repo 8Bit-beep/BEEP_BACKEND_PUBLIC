@@ -41,10 +41,8 @@ public class StudentController {
     @GetMapping("/info")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "학생프로필 조회", description = "학생프로필 조회입니다 (student)")
-    public StudentInfoResponse getInfo(
-            @RequestHeader(name = "Authorization") String token
-    ) {
-        return studentService.getStudentInfo(token);
+    public StudentInfoResponse getInfo() {
+        return studentService.getStudentInfo();
     }
 
     @GetMapping("/cls")

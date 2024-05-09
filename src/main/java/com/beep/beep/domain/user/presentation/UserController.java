@@ -31,10 +31,9 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "회원탈퇴", description = "회원탈퇴 요청합니다. (student,teacher,admin)")
     public void withdrawal(
-            @RequestHeader("Authorization") String token,
             @RequestBody WithdrawalRequest request
     ){
-        userService.withdrawal(token,request);
+        userService.withdrawal(request);
     }
 
     @GetMapping("/find-user")

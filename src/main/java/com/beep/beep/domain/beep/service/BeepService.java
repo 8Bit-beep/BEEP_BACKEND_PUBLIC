@@ -1,8 +1,8 @@
 package com.beep.beep.domain.beep.service;
 
 
-import com.beep.beep.domain.beep.domain.Attendance;
-import com.beep.beep.domain.beep.domain.Room;
+import com.beep.beep.domain.beep.domain.AttendanceEntity;
+import com.beep.beep.domain.beep.domain.RoomEntity;
 import com.beep.beep.domain.beep.domain.repository.AttendanceRepository;
 import com.beep.beep.domain.beep.domain.repository.RoomRepository;
 import com.beep.beep.domain.beep.exception.NonExitException;
@@ -14,10 +14,11 @@ import com.beep.beep.domain.beep.presentation.dto.request.EnterRoomRequest;
 import com.beep.beep.domain.beep.presentation.dto.request.ExitRoomRequest;
 import com.beep.beep.domain.beep.presentation.dto.response.GetAttendanceResponse;
 import com.beep.beep.domain.beep.presentation.dto.response.GetRoomResponse;
-import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.domain.UserEntity;
 import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.facade.UserFacade;
-import com.beep.beep.global.security.jwt.JwtProvider;
+import com.beep.beep.domain.user.presentation.dto.User;
+import com.beep.beep.global.common.repository.UserSecurity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,52 +34,52 @@ public class BeepService {
     private final UserFacade userFacade;
     private final RoomRepository roomRepository;
     private final AttendanceRepository attendanceRepository;
-    private final JwtProvider jwtProvider;
     private final StudentIdRepository studentIdRepository;
     private final UserRepository userRepository;
+    private final UserSecurity userSecurity;
 
     @Transactional
-    public void enter(String token, EnterRoomRequest request){
+    public void enter(EnterRoomRequest request){
         String code = request.getCode();
         beepFacade.existsRoomByCode(code);
 
-        User user = userFacade.findUserByEmail(jwtProvider.getTokenSubject(jwtProvider.parseToken(token)));
+        User user = userFacade.findUserByEmail(userSecurity.getUser().getEmail());
 
-        Attendance attendance = beepFacade.findAttendanceByIdx(user.getIdx());
-        if (!Objects.equals(attendance.getCode(), "404"))
+        AttendanceEntity attendanceEntity = beepFacade.findAttendanceByIdx(user.getIdx());
+        if (!Objects.equals(attendanceEntity.getCode(), "404"))
             throw NonExitException.EXCEPTION;
 
-        attendance.updateAttendance(code);
+        attendanceEntity.updateAttendance(code);
     }
 
     @Transactional
-    public void exit(String token, ExitRoomRequest request){
+    public void exit(ExitRoomRequest request){
         String code = request.getCode();
         beepFacade.existsRoomByCode(code);
 
-        User user = userFacade.findUserByEmail(jwtProvider.getTokenSubject(jwtProvider.parseToken(token)));
+        User user = userFacade.findUserByEmail(userSecurity.getUser().getEmail());
 
-        Attendance attendance = beepFacade.findAttendanceByIdx(user.getIdx());
-        if (!Objects.equals(code, attendance.getCode()))
+        AttendanceEntity attendanceEntity = beepFacade.findAttendanceByIdx(user.getIdx());
+        if (!Objects.equals(code, attendanceEntity.getCode()))
             throw NotCurrentRoomException.EXCEPTION;
 
-        attendance.updateAttendance("404");
+        attendanceEntity.updateAttendance("404");
     }
 
     public List<GetRoomResponse> getRooms(String name){
-        List<Room> roomList = roomRepository.findAllByName(name);
+        List<RoomEntity> roomEntityList = roomRepository.findAllByName(name);
 
-        return roomList.stream()
+        return roomEntityList.stream()
                 .map(BeepMapper::toGetRoomDto)
                 .toList();
     }
 
     public List<GetAttendanceResponse> getAttendance(String code){
-        List<User> userList = attendanceRepository.findAllByCode(code).stream()
-                .map(attendance -> userRepository.findByIdx(attendance.getUserIdx()))
+        List<UserEntity> userEntityList = attendanceRepository.findAllByCode(code).stream()
+                .map(attendanceEntity -> userRepository.findByIdx(attendanceEntity.getUserIdx()))
                 .toList();
 
-        return userList.stream()
+        return userEntityList.stream()
                 .map(user -> BeepMapper.toGetAttendanceDto(user,studentIdRepository.findByUserIdx(user.getIdx())))
                 .toList();
     }

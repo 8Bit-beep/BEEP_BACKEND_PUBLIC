@@ -2,13 +2,13 @@ package com.beep.beep.domain.teacher.service;
 
 import com.beep.beep.domain.teacher.domain.repository.JobRepository;
 import com.beep.beep.domain.teacher.mapper.TeacherMapper;
+import com.beep.beep.domain.teacher.presentation.dto.Job;
 import com.beep.beep.domain.teacher.presentation.dto.response.AdminTeacherResponse;
-import com.beep.beep.domain.teacher.domain.Job;
 import com.beep.beep.domain.teacher.presentation.dto.response.TeacherInfoResponse;
-import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.UserType;
 import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.facade.UserFacade;
+import com.beep.beep.domain.user.presentation.dto.User;
 import com.beep.beep.global.security.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class TeacherService {
         User user = userFacade.findUserByEmail(jwtProvider.getTokenSubject(jwtProvider.parseToken(token)));
         Job job = jobRepository.findByUserIdx(user.getIdx());
 
-        return TeacherMapper.toTeacherInfoDto(user,job);
+        return TeacherMapper.toTeacherInfoDto(user, job);
     }
 
 

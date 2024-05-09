@@ -3,12 +3,14 @@ package com.beep.beep.domain.user.service;
 
 import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.exception.UserNotFoundException;
+import com.beep.beep.domain.user.presentation.dto.User;
 import com.beep.beep.domain.user.presentation.dto.request.WithdrawalRequest;
-import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.domain.UserEntity;
 import com.beep.beep.domain.user.exception.PasswordWrongException;
 import com.beep.beep.domain.user.facade.UserFacade;
 import com.beep.beep.domain.user.presentation.dto.request.ChangePwRequest;
 import com.beep.beep.domain.user.presentation.dto.response.UserIdResponse;
+import com.beep.beep.global.common.repository.UserSecurity;
 import com.beep.beep.global.security.jwt.JwtProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +23,16 @@ public class UserService {
 
     private final UserFacade userFacade;
     private final PasswordEncoder encoder;
-    private final JwtProvider jwtProvider;
+    private final UserSecurity userSecurity;
     private final UserRepository userRepository;
 
-    public void withdrawal(String token,WithdrawalRequest request) {
-        User user = userFacade.findUserByEmail(jwtProvider.getTokenSubject(jwtProvider.parseToken(token)));
+    public void withdrawal(WithdrawalRequest request) {
+        User user = userFacade.findUserByEmail(userSecurity.getUser().getEmail());
 
         if (!encoder.matches(request.getPassword(), user.getPassword()))
             throw PasswordWrongException.EXCEPTION;
 
-        userRepository.delete(user);
+        userRepository.deleteById(user.getIdx());
     }
 
     public void idCheck(String id) {
@@ -53,9 +55,9 @@ public class UserService {
 
     @Transactional
     public void changePw(ChangePwRequest request){
-        User user = userFacade.findUserById(request.getId());
+        UserEntity userEntity = userFacade.findUserById(request.getId());
 
-        user.updateUser(encoder.encode(request.getPassword()));
+        userEntity.updateUser(encoder.encode(request.getPassword()));
     }
 
 }
