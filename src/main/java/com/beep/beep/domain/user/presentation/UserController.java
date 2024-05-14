@@ -28,7 +28,6 @@ public class UserController {
     private final UserService userService;
 
     @DeleteMapping()
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "회원탈퇴", description = "회원탈퇴 요청합니다. (student,teacher,admin)")
     public void withdrawal(
             @RequestBody WithdrawalRequest request
@@ -37,7 +36,6 @@ public class UserController {
     }
 
     @GetMapping("/find-user")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "이메일-유저아이디에 일치하는 유저존재여부 조회", description = "이메일-유저아이디에 일치하는 유저가 존재하는지를 조회합니다.(unauthenticated)")
     public void checkIdEmail(
             @RequestParam String email,
@@ -47,7 +45,6 @@ public class UserController {
     }
 
     @PutMapping("/change-pw")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "비밀번호 변경", description = "아이디와 변경할 비번 값을 받아 비번을 변경해줍니다.(unauthenticated)")
     public void changePw(
             @RequestBody ChangePwRequest request
@@ -56,7 +53,6 @@ public class UserController {
     }
 
     @GetMapping("/find-id")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "아이디 찾기", description = "검증된 이메일로 아이디를 찾습니다. (unauthenticated)")
     public UserIdResponse findId(
             @RequestParam String email
@@ -65,7 +61,6 @@ public class UserController {
     }
 
     @GetMapping("/id-check")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "아이디 확인", description = "아이디 존재여부 확인 (unauthenticated)")
     public void studentIdCheck(
             @RequestParam String id

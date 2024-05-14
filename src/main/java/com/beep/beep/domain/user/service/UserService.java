@@ -3,6 +3,7 @@ package com.beep.beep.domain.user.service;
 
 import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.exception.UserNotFoundException;
+import com.beep.beep.domain.user.mapper.UserMapper;
 import com.beep.beep.domain.user.presentation.dto.User;
 import com.beep.beep.domain.user.presentation.dto.request.WithdrawalRequest;
 import com.beep.beep.domain.user.domain.UserEntity;
@@ -25,6 +26,7 @@ public class UserService {
     private final PasswordEncoder encoder;
     private final UserSecurity userSecurity;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public void withdrawal(WithdrawalRequest request) {
         User user = userFacade.findUserByEmail(userSecurity.getUser().getEmail());
@@ -55,9 +57,9 @@ public class UserService {
 
     @Transactional
     public void changePw(ChangePwRequest request){
-        UserEntity userEntity = userFacade.findUserById(request.getId());
-
-        userEntity.updateUser(encoder.encode(request.getPassword()));
+        User user = userFacade.findUserById(request.getId());
+        user.setPassword(encoder.encode(request.getPassword()));
+        userRepository.save(userMapper.toEdit(user));
     }
 
 }

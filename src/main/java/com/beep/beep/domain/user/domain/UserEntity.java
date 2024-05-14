@@ -44,8 +44,4 @@ public class UserEntity {
         this.authority = authority;
     }
 
-    public void updateUser(String password) {
-        this.password = password.isBlank() ? this.password : password;
-    }
-
 }
