@@ -9,6 +9,7 @@ import com.beep.beep.domain.user.domain.enums.UserType;
 import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.facade.UserFacade;
 import com.beep.beep.domain.user.presentation.dto.User;
+import com.beep.beep.global.common.repository.UserSecurity;
 import com.beep.beep.global.security.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeacherService {
 
-    private final JwtProvider jwtProvider;
     private final UserFacade userFacade;
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
+    private final UserSecurity userSecurity;
 
     public List<AdminTeacherResponse> teacherList() {
         List<User> teacherList = userRepository.findAllByAuthority(UserType.TEACHER);
@@ -33,8 +34,8 @@ public class TeacherService {
                 .toList();
     }
 
-    public TeacherInfoResponse getTeacherInfo(String token){
-        User user = userFacade.findUserByEmail(jwtProvider.getTokenSubject(jwtProvider.parseToken(token)));
+    public TeacherInfoResponse getTeacherInfo(){
+        User user = userFacade.findUserByEmail(userSecurity.getUser().getEmail());
         Job job = jobRepository.findByUserIdx(user.getIdx());
 
         return TeacherMapper.toTeacherInfoDto(user, job);

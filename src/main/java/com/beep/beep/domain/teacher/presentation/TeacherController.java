@@ -25,19 +25,16 @@ public class TeacherController {
     private final TeacherService teacherService;
 
     @GetMapping()
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "선생님계정 조회", description = "선생님계정 전부 조회합니다. (admin)")
     public List<AdminTeacherResponse> teacherList(){
         return teacherService.teacherList();
     }
 
     @GetMapping("/info")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "선생님프로필 조회", description = "선생님프로필 조회합니다. (teacher)")
     public TeacherInfoResponse getInfo(
-            @RequestHeader("Authorization") String token
     ) {
-        return teacherService.getTeacherInfo(token);
+        return teacherService.getTeacherInfo();
     }
 
 
