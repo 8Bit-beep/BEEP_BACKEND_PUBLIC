@@ -13,8 +13,10 @@ import lombok.experimental.SuperBuilder;
 
 
 @Entity
-@Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Table(name = "tb_attendance")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SuperBuilder
 public class AttendanceEntity extends BaseTime {
     @Id
     private Long userIdx;
@@ -22,9 +24,4 @@ public class AttendanceEntity extends BaseTime {
     @Column(unique = true,nullable = false)
     private String code;
 
-    @Builder
-    public AttendanceEntity(Long userIdx, String code) {
-        this.userIdx = userIdx;
-        this.code = code;
-    }
 }
