@@ -45,7 +45,7 @@ jobs:
             docker image prune -a -f
 
             docker pull ${{ secrets.DOCKER_USERNAME }}/beep:0.0.1-SNAPSHOT
-            docker pull redis:
+            docker pull redis
 
             docker run --name redis -p 6379:6379 --network redis-network -it -d redis
 
