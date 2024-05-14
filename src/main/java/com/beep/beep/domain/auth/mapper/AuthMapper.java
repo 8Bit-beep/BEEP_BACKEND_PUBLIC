@@ -7,11 +7,12 @@ import com.beep.beep.domain.beep.domain.AttendanceEntity;
 import com.beep.beep.domain.student.domain.StudentIdEntity;
 import com.beep.beep.domain.teacher.domain.JobEntity;
 import com.beep.beep.domain.user.domain.UserEntity;
-import com.beep.beep.domain.user.domain.enums.UserType;
+import com.beep.beep.domain.user.presentation.dto.User;
 import org.springframework.stereotype.Component;
 
 import static com.beep.beep.domain.user.domain.enums.UserType.ADMIN;
 import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
+import static com.beep.beep.domain.user.domain.enums.UserType.TEACHER;
 
 @Component
 public class AuthMapper {
@@ -39,26 +40,26 @@ public class AuthMapper {
                 .password(encryptedPassword)
                 .email(request.getEmail())
                 .name(request.getName())
-                .authority(UserType.TEACHER).build();
+                .authority(TEACHER).build();
     }
 
-    public StudentIdEntity toStudentId(UserEntity userEntity, StudentSignUpRequest request) {
+    public StudentIdEntity toStudentId(User user, StudentSignUpRequest request) {
         return StudentIdEntity.builder()
-                .userIdx(userEntity.getIdx())
+                .userIdx(user.getIdx())
                 .grade(request.getGrade())
                 .cls(request.getCls())
                 .num(request.getNum()).build();
     }
 
-    public AttendanceEntity toAttendance(UserEntity userEntity) {
+    public AttendanceEntity toAttendance(User user) {
         return AttendanceEntity.builder()
-                .userIdx(userEntity.getIdx())
+                .userIdx(user.getIdx())
                 .code("404").build();
     }
 
-    public JobEntity toJob(UserEntity userEntity, TeacherSignUpRequest request) {
+    public JobEntity toJob(User user, TeacherSignUpRequest request) {
         return JobEntity.builder()
-                .userIdx(userEntity.getIdx())
+                .userIdx(user.getIdx())
                 .department(request.getDepartment())
                 .job(request.getJob()).build();
     }

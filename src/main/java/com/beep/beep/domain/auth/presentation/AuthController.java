@@ -71,7 +71,6 @@ public class AuthController {
     }
 
     @GetMapping("/refresh")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "토큰 재발급", description = "access 토큰 재발급 (student,teacher,admin)")
     public TokenRefreshResponse refresh(
             @Validated @RequestBody TokenRefreshRequest request
