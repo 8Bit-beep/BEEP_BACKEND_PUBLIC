@@ -32,21 +32,18 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping()
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "학생계정 조회", description = "학생계정 전부 조회합니다. (admin)")
     public List<AdminStudentResponse> studentList(){
         return studentService.studentList();
     }
 
     @GetMapping("/info")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "학생프로필 조회", description = "학생프로필 조회입니다 (student)")
     public StudentInfoResponse getInfo() {
         return studentService.getStudentInfo();
     }
 
     @GetMapping("/cls")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "반 조회", description = "학년 param로 반을 조회합니다.(teacher)")
     public List<GetClsResponse> getCls(
             @RequestParam int grade
@@ -55,7 +52,6 @@ public class StudentController {
     }
 
     @GetMapping("/cls-member")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "반 구성원 조회", description = "학년-반으로 반 구성원 목록을 조회합니다. (teacher)")
     public List<GetStudentResponse> getStudents(
             @ModelAttribute GetStudentRequest request
@@ -64,7 +60,6 @@ public class StudentController {
     }
 
     @GetMapping("/name")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "학생 조회", description = "학생이름으로 학생을 조회합니다.(teacher)")
     public List<SearchStudentResponse> searchStudents(
             @RequestParam String name

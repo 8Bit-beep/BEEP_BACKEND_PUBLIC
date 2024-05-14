@@ -1,8 +1,10 @@
 package com.beep.beep.domain.student.service;
 
 import com.beep.beep.domain.beep.domain.repository.RoomRepository;
+import com.beep.beep.domain.beep.presentation.dto.Room;
 import com.beep.beep.domain.student.domain.repository.StudentIdRepository;
 import com.beep.beep.domain.student.mapper.StudentMapper;
+import com.beep.beep.domain.student.presentation.dto.StudentId;
 import com.beep.beep.domain.student.presentation.dto.request.GetStudentRequest;
 import com.beep.beep.domain.student.presentation.dto.response.AdminStudentResponse;
 import com.beep.beep.domain.beep.domain.RoomEntity;
@@ -49,14 +51,14 @@ public class StudentService {
         User user = userFacade.findUserByEmail(userSecurity.getUser().getEmail());
         Long userIdx = user.getIdx();
 
-        StudentIdEntity studentIdEntity = studentIdRepository.findByUserIdx(userIdx);
-        RoomEntity roomEntity = roomRepository.findByCode(beepFacade.findAttendanceByIdx(userIdx).getCode());
+        StudentId studentId = studentIdRepository.findByUserIdx(userIdx);
+        Room room = roomRepository.findByCode(beepFacade.findAttendanceByIdx(userIdx).getCode());
 
-        return StudentMapper.toStudentInfoDto(user, studentIdEntity, roomEntity);
+        return StudentMapper.toStudentInfoDto(user, studentId, room);
     }
 
     public List<GetStudentResponse> getStudents(GetStudentRequest request){
-        List<StudentIdEntity> studentIdEntityList = studentIdRepository.findByGradeAndCls(request.getGrade(),request.getCls());
+        List<StudentId> studentIdEntityList = studentIdRepository.findByGradeAndCls(request.getGrade(),request.getCls());
 
         return studentIdEntityList.stream()
                 .map(studentId -> {
@@ -67,7 +69,7 @@ public class StudentService {
     }
 
     public List<SearchStudentResponse> searchStudents(String name){
-        List<UserEntity> userEntityList = userRepository.findByName(name, UserType.STUDENT);
+        List<User> userEntityList = userRepository.findByName(name, UserType.STUDENT);
         // 2. studentId 찾기 , attendance -> roomName 찾기
         return userEntityList.stream()
                 .map(user -> {
