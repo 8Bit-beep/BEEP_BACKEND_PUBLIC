@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 
 @Entity
@@ -25,9 +26,5 @@ public class AttendanceEntity extends BaseTime {
     public AttendanceEntity(Long userIdx, String code) {
         this.userIdx = userIdx;
         this.code = code;
-    }
-
-    public void updateAttendance(String code) {
-        this.code = code.isBlank() ? this.code : code;
     }
 }

@@ -47,7 +47,6 @@ public class BeepController {
     }
 
     @GetMapping("/rooms")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "실 조회", description = "실 이름으로 실을 조회합니다.(teacher)")
     public List<GetRoomResponse> getRooms(
             @RequestParam String name
@@ -56,7 +55,6 @@ public class BeepController {
     }
 
     @GetMapping("/attendances")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "출석 조회", description = "실 코드로 입실한 학생목록 조회합니다. (teacher)")
     public List<GetAttendanceResponse> getAttendance(
             @RequestParam String code
