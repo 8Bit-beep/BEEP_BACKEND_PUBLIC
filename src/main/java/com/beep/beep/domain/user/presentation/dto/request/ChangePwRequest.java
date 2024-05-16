@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 public class ChangePwRequest {
-    private String id;
+    private String email;
     private String password;
 }

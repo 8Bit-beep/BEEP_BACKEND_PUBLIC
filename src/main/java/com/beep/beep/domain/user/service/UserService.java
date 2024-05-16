@@ -57,7 +57,7 @@ public class UserService {
 
     @Transactional
     public void changePw(ChangePwRequest request){
-        User user = userFacade.findUserById(request.getId());
+        User user = userFacade.findUserByEmail(request.getEmail());
         user.setPassword(encoder.encode(request.getPassword()));
         userRepository.save(userMapper.toEdit(user));
     }

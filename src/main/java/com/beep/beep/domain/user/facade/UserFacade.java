@@ -19,7 +19,7 @@ public class UserFacade {
             throw UserAlreadyExistsException.EXCEPTION;
     }
 
-    public User findUserById(String id) {
+    public UserEntity findUserById(String id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> UserNotFoundException.EXCEPTION );
     }
