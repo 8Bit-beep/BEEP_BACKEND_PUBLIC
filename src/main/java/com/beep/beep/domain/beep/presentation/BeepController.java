@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -27,6 +28,13 @@ import java.util.List;
 public class BeepController {
 
     private final BeepService beepService;
+
+    @PostMapping("/attendances")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "입실 요청", description = "입실을 요청합니다.(student)")
+    public void saveAttendance() {
+        beepService.saveAttendance();
+    }
 
     @PutMapping("/enter")
     @ResponseStatus(HttpStatus.CREATED)

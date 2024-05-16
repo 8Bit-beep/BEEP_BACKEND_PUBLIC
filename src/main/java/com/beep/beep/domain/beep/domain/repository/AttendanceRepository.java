@@ -10,5 +10,5 @@ public interface AttendanceRepository extends CrudRepository<AttendanceEntity,St
 
     Attendance findByUserIdx(Long userIdx);
 
-    List<Attendance> findAllByCode(String code);
+    List<AttendanceEntity> findAllByCode(String code);
 }
