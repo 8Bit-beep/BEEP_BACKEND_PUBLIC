@@ -7,6 +7,7 @@ import com.beep.beep.global.security.jwt.handler.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import static com.beep.beep.domain.user.domain.enums.UserType.ADMIN;
 import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
 import static com.beep.beep.domain.user.domain.enums.UserType.TEACHER;
+import static org.apache.hc.core5.http.Method.POST;
 
 
 @Configuration
@@ -46,12 +48,15 @@ public class SecurityConfiguration {
                         .requestMatchers("/beep/enter").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers("/beep/exit").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers("/beep/rooms").hasAuthority(TEACHER.getAuthority())
-                        .requestMatchers("/beep/attendances").hasAuthority(TEACHER.getAuthority())
+                        .requestMatchers(HttpMethod.POST,"/beep/attendances").hasAuthority(STUDENT.getAuthority())
+                        .requestMatchers(HttpMethod.GET,"/beep/attendances").hasAuthority(TEACHER.getAuthority())
 
+                        .requestMatchers("/teachers/job").hasAuthority(TEACHER.getAuthority())
                         .requestMatchers("/teachers").hasAuthority(ADMIN.getAuthority())
                         .requestMatchers("/teachers/info").hasAuthority(TEACHER.getAuthority())
 
                         .requestMatchers("/students").hasAuthority(ADMIN.getAuthority())
+                        .requestMatchers("/students/id").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers("/students/info").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers("/students/cls").hasAuthority(TEACHER.getAuthority())
                         .requestMatchers("/students/cls-member").hasAuthority(TEACHER.getAuthority())
