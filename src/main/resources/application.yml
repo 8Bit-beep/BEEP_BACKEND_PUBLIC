@@ -31,7 +31,7 @@ spring:
     redis:
       mail:
         host: 13.209.81.47 # ?? ???? ???? ???? ?? ??
-        port: 6379
+        port: 32768
 
 jwt:
   refresh-exp: 2592000000 #30일
