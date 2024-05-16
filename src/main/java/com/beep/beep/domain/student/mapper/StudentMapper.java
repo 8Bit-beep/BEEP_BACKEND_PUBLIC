@@ -1,18 +1,21 @@
 package com.beep.beep.domain.student.mapper;
 
-import com.beep.beep.domain.beep.presentation.dto.Room;
-import com.beep.beep.domain.student.presentation.dto.StudentId;
+import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpRequest;
+import com.beep.beep.domain.beep.domain.RoomEntity;
+import com.beep.beep.domain.student.domain.StudentIdEntity;
+import com.beep.beep.domain.student.presentation.dto.request.StudentIdRequest;
 import com.beep.beep.domain.student.presentation.dto.response.AdminStudentResponse;
 import com.beep.beep.domain.student.presentation.dto.response.GetClsResponse;
 import com.beep.beep.domain.student.presentation.dto.response.GetStudentResponse;
 import com.beep.beep.domain.student.presentation.dto.response.SearchStudentResponse;
 import com.beep.beep.domain.student.presentation.dto.response.StudentInfoResponse;
+import com.beep.beep.domain.user.domain.UserEntity;
 import com.beep.beep.domain.user.presentation.dto.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class StudentMapper {
-    public static AdminStudentResponse toAdminStudentDto(User user, StudentId studentId) {
+    public static AdminStudentResponse toAdminStudentDto(UserEntity user, StudentIdEntity studentId) {
         return AdminStudentResponse.builder()
                 .idx(user.getIdx())
                 .id(user.getId())
@@ -23,7 +26,7 @@ public class StudentMapper {
                 .num(studentId.getNum()).build();
     }
 
-    public static GetStudentResponse toGetStudentDto(StudentId studentId, User user, Room room) {
+    public static GetStudentResponse toGetStudentDto(StudentIdEntity studentId, UserEntity user, RoomEntity room) {
         return GetStudentResponse.builder()
                 .name(user.getName())
                 .grade(studentId.getGrade())
@@ -39,7 +42,7 @@ public class StudentMapper {
                 .headCount(headCount).build();
     }
 
-    public static SearchStudentResponse toSearchStudentDto(User user, StudentId studentId, Room room) {
+    public static SearchStudentResponse toSearchStudentDto(UserEntity user, StudentIdEntity studentId, RoomEntity room) {
         return SearchStudentResponse.builder()
                 .name(user.getName())
                 .grade(studentId.getGrade())
@@ -48,7 +51,7 @@ public class StudentMapper {
                 .room(room.getName()).build();
     }
 
-    public static StudentInfoResponse toStudentInfoDto(User user, StudentId studentId, Room room) {
+    public static StudentInfoResponse toStudentInfoDto(User user, StudentIdEntity studentId, RoomEntity room) {
         return StudentInfoResponse.builder()
                 .name(user.getName())
                 .email(user.getEmail())
@@ -56,5 +59,13 @@ public class StudentMapper {
                 .cls(studentId.getCls())
                 .num(studentId.getNum())
                 .room(room.getName()).build();
+    }
+
+    public StudentIdEntity toStudentId(User user, StudentIdRequest request) {
+        return StudentIdEntity.builder()
+                .userIdx(user.getIdx())
+                .grade(request.getGrade())
+                .cls(request.getCls())
+                .num(request.getNum()).build();
     }
 }

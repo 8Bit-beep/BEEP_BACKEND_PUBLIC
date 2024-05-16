@@ -2,6 +2,7 @@ package com.beep.beep.domain.student.presentation;
 
 
 import com.beep.beep.domain.student.presentation.dto.request.GetStudentRequest;
+import com.beep.beep.domain.student.presentation.dto.request.StudentIdRequest;
 import com.beep.beep.domain.student.presentation.dto.response.AdminStudentResponse;
 import com.beep.beep.domain.student.presentation.dto.response.GetClsResponse;
 import com.beep.beep.domain.student.presentation.dto.response.GetStudentResponse;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +33,15 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
+
+    @PostMapping("/id")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "학번 저장", description = "학번을 저장합니다. (student)")
+    public void saveStudentId(
+            @RequestBody StudentIdRequest request
+    ){
+        studentService.saveStudentId(request);
+    }
 
     @GetMapping()
     @Operation(summary = "학생계정 조회", description = "학생계정 전부 조회합니다. (admin)")
