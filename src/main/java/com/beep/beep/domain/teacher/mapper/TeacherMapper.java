@@ -1,8 +1,10 @@
 package com.beep.beep.domain.teacher.mapper;
 
-import com.beep.beep.domain.teacher.presentation.dto.Job;
+import com.beep.beep.domain.teacher.domain.JobEntity;
+import com.beep.beep.domain.teacher.presentation.dto.request.SaveJobRequest;
 import com.beep.beep.domain.teacher.presentation.dto.response.AdminTeacherResponse;
 import com.beep.beep.domain.teacher.presentation.dto.response.TeacherInfoResponse;
+import com.beep.beep.domain.user.domain.UserEntity;
 import com.beep.beep.domain.user.presentation.dto.User;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +12,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class TeacherMapper {
 
-    public static AdminTeacherResponse toAdminTeacherDto(User user, Job job) {
+    public JobEntity toJob(User user, SaveJobRequest request) {
+        return JobEntity.builder()
+                .userIdx(user.getIdx())
+                .department(request.getDepartment())
+                .job(request.getJob()).build();
+    }
+
+    public static AdminTeacherResponse toAdminTeacherDto(UserEntity user, JobEntity job) {
         return AdminTeacherResponse.builder()
                 .idx(user.getIdx())
                 .id(user.getId())
@@ -20,7 +29,7 @@ public class TeacherMapper {
                 .job(job.getJob()).build();
     }
 
-    public static TeacherInfoResponse toTeacherInfoDto(User user, Job job) {
+    public static TeacherInfoResponse toTeacherInfoDto(User user, JobEntity job) {
         return TeacherInfoResponse.builder()
                 .name(user.getName())
                 .email(user.getEmail())
