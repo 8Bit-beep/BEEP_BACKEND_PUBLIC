@@ -5,24 +5,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
-@Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter @SuperBuilder
 @Table(name = "tb_job")
-public class Job {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class JobEntity {
     @Id
     private Long userIdx;
 
     private String department; // 소속부서
     private String job; // 직책
-
-    @Builder
-    public Job(Long userIdx,String job,String department){
-        this.userIdx = userIdx;
-        this.department = department;
-        this.job = job;
-    }
 }

@@ -1,87 +1,91 @@
 package com.beep.beep.domain.student.service;
 
-import com.beep.beep.domain.student.presentation.dto.request.AdminStudentResponse;
-import com.beep.beep.domain.beep.domain.Attendance;
-import com.beep.beep.domain.beep.domain.Room;
-import com.beep.beep.domain.beep.exception.NonExitException;
-import com.beep.beep.domain.beep.exception.NotCurrentRoomException;
+import com.beep.beep.domain.beep.domain.repository.RoomRepository;
+import com.beep.beep.domain.student.domain.repository.StudentIdRepository;
+import com.beep.beep.domain.student.mapper.StudentMapper;
+import com.beep.beep.domain.student.presentation.dto.request.GetStudentRequest;
+import com.beep.beep.domain.student.presentation.dto.request.StudentIdRequest;
+import com.beep.beep.domain.student.presentation.dto.response.AdminStudentResponse;
+import com.beep.beep.domain.beep.domain.RoomEntity;
 import com.beep.beep.domain.beep.facade.BeepFacade;
-import com.beep.beep.domain.student.presentation.dto.request.EnterRoomRequest;
-import com.beep.beep.domain.student.presentation.dto.request.ExitRoomRequest;
-import com.beep.beep.domain.student.domain.StudentId;
-import com.beep.beep.domain.student.facade.StudentFacade;
+import com.beep.beep.domain.student.domain.StudentIdEntity;
+import com.beep.beep.domain.student.presentation.dto.response.GetClsResponse;
 import com.beep.beep.domain.student.presentation.dto.response.GetStudentResponse;
 import com.beep.beep.domain.student.presentation.dto.response.SearchStudentResponse;
 import com.beep.beep.domain.student.presentation.dto.response.StudentInfoResponse;
-import com.beep.beep.domain.teacher.presentation.dto.response.GetClsResponse;
-import com.beep.beep.domain.user.domain.User;
-import com.beep.beep.domain.user.facade.UserFacade;
-import com.beep.beep.global.security.jwt.JwtProvider;
-import jakarta.transaction.Transactional;
+import com.beep.beep.domain.user.domain.UserEntity;
+import com.beep.beep.domain.user.domain.enums.UserType;
+import com.beep.beep.domain.user.domain.repository.UserRepository;
+import com.beep.beep.domain.user.presentation.dto.User;
+import com.beep.beep.global.common.service.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class StudentService {
 
-    private final UserFacade userFacade;
-    private final StudentFacade studentFacade;
     private final BeepFacade beepFacade;
-    private final JwtProvider jwtProvider;
+    private final StudentMapper studentMapper;
+    private final UserUtil userUtil;
+    private final RoomRepository roomRepository;
+    private final StudentIdRepository studentIdRepository;
+    private final UserRepository userRepository;
+
+    public void saveStudentId(StudentIdRequest request){
+        studentIdRepository.save(studentMapper.toStudentId(userUtil.getCurrentUser(),request));
+    }
 
     public List<AdminStudentResponse> studentList(){
-        List<User> studentList = userFacade.findAllStudents();
+        List<UserEntity> studentList = userRepository.findAllByAuthority(UserType.STUDENT);
 
         return studentList.stream()
                 .map(student ->
-                        AdminStudentResponse.of(student,studentFacade.findByUserIdx(student.getIdx())))
+                        StudentMapper.toAdminStudentDto(student,studentIdRepository.findByUserIdx(student.getIdx())))
                 .toList();
     }
 
-    public StudentInfoResponse getStudentInfo(String token) {
-        User user = userFacade.findUserByEmail(jwtProvider.getTokenSubject(jwtProvider.parseToken(token)));
-        System.out.println("유저 찾음.");
+    public StudentInfoResponse getStudentInfo() {
+        User user = userUtil.getCurrentUser();
         Long userIdx = user.getIdx();
 
-        StudentId studentId = studentFacade.findByUserIdx(userIdx);
-        Room room = beepFacade.findByCode(beepFacade.findAttendanceByIdx(userIdx).getCode());
+        StudentIdEntity studentId = studentIdRepository.findByUserIdx(userIdx);
+        RoomEntity room = roomRepository.findByCode(beepFacade.findAttendanceByIdx(userIdx).getCode());
 
-        return StudentInfoResponse.of(user,studentId,room);
+        return StudentMapper.toStudentInfoDto(user, studentId, room);
     }
 
-    public List<GetStudentResponse> getStudents(int grade, int cls){
-        List<StudentId> studentIdList = studentFacade.findByGradeCls(grade,cls);
+    public List<GetStudentResponse> getStudents(GetStudentRequest request){
+        List<StudentIdEntity> studentIdEntityList = studentIdRepository.findByGradeAndCls(request.getGrade(),request.getCls());
 
-        return studentIdList.stream()
+        return studentIdEntityList.stream()
                 .map(studentId -> {
                     Long userIdx = studentId.getUserIdx();
-                    return GetStudentResponse.of(studentId, userFacade.findUserByIdx(userIdx), beepFacade.findRoomByUserIdx(userIdx));
+                    return StudentMapper.toGetStudentDto(studentId, userRepository.findByIdx(userIdx), beepFacade.findRoomByUserIdx(userIdx));
                 })
                 .toList();
     }
 
     public List<SearchStudentResponse> searchStudents(String name){
-        List<User> userList = userFacade.findStudentsByName(name);
+        List<UserEntity> userEntityList = userRepository.findByName(name, UserType.STUDENT);
         // 2. studentId 찾기 , attendance -> roomName 찾기
-        return userList.stream()
+        return userEntityList.stream()
                 .map(user -> {
                     Long userIdx = user.getIdx();
-                    return SearchStudentResponse.of(user, studentFacade.findByUserIdx(userIdx), beepFacade.findRoomByUserIdx(userIdx));
+                    return StudentMapper.toSearchStudentDto(user, studentIdRepository.findByUserIdx(userIdx), beepFacade.findRoomByUserIdx(userIdx));
                 })
                 .toList();
     }
 
     public List<GetClsResponse> getCls(int grade){
-        List<Integer> clsList = studentFacade.findAllClsByGrade(grade);
+        List<Integer> clsList = studentIdRepository.findClsByGrade(grade);
 
         return clsList.stream()
                 .map( cls -> {
-                    int headCount = studentFacade.countStudentsByCls(grade,cls);
-                    return GetClsResponse.of(cls,headCount);
+                    int headCount = studentIdRepository.countByCls(grade,cls);
+                    return StudentMapper.toGetClsDto(cls,headCount);
                 }).toList();
     }
 

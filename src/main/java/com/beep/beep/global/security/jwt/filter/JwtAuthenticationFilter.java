@@ -1,6 +1,7 @@
 package com.beep.beep.global.security.jwt.filter;
 
 
+import com.beep.beep.global.security.jwt.JwtExtractor;
 import com.beep.beep.global.security.jwt.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -18,17 +19,18 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
+    private final JwtExtractor jwtExtractor;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String token = jwtProvider.extractTokenFromRequest(request);
+        String token = jwtExtractor.extractTokenFromRequest(request);
 
         if (token != null) { // 토큰이 존재하면
             // 사용자 인증정보를 SecurityContext에 설정하는 과정
             // SecurityContext : 인증된 사용자의 세부정보 저장소 -> 구성요소 : Authentication 객체
             // SecurityContextHolder : SecurityContext에 접근하기 위한 메커니즘 제공
-            SecurityContextHolder.getContext().setAuthentication(jwtProvider.getAuthentication(token));
+            SecurityContextHolder.getContext().setAuthentication(jwtExtractor.getAuthentication(token));
             // setAuthentication  : 인증 정보를 인자로 받는 setter , 이거 return 값 : Authentication 객체
         }
 

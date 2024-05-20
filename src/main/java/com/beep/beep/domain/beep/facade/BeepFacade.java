@@ -1,14 +1,12 @@
 package com.beep.beep.domain.beep.facade;
 
-import com.beep.beep.domain.beep.domain.Attendance;
-import com.beep.beep.domain.beep.domain.Room;
+import com.beep.beep.domain.beep.domain.RoomEntity;
 import com.beep.beep.domain.beep.domain.repository.AttendanceRepository;
 import com.beep.beep.domain.beep.domain.repository.RoomRepository;
 import com.beep.beep.domain.beep.exception.RoomNotExistsException;
+import com.beep.beep.domain.beep.presentation.dto.Attendance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -26,33 +24,9 @@ public class BeepFacade {
         return attendanceRepository.findByUserIdx(userIdx);
     }
 
-    public Room findByCode(String code){
-        return roomRepository.findByCode(code);
-    }
-
-    public List<Room> findRoomsByName(String name) {
-        return roomRepository.findAllByName(name);
-    }
-
-    public List<Attendance> findAttendancesByCode(String code) {
-        return attendanceRepository.findAllByCode(code);
-    }
-
-    public Room findRoomByUserIdx(Long userIdx) {
-        Attendance attendance = findAttendanceByUserIdx(userIdx);
+    public RoomEntity findRoomByUserIdx(Long userIdx) {
+        Attendance attendance = findAttendanceByIdx(userIdx);
         return attendance == null ? null : roomRepository.findByCode(attendance.getCode());
     }
-
-    public Attendance findAttendanceByUserIdx(Long userIdx){
-        return attendanceRepository.findByUserIdx(userIdx);
-    }
-
-
-    public void save(Attendance attendance){
-        attendanceRepository.save(attendance);
-    }
-
-
-
 
 }

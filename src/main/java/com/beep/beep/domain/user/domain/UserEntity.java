@@ -14,11 +14,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_user")
-public class User {
+@SuperBuilder
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,18 +36,5 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private UserType authority;
-
-    @Builder
-    public User(String id, String password,String name, String email, UserType authority){
-        this.id = id;
-        this.password = password;
-        this.name = name;
-        this.email = email;
-        this.authority = authority;
-    }
-
-    public void updateUser(String password) {
-        this.password = password.isBlank() ? this.password : password;
-    }
 
 }

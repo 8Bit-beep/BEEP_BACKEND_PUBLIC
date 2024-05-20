@@ -1,19 +1,23 @@
 package com.beep.beep.domain.beep.service;
 
-
-import com.beep.beep.domain.beep.domain.Attendance;
-import com.beep.beep.domain.beep.domain.Room;
+import com.beep.beep.domain.beep.domain.RoomEntity;
+import com.beep.beep.domain.beep.domain.repository.AttendanceRepository;
+import com.beep.beep.domain.beep.domain.repository.RoomRepository;
 import com.beep.beep.domain.beep.exception.NonExitException;
 import com.beep.beep.domain.beep.exception.NotCurrentRoomException;
 import com.beep.beep.domain.beep.facade.BeepFacade;
-import com.beep.beep.domain.student.facade.StudentFacade;
-import com.beep.beep.domain.student.presentation.dto.request.EnterRoomRequest;
-import com.beep.beep.domain.student.presentation.dto.request.ExitRoomRequest;
-import com.beep.beep.domain.student.presentation.dto.response.GetAttendanceResponse;
-import com.beep.beep.domain.student.presentation.dto.response.GetRoomResponse;
-import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.beep.mapper.BeepMapper;
+import com.beep.beep.domain.beep.presentation.dto.Attendance;
+import com.beep.beep.domain.student.domain.repository.StudentIdRepository;
+import com.beep.beep.domain.beep.presentation.dto.request.EnterRoomRequest;
+import com.beep.beep.domain.beep.presentation.dto.request.ExitRoomRequest;
+import com.beep.beep.domain.beep.presentation.dto.response.GetAttendanceResponse;
+import com.beep.beep.domain.beep.presentation.dto.response.GetRoomResponse;
+import com.beep.beep.domain.user.domain.UserEntity;
+import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.facade.UserFacade;
-import com.beep.beep.global.security.jwt.JwtProvider;
+import com.beep.beep.global.common.repository.UserSecurity;
+import com.beep.beep.global.common.service.UserUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,55 +30,65 @@ import java.util.Objects;
 public class BeepService {
 
     private final BeepFacade beepFacade;
+    private final BeepMapper beepMapper;
     private final UserFacade userFacade;
-    private final StudentFacade studentFacade;
-    private final JwtProvider jwtProvider;
+    private final UserUtil userUtil;
+    private final RoomRepository roomRepository;
+    private final AttendanceRepository attendanceRepository;
+    private final StudentIdRepository studentIdRepository;
+    private final UserRepository userRepository;
+    private final UserSecurity userSecurity;
+
+    public void saveAttendance(){
+        attendanceRepository.save(beepMapper.toAttendance(userUtil.getCurrentUser()));
+    }
 
     @Transactional
-    public void enter(String token, EnterRoomRequest request){
+    public void enter(EnterRoomRequest request){
         String code = request.getCode();
-        beepFacade.existsRoomByCode(code);
+        beepFacade.existsRoomByCode(code); // room 존재 여부 확인
 
-        User user = userFacade.findUserByEmail(jwtProvider.getTokenSubject(jwtProvider.parseToken(token)));
-
-        Attendance attendance = beepFacade.findAttendanceByIdx(user.getIdx());
+        Attendance attendance =  getAttendance(); // 유저 출석정보 조회
         if (!Objects.equals(attendance.getCode(), "404"))
             throw NonExitException.EXCEPTION;
 
-        attendance.updateAttendance(code);
+        attendance.setCode(code); // room코드 변경
+        attendanceRepository.save(beepMapper.toEdit(attendance));
     }
 
     @Transactional
-    public void exit(String token, ExitRoomRequest request){
+    public void exit(ExitRoomRequest request){
         String code = request.getCode();
-        beepFacade.existsRoomByCode(code);
+        beepFacade.existsRoomByCode(code); // room 존재 여부 확인
 
-        User user = userFacade.findUserByEmail(jwtProvider.getTokenSubject(jwtProvider.parseToken(token)));
-
-        Attendance attendance = beepFacade.findAttendanceByIdx(user.getIdx());
+        Attendance attendance = getAttendance();
         if (!Objects.equals(code, attendance.getCode()))
             throw NotCurrentRoomException.EXCEPTION;
 
-        attendance.updateAttendance("404");
+        attendance.setCode("404"); // room코드 변경
+        attendanceRepository.save(beepMapper.toEdit(attendance));
     }
 
     public List<GetRoomResponse> getRooms(String name){
-        List<Room> roomList = beepFacade.findRoomsByName(name);
+        List<RoomEntity> roomEntityList = roomRepository.findAllByName(name);
 
-        return roomList.stream()
-                .map(GetRoomResponse::of)
+        return roomEntityList.stream()
+                .map(BeepMapper::toGetRoomDto)
                 .toList();
     }
 
     public List<GetAttendanceResponse> getAttendance(String code){
-        List<User> userList = beepFacade.findAttendancesByCode(code).stream()
-                .map(attendance -> userFacade.findUserByIdx(attendance.getUserIdx()))
+        List<UserEntity> userEntityList = attendanceRepository.findAllByCode(code).stream()
+                .map(attendanceEntity -> userRepository.findByIdx(attendanceEntity.getUserIdx()))
                 .toList();
 
-        return userList.stream()
-                .map(user -> GetAttendanceResponse.of(user,studentFacade.findByUserIdx(user.getIdx())))
+        return userEntityList.stream()
+                .map(user -> BeepMapper.toGetAttendanceDto(user,studentIdRepository.findByUserIdx(user.getIdx())))
                 .toList();
     }
 
+    private Attendance getAttendance(){
+        return beepFacade.findAttendanceByIdx(userUtil.getCurrentUser().getIdx());
+    }
 
 }

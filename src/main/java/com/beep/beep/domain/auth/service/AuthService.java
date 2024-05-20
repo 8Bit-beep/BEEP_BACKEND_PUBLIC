@@ -1,5 +1,6 @@
 package com.beep.beep.domain.auth.service;
 
+import com.beep.beep.domain.auth.mapper.AuthMapper;
 import com.beep.beep.domain.auth.presentation.dto.request.AdminSignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.TeacherSignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.SignInRequest;
@@ -7,21 +8,17 @@ import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.TokenRefreshRequest;
 import com.beep.beep.domain.auth.presentation.dto.response.SignInResponse;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshResponse;
-import com.beep.beep.domain.beep.facade.BeepFacade;
-import com.beep.beep.domain.student.facade.StudentFacade;
-import com.beep.beep.domain.teacher.domain.facade.TeacherFacade;
-import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.domain.UserEntity;
 import com.beep.beep.domain.user.domain.enums.UserType;
+import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.exception.PasswordWrongException;
 import com.beep.beep.domain.user.facade.UserFacade;
-import com.beep.beep.domain.user.presentation.dto.request.ChangePwRequest;
-import com.beep.beep.domain.user.presentation.dto.response.UserIdResponse;
+import com.beep.beep.global.security.jwt.JwtExtractor;
 import com.beep.beep.global.security.jwt.JwtProvider;
 import com.beep.beep.global.security.jwt.enums.JwtType;
 import com.beep.beep.global.security.jwt.exception.TokenTypeException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,72 +30,51 @@ public class AuthService {
     private final PasswordEncoder encoder;
     private final JwtProvider jwtProvider;
     private final UserFacade userFacade;
-    private final StudentFacade studentFacade;
-    private final TeacherFacade teacherFacade;
-    private final BeepFacade beepFacade;
-
-    public void idCheck(String id) {
-        userFacade.existsById(id);
-    }
+    private final AuthMapper authMapper;
+    private final UserRepository userRepository;
+    private final JwtExtractor jwtExtractor;
 
     public void studentSignUp(StudentSignUpRequest request){
-        userFacade.save(request.toUserEntity(encoder.encode(request.getPassword())));
-        User user = userFacade.findUserById(request.getId());
+        userFacade.existsById(request.getId());
 
-        studentFacade.save(request.toStudentIdEntity(user));
-        beepFacade.save(request.toAttendanceEntity(user));
+        userRepository.save(authMapper.toStudent(encoder.encode(request.getPassword()),request));
     }
 
     public void teacherSignUp(TeacherSignUpRequest request){
-        userFacade.save(request.toUserEntity(encoder.encode(request.getPassword())));
-        User user = userFacade.findUserById(request.getId());
+        userFacade.existsById(request.getId());
 
-        teacherFacade.save(request.toJobEntity(user));
+        userRepository.save(authMapper.toTeacher(encoder.encode(request.getPassword()),request));
+
+
     }
 
     public void adminSignUp(AdminSignUpRequest request){
-        User user = request.toEntity(encoder.encode(request.getPassword()));
-        userFacade.save(user);
+        userFacade.existsById(request.getId());
+
+        UserEntity userEntity = authMapper.toAdmin(encoder.encode(request.getPassword()),request);
+        userRepository.save(userEntity);
     }
 
     public SignInResponse signIn(SignInRequest request){
-        User user = userFacade.findUserById(request.getId());
+        UserEntity user = userFacade.findUserById(request.getId());
 
         if (!encoder.matches(request.getPassword(), user.getPassword()))
             throw PasswordWrongException.EXCEPTION;
 
         return SignInResponse.builder()
-                .accessToken(jwtProvider.generateAccessToken(user.getEmail(),user.getAuthority()))
-                .refreshToken(jwtProvider.generateRefreshToken(user.getEmail(),user.getAuthority()))
+                .accessToken(jwtProvider.generateAccessToken(user.getEmail(), user.getAuthority()))
+                .refreshToken(jwtProvider.generateRefreshToken(user.getEmail(), user.getAuthority()))
                 .build();
     }
 
     public TokenRefreshResponse refresh(TokenRefreshRequest request){
-        Jws<Claims> claims = jwtProvider.getClaims(jwtProvider.extractToken(request.getToken())); // 토큰 정보 발췌
+        Jws<Claims> claims = jwtExtractor.getClaims(jwtExtractor.extractToken(request.getToken())); // 토큰 정보 발췌
 
-        if (jwtProvider.isWrongType(claims, JwtType.REFRESH)) // refresh가 아니면
+        if (jwtExtractor.isWrongType(claims, JwtType.REFRESH)) // refresh가 아니면
             throw TokenTypeException.EXCEPTION;
 
         return TokenRefreshResponse.builder()
                 .accessToken(jwtProvider.generateAccessToken(claims.getBody().getSubject(), (UserType) claims.getHeader().get("authority"))).build();
-    }
-
-    public UserIdResponse findId(String email) {
-        String id = userFacade.findIdByEmail(email);
-
-        return UserIdResponse.builder()
-                .id(id).build();
-    }
-
-    public void checkIdEmail(String id,String email) {
-        userFacade.existsByIdAndEmail(id,email);
-    }
-
-    @Transactional
-    public void changePw(ChangePwRequest request){
-        User user = userFacade.findUserById(request.getId());
-
-        user.updateUser(encoder.encode(request.getPassword()));
     }
 
 

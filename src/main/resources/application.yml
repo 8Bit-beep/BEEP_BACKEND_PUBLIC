@@ -12,9 +12,6 @@ spring:
       hibernate:
         format_sql: true
 
-  cache:
-    type: redis
-
   mail:
     username: heunseo9@gmail.com
     password: cyje eoaq uxsv upst
@@ -26,12 +23,6 @@ spring:
         smtp.auth: true
         smtp.timeout: 50000 # SMTP ??? ??? ???? ??? ???? ?? ??? 50,000ms
         smtp.starttls.enable: true
-
-  data:
-    redis:
-      mail:
-        host: 172.31.6.17 # ?? ???? ???? ???? ?? ??
-        port: 6379
 
 jwt:
   refresh-exp: 2592000000 #30일
