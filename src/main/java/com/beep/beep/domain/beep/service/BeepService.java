@@ -16,8 +16,8 @@ import com.beep.beep.domain.beep.presentation.dto.response.GetRoomResponse;
 import com.beep.beep.domain.user.domain.UserEntity;
 import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.facade.UserFacade;
-import com.beep.beep.domain.user.presentation.dto.User;
 import com.beep.beep.global.common.repository.UserSecurity;
+import com.beep.beep.global.common.service.UserUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,6 +32,7 @@ public class BeepService {
     private final BeepFacade beepFacade;
     private final BeepMapper beepMapper;
     private final UserFacade userFacade;
+    private final UserUtil userUtil;
     private final RoomRepository roomRepository;
     private final AttendanceRepository attendanceRepository;
     private final StudentIdRepository studentIdRepository;
@@ -39,8 +40,7 @@ public class BeepService {
     private final UserSecurity userSecurity;
 
     public void saveAttendance(){
-        User user = userFacade.findUserByEmail(userSecurity.getUser().getEmail());
-        attendanceRepository.save(beepMapper.toAttendance(user));
+        attendanceRepository.save(beepMapper.toAttendance(userUtil.getCurrentUser()));
     }
 
     @Transactional
@@ -48,9 +48,7 @@ public class BeepService {
         String code = request.getCode();
         beepFacade.existsRoomByCode(code); // room 존재 여부 확인
 
-        User user = userFacade.findUserByEmail(userSecurity.getUser().getEmail()); // 유저 조회
-
-        Attendance attendance = beepFacade.findAttendanceByIdx(user.getIdx()); // 유저 출석정보 조회
+        Attendance attendance =  getAttendance(); // 유저 출석정보 조회
         if (!Objects.equals(attendance.getCode(), "404"))
             throw NonExitException.EXCEPTION;
 
@@ -63,9 +61,7 @@ public class BeepService {
         String code = request.getCode();
         beepFacade.existsRoomByCode(code); // room 존재 여부 확인
 
-        User user = userFacade.findUserByEmail(userSecurity.getUser().getEmail()); // 유저 조회
-
-        Attendance attendance = beepFacade.findAttendanceByIdx(user.getIdx());
+        Attendance attendance = getAttendance();
         if (!Objects.equals(code, attendance.getCode()))
             throw NotCurrentRoomException.EXCEPTION;
 
@@ -91,5 +87,8 @@ public class BeepService {
                 .toList();
     }
 
+    private Attendance getAttendance(){
+        return beepFacade.findAttendanceByIdx(userUtil.getCurrentUser().getIdx());
+    }
 
 }
