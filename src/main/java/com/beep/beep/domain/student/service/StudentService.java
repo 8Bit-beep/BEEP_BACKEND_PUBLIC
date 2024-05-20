@@ -16,9 +16,8 @@ import com.beep.beep.domain.student.presentation.dto.response.StudentInfoRespons
 import com.beep.beep.domain.user.domain.UserEntity;
 import com.beep.beep.domain.user.domain.enums.UserType;
 import com.beep.beep.domain.user.domain.repository.UserRepository;
-import com.beep.beep.domain.user.facade.UserFacade;
 import com.beep.beep.domain.user.presentation.dto.User;
-import com.beep.beep.global.common.repository.UserSecurity;
+import com.beep.beep.global.common.service.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,17 +27,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentService {
 
-    private final UserFacade userFacade;
     private final BeepFacade beepFacade;
     private final StudentMapper studentMapper;
+    private final UserUtil userUtil;
     private final RoomRepository roomRepository;
     private final StudentIdRepository studentIdRepository;
     private final UserRepository userRepository;
-    private final UserSecurity userSecurity;
 
     public void saveStudentId(StudentIdRequest request){
-        User user = userFacade.findUserByEmail(userSecurity.getUser().getEmail());
-        studentIdRepository.save(studentMapper.toStudentId(user,request));
+        studentIdRepository.save(studentMapper.toStudentId(userUtil.getCurrentUser(),request));
     }
 
     public List<AdminStudentResponse> studentList(){
@@ -51,7 +48,7 @@ public class StudentService {
     }
 
     public StudentInfoResponse getStudentInfo() {
-        User user = userFacade.findUserByEmail(userSecurity.getUser().getEmail());
+        User user = userUtil.getCurrentUser();
         Long userIdx = user.getIdx();
 
         StudentIdEntity studentId = studentIdRepository.findByUserIdx(userIdx);
