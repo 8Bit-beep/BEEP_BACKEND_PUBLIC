@@ -24,11 +24,8 @@ public class UserService {
     private final UserUtil userUtil;
     private final UserMapper userMapper;
 
-    public void withdrawal(WithdrawalRequest request) {
+    public void withdrawal() {
         User user = userUtil.getCurrentUser();
-
-        if (!encoder.matches(request.getPassword(), user.getPassword()))
-            throw PasswordWrongException.EXCEPTION;
 
         userRepository.deleteById(user.getIdx());
     }

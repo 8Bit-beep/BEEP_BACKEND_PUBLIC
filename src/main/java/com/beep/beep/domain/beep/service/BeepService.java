@@ -3,6 +3,7 @@ package com.beep.beep.domain.beep.service;
 import com.beep.beep.domain.beep.domain.RoomEntity;
 import com.beep.beep.domain.beep.domain.repository.AttendanceRepository;
 import com.beep.beep.domain.beep.domain.repository.RoomRepository;
+import com.beep.beep.domain.beep.domain.repository.querydsl.RoomRepositoryCustom;
 import com.beep.beep.domain.beep.exception.NonExitException;
 import com.beep.beep.domain.beep.exception.NotCurrentRoomException;
 import com.beep.beep.domain.beep.exception.RoomNotExistsException;
@@ -33,6 +34,7 @@ public class BeepService {
     private final AttendanceRepository attendanceRepository;
     private final StudentIdRepository studentIdRepository;
     private final UserRepository userRepository;
+    private final RoomRepositoryCustom roomRepositoryCustom;
 
     public void saveAttendance(){
         attendanceRepository.save(beepMapper.toAttendance(userUtil.getCurrentUser()));
@@ -67,7 +69,7 @@ public class BeepService {
     }
 
     public List<GetRoomResponse> getRooms(String name){
-        List<RoomEntity> roomEntityList = roomRepository.findAllByName(name);
+        List<RoomEntity> roomEntityList = roomRepositoryCustom.findAllByName(name);
 
         return roomEntityList.stream()
                 .map(BeepMapper::toGetRoomDto)
