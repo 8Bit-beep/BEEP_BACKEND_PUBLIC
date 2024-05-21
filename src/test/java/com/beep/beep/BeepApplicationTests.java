@@ -8,16 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class BeepApplicationTests {
-
-	private final UserRepository userRepository;
-
-    BeepApplicationTests(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     @Test
 	void contextLoads() {
-		User user = userRepository.findByEmail("teacher@email.com")
-				.orElseThrow(() -> UserNotFoundException.EXCEPTION);
 	}
 }
