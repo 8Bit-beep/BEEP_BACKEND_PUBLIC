@@ -5,7 +5,7 @@ on:
     branches: [ "main" ] # 해당 branch에 푸쉬 발생 시 업데이트
   pull_request:
     branches: [ "main" ]
-
+ 
 jobs:
   CI-CD:
     runs-on: ubuntu-latest
