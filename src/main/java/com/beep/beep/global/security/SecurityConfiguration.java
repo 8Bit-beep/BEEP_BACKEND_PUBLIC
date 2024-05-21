@@ -51,12 +51,12 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST,"/beep/attendances").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers(HttpMethod.GET,"/beep/attendances").hasAuthority(TEACHER.getAuthority())
 
-                        .requestMatchers("/teachers/job").hasAuthority("TEACHER")
+                        .requestMatchers("/teachers/job").permitAll()
                         .requestMatchers("/teachers").hasAuthority(ADMIN.getAuthority())
                         .requestMatchers("/teachers/info").hasAuthority(TEACHER.getAuthority())
 
                         .requestMatchers("/students").hasAuthority(ADMIN.getAuthority())
-                        .requestMatchers("/students/id").hasAuthority(STUDENT.getAuthority())
+                        .requestMatchers("/students/id").permitAll()
                         .requestMatchers("/students/info").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers("/students/cls").hasAuthority(TEACHER.getAuthority())
                         .requestMatchers("/students/member").hasAuthority(TEACHER.getAuthority())
