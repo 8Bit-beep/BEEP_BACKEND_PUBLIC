@@ -33,10 +33,11 @@ public class TeacherController {
     public void saveJob(
             @RequestBody SaveJobRequest request
     ){
+        System.out.println("일단 왔음");
         teacherService.saveJob(request);
     }
 
-    @GetMapping()
+    @GetMapping("")
     @Operation(summary = "선생님계정 조회", description = "선생님계정 전부 조회합니다. (admin)")
     public List<AdminTeacherResponse> teacherList(){
         return teacherService.teacherList();
@@ -44,8 +45,8 @@ public class TeacherController {
 
     @GetMapping("/info")
     @Operation(summary = "선생님프로필 조회", description = "선생님프로필 조회합니다. (teacher)")
-    public TeacherInfoResponse getInfo(
-    ) {
+    public TeacherInfoResponse getInfo() {
+        System.out.println("일단 왔음");
         return teacherService.getTeacherInfo();
     }
 

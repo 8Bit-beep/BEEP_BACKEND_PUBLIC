@@ -51,7 +51,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST,"/beep/attendances").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers(HttpMethod.GET,"/beep/attendances").hasAuthority(TEACHER.getAuthority())
 
-                        .requestMatchers("/teachers/job").hasAuthority(TEACHER.getAuthority())
+                        .requestMatchers("/teachers/job").hasAuthority("TEACHER")
                         .requestMatchers("/teachers").hasAuthority(ADMIN.getAuthority())
                         .requestMatchers("/teachers/info").hasAuthority(TEACHER.getAuthority())
 
@@ -59,7 +59,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/students/id").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers("/students/info").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers("/students/cls").hasAuthority(TEACHER.getAuthority())
-                        .requestMatchers("/students/cls-member").hasAuthority(TEACHER.getAuthority())
+                        .requestMatchers("/students/member").hasAuthority(TEACHER.getAuthority())
                         .requestMatchers("/students/name").hasAuthority(TEACHER.getAuthority())
 
                         .requestMatchers("/users/find-user","/users/change-pw","/users/find-id","/id-check").permitAll()

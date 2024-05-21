@@ -45,7 +45,7 @@ public class EmailController {
 //    }
 
     @GetMapping("/check")
-    @Operation(summary = "이메일 존재여부 확인", description = "이 이메일이 이미 유저계정 중에 사용 중인것인지 확인합니다. (unauthenticated)")
+    @Operation(summary = "이메일 중복 확인", description = "이 이메일이 이미 유저계정 중에 사용 중인것인지 확인합니다. (unauthenticated)")
     public void checkEmail(
             @RequestParam String email
     ){

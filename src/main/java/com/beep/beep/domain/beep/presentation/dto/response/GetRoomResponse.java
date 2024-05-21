@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 @Builder @AllArgsConstructor
 public class GetRoomResponse {
-
-    private String room;
+    private String code;
+    private String floor;
+    private String name;
 }

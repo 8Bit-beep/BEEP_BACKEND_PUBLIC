@@ -2,6 +2,7 @@ package com.beep.beep.domain.teacher.service;
 
 import com.beep.beep.domain.teacher.domain.JobEntity;
 import com.beep.beep.domain.teacher.domain.repository.JobRepository;
+import com.beep.beep.domain.teacher.exception.JobNotFoundException;
 import com.beep.beep.domain.teacher.mapper.TeacherMapper;
 import com.beep.beep.domain.teacher.presentation.dto.request.SaveJobRequest;
 import com.beep.beep.domain.teacher.presentation.dto.response.AdminTeacherResponse;
@@ -9,9 +10,8 @@ import com.beep.beep.domain.teacher.presentation.dto.response.TeacherInfoRespons
 import com.beep.beep.domain.user.domain.UserEntity;
 import com.beep.beep.domain.user.domain.enums.UserType;
 import com.beep.beep.domain.user.domain.repository.UserRepository;
-import com.beep.beep.domain.user.facade.UserFacade;
 import com.beep.beep.domain.user.presentation.dto.User;
-import com.beep.beep.global.common.repository.UserSecurity;
+import com.beep.beep.global.common.service.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +21,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeacherService {
 
-    private final UserFacade userFacade;
     private final TeacherMapper teacherMapper;
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
-    private final UserSecurity userSecurity;
+    private final UserUtil userUtil;
 
     public void saveJob(SaveJobRequest request){
-        User user = userFacade.findUserByEmail(userSecurity.getUser().getEmail());
-
+        User user = userUtil.getCurrentUser();
+        findByUserIdx(user.getIdx());
         jobRepository.save(teacherMapper.toJob(user,request));
     }
 
@@ -38,15 +37,20 @@ public class TeacherService {
 
         return teacherList.stream()
                 .map(teacher ->
-                        TeacherMapper.toAdminTeacherDto(teacher,jobRepository.findByUserIdx(teacher.getIdx())))
+                        TeacherMapper.toAdminTeacherDto(teacher,findByUserIdx(teacher.getIdx())))
                 .toList();
     }
 
     public TeacherInfoResponse getTeacherInfo(){
-        User user = userFacade.findUserByEmail(userSecurity.getUser().getEmail());
-        JobEntity job = jobRepository.findByUserIdx(user.getIdx());
+        System.out.println("되나?");
+        User user = userUtil.getCurrentUser();
+        System.out.println("진짜?");
+        return TeacherMapper.toTeacherInfoDto(user, findByUserIdx(user.getIdx()));
+    }
 
-        return TeacherMapper.toTeacherInfoDto(user, job);
+    private JobEntity findByUserIdx(Long userIdx){
+        return jobRepository.findByUserIdx(userIdx)
+                .orElseThrow(() -> JobNotFoundException.EXCEPTION);
     }
 
 

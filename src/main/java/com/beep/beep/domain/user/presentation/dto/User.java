@@ -2,6 +2,9 @@ package com.beep.beep.domain.user.presentation.dto;
 
 
 import com.beep.beep.domain.user.domain.enums.UserType;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,15 +17,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class User {
-    private Long idx;
 
-    private String id;
+    private Long idx;
 
     private String email;
 
-    private String password;
+    private String id;
 
     private String name;
 
+    private String password;
+
     private UserType authority;
+
 }

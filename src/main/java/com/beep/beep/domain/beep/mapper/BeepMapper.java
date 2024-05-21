@@ -30,13 +30,21 @@ public class BeepMapper {
 
     public static GetRoomResponse toGetRoomDto(RoomEntity room) {
         return GetRoomResponse.builder()
-                .room(room.getName()).build();
+                .name(room.getName())
+                .code(room.getCode())
+                .floor(room.getFloor()).build();
     }
 
     public AttendanceEntity toAttendance(User user) {
         return AttendanceEntity.builder()
                 .userIdx(user.getIdx())
                 .code("404").build();
+    }
+
+    public Attendance toAttendanceDto(AttendanceEntity attendanceEntity) {
+        return Attendance.builder()
+                .code(attendanceEntity.getCode())
+                .userIdx(attendanceEntity.getUserIdx()).build();
     }
 
 }

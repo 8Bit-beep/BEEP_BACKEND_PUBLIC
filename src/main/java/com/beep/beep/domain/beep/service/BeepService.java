@@ -5,7 +5,7 @@ import com.beep.beep.domain.beep.domain.repository.AttendanceRepository;
 import com.beep.beep.domain.beep.domain.repository.RoomRepository;
 import com.beep.beep.domain.beep.exception.NonExitException;
 import com.beep.beep.domain.beep.exception.NotCurrentRoomException;
-import com.beep.beep.domain.beep.facade.BeepFacade;
+import com.beep.beep.domain.beep.exception.RoomNotExistsException;
 import com.beep.beep.domain.beep.mapper.BeepMapper;
 import com.beep.beep.domain.beep.presentation.dto.Attendance;
 import com.beep.beep.domain.student.domain.repository.StudentIdRepository;
@@ -15,8 +15,6 @@ import com.beep.beep.domain.beep.presentation.dto.response.GetAttendanceResponse
 import com.beep.beep.domain.beep.presentation.dto.response.GetRoomResponse;
 import com.beep.beep.domain.user.domain.UserEntity;
 import com.beep.beep.domain.user.domain.repository.UserRepository;
-import com.beep.beep.domain.user.facade.UserFacade;
-import com.beep.beep.global.common.repository.UserSecurity;
 import com.beep.beep.global.common.service.UserUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -29,15 +27,12 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class BeepService {
 
-    private final BeepFacade beepFacade;
     private final BeepMapper beepMapper;
-    private final UserFacade userFacade;
     private final UserUtil userUtil;
     private final RoomRepository roomRepository;
     private final AttendanceRepository attendanceRepository;
     private final StudentIdRepository studentIdRepository;
     private final UserRepository userRepository;
-    private final UserSecurity userSecurity;
 
     public void saveAttendance(){
         attendanceRepository.save(beepMapper.toAttendance(userUtil.getCurrentUser()));
@@ -46,7 +41,8 @@ public class BeepService {
     @Transactional
     public void enter(EnterRoomRequest request){
         String code = request.getCode();
-        beepFacade.existsRoomByCode(code); // room 존재 여부 확인
+        if(!roomRepository.existsById(code))
+            throw RoomNotExistsException.EXCEPTION; // room 존재 여부 확인
 
         Attendance attendance =  getAttendance(); // 유저 출석정보 조회
         if (!Objects.equals(attendance.getCode(), "404"))
@@ -59,7 +55,8 @@ public class BeepService {
     @Transactional
     public void exit(ExitRoomRequest request){
         String code = request.getCode();
-        beepFacade.existsRoomByCode(code); // room 존재 여부 확인
+        if(!roomRepository.existsById(code))
+            throw RoomNotExistsException.EXCEPTION; // room 존재 여부 확인
 
         Attendance attendance = getAttendance();
         if (!Objects.equals(code, attendance.getCode()))
@@ -88,7 +85,7 @@ public class BeepService {
     }
 
     private Attendance getAttendance(){
-        return beepFacade.findAttendanceByIdx(userUtil.getCurrentUser().getIdx());
+        return beepMapper.toAttendanceDto(attendanceRepository.findByUserIdx(userUtil.getCurrentUser().getIdx()));
     }
 
 }

@@ -2,7 +2,6 @@ package com.beep.beep.domain.user.domain.repository;
 
 import com.beep.beep.domain.user.domain.UserEntity;
 import com.beep.beep.domain.user.domain.enums.UserType;
-import com.beep.beep.domain.user.presentation.dto.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -28,7 +27,7 @@ public interface UserRepository extends CrudRepository<UserEntity,Long> {
 
     Optional<UserEntity> findById(String id);
 
-    Optional<User> findByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
 
 
 }

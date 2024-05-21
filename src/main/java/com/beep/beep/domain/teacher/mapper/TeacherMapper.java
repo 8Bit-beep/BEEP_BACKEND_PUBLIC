@@ -14,9 +14,9 @@ public class TeacherMapper {
 
     public JobEntity toJob(User user, SaveJobRequest request) {
         return JobEntity.builder()
-                .userIdx(user.getIdx())
+                .job(request.getJob())
                 .department(request.getDepartment())
-                .job(request.getJob()).build();
+                .userIdx(user.getIdx()).build();
     }
 
     public static AdminTeacherResponse toAdminTeacherDto(UserEntity user, JobEntity job) {

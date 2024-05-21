@@ -31,7 +31,7 @@ public class BeepController {
 
     @PostMapping("/attendances")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "입실 요청", description = "입실을 요청합니다.(student)")
+    @Operation(summary = "출석정보 초기화", description = "출석정보 초기값을 설정합니다.(student)")
     public void saveAttendance() {
         beepService.saveAttendance();
     }

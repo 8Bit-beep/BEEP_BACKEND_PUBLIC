@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AttendanceRepository extends CrudRepository<AttendanceEntity,String> {
 
-    Attendance findByUserIdx(Long userIdx);
+    AttendanceEntity findByUserIdx(Long userIdx);
 
     List<AttendanceEntity> findAllByCode(String code);
 }

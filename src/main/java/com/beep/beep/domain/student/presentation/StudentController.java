@@ -43,7 +43,7 @@ public class StudentController {
         studentService.saveStudentId(request);
     }
 
-    @GetMapping()
+    @GetMapping("")
     @Operation(summary = "학생계정 조회", description = "학생계정 전부 조회합니다. (admin)")
     public List<AdminStudentResponse> studentList(){
         return studentService.studentList();
@@ -63,7 +63,7 @@ public class StudentController {
         return studentService.getCls(grade);
     }
 
-    @GetMapping("/cls-member")
+    @GetMapping("/member")
     @Operation(summary = "반 구성원 조회", description = "학년-반으로 반 구성원 목록을 조회합니다. (teacher)")
     public List<GetStudentResponse> getStudents(
             @ModelAttribute GetStudentRequest request

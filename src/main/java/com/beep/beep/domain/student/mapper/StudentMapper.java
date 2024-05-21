@@ -1,6 +1,5 @@
 package com.beep.beep.domain.student.mapper;
 
-import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpRequest;
 import com.beep.beep.domain.beep.domain.RoomEntity;
 import com.beep.beep.domain.student.domain.StudentIdEntity;
 import com.beep.beep.domain.student.presentation.dto.request.StudentIdRequest;
