@@ -11,6 +11,13 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  cache:
+    type: redis
+  data:
+    redis:
+      mail:
+        host: redis # ?? ???? ???? ???? ?? ??
+        port: 6379
 
   mail:
     username: heunseo9@gmail.com
