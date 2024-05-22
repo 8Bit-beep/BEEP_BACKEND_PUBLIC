@@ -39,7 +39,7 @@ public class StudentService {
     private final UserRepository userRepository;
 
     public void saveStudentId(StudentIdRequest request){
-        studentIdRepository.save(studentMapper.toStudentId(userUtil.getCurrentUser(),request));
+        studentIdRepository.save(studentMapper.toStudentId(userUtil.findUserByEmail(request.getEmail()),request));
     }
 
     public List<AdminStudentResponse> studentList(){

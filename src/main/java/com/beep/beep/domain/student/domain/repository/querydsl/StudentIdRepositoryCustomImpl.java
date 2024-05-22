@@ -1,9 +1,6 @@
 package com.beep.beep.domain.student.domain.repository.querydsl;
 
-import com.beep.beep.domain.beep.domain.RoomEntity;
-import com.beep.beep.domain.student.domain.QStudentIdEntity;
 import com.beep.beep.domain.student.domain.StudentIdEntity;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

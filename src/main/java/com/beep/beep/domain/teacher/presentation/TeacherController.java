@@ -33,7 +33,6 @@ public class TeacherController {
     public void saveJob(
             @RequestBody SaveJobRequest request
     ){
-        System.out.println("일단 왔음");
         teacherService.saveJob(request);
     }
 

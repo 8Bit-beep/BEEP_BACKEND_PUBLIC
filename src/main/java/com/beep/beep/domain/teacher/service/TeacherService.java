@@ -27,9 +27,7 @@ public class TeacherService {
     private final UserUtil userUtil;
 
     public void saveJob(SaveJobRequest request){
-        User user = userUtil.getCurrentUser();
-        findByUserIdx(user.getIdx());
-        jobRepository.save(teacherMapper.toJob(user,request));
+        jobRepository.save(teacherMapper.toJob(userUtil.findUserByEmail(request.getEmail()),request));
     }
 
     public List<AdminTeacherResponse> teacherList() {
@@ -42,9 +40,7 @@ public class TeacherService {
     }
 
     public TeacherInfoResponse getTeacherInfo(){
-        System.out.println("되나?");
         User user = userUtil.getCurrentUser();
-        System.out.println("진짜?");
         return TeacherMapper.toTeacherInfoDto(user, findByUserIdx(user.getIdx()));
     }
 

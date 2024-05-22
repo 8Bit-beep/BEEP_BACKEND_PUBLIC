@@ -48,7 +48,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/beep/enter").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers("/beep/exit").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers("/beep/rooms").hasAuthority(TEACHER.getAuthority())
-                        .requestMatchers(HttpMethod.POST,"/beep/attendances").hasAuthority(STUDENT.getAuthority())
+                        .requestMatchers(HttpMethod.POST,"/beep/attendances").permitAll()
                         .requestMatchers(HttpMethod.GET,"/beep/attendances").hasAuthority(TEACHER.getAuthority())
 
                         .requestMatchers("/teachers/job").permitAll()

@@ -1,5 +1,6 @@
 package com.beep.beep.domain.beep.presentation;
 
+import com.beep.beep.domain.beep.presentation.dto.request.SaveAttendanceRequest;
 import com.beep.beep.domain.beep.service.BeepService;
 import com.beep.beep.domain.beep.presentation.dto.request.EnterRoomRequest;
 import com.beep.beep.domain.beep.presentation.dto.request.ExitRoomRequest;
@@ -32,8 +33,10 @@ public class BeepController {
     @PostMapping("/attendances")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "출석정보 초기화", description = "출석정보 초기값을 설정합니다.(student)")
-    public void saveAttendance() {
-        beepService.saveAttendance();
+    public void saveAttendance(
+            @RequestBody SaveAttendanceRequest request
+    ) {
+        beepService.saveAttendance(request);
     }
 
     @PutMapping("/enter")

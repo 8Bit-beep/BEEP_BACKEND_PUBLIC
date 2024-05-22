@@ -9,6 +9,7 @@ import com.beep.beep.domain.beep.exception.NotCurrentRoomException;
 import com.beep.beep.domain.beep.exception.RoomNotExistsException;
 import com.beep.beep.domain.beep.mapper.BeepMapper;
 import com.beep.beep.domain.beep.presentation.dto.Attendance;
+import com.beep.beep.domain.beep.presentation.dto.request.SaveAttendanceRequest;
 import com.beep.beep.domain.student.domain.repository.StudentIdRepository;
 import com.beep.beep.domain.beep.presentation.dto.request.EnterRoomRequest;
 import com.beep.beep.domain.beep.presentation.dto.request.ExitRoomRequest;
@@ -36,8 +37,8 @@ public class BeepService {
     private final UserRepository userRepository;
     private final RoomRepositoryCustom roomRepositoryCustom;
 
-    public void saveAttendance(){
-        attendanceRepository.save(beepMapper.toAttendance(userUtil.getCurrentUser()));
+    public void saveAttendance(SaveAttendanceRequest request){
+        attendanceRepository.save(beepMapper.toAttendance(userUtil.findUserByEmail(request.getEmail())));
     }
 
     @Transactional
