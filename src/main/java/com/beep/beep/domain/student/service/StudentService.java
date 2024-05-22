@@ -53,15 +53,10 @@ public class StudentService {
 
     public StudentInfoResponse getStudentInfo() {
         User user = userUtil.getCurrentUser();
-        Long userIdx = user.getIdx();
-
         return StudentMapper.toStudentInfoDto(user, studentIdRepository.findByUserIdx(userIdx), findRoomByUserIdx(userIdx));
     }
 
     public List<GetStudentResponse> getStudents(GetStudentRequest request){
-        try{
-            System.out.println(request.getGrade());
-            System.out.println(request.getCls());
             List<StudentIdEntity> studentIdEntityList = studentIdRepository.findByGradeAndCls(request.getGrade(), request.getCls());
 
             return studentIdEntityList.stream()
@@ -70,10 +65,6 @@ public class StudentService {
                         return StudentMapper.toGetStudentDto(studentId, userRepository.findByIdx(userIdx), findRoomByUserIdx(userIdx));
                     })
                     .toList();
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public List<SearchStudentResponse> searchStudents(String name){

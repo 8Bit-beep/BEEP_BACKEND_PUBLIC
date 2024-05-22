@@ -15,6 +15,6 @@ public class StudentInfoResponse {
     private int cls;
     private int num;
 
-    private String room;
+    private String roomName;
 
 }
