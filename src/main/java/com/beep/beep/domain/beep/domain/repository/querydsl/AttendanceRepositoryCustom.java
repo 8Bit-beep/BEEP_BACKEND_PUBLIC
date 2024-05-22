@@ -9,5 +9,5 @@ import java.util.List;
 public interface AttendanceRepositoryCustom {
     List<GetAttendanceResponse> attendanceListByCode(String code);
 
-    StudentInfoResponse studentInfo(User user);
+//    StudentInfoResponse studentInfo(User user);
 }

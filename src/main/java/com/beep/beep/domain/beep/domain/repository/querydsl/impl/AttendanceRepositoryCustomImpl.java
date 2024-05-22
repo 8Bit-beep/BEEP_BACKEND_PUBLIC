@@ -36,13 +36,13 @@ public class AttendanceRepositoryCustomImpl implements AttendanceRepositoryCusto
                 .fetch();
     }
 
-    @Override
-    public StudentInfoResponse studentInfo(User user) {
-        return query.select(studentInfoConstructorExpression(user))
-                .from(attendanceEntity)
-                .where(attendanceEntity.userIdx.eq(user.getIdx()))
-                .fetch();
-    }
+//    @Override
+//    public StudentInfoResponse studentInfo(User user) {
+//        return query.select(studentInfoConstructorExpression(user))
+//                .from(attendanceEntity)
+//                .where(attendanceEntity.userIdx.eq(user.getIdx()))
+//                .fetch();
+//    }
 
     private ConstructorExpression<GetAttendanceResponse> attendanceListConstructorExpression() {
         return Projections.constructor(GetAttendanceResponse.class,

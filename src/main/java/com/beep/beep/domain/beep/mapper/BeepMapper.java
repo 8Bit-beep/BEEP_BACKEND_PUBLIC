@@ -22,7 +22,6 @@ public class BeepMapper {
 
     public static GetAttendanceResponse toGetAttendanceDto(UserEntity user, StudentIdEntity studentId) {
         return GetAttendanceResponse.builder()
-                .name(user.getName())
                 .grade(studentId.getGrade())
                 .cls(studentId.getCls())
                 .num(studentId.getNum()).build();

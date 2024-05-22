@@ -56,8 +56,7 @@ public class StudentMapper {
                 .email(user.getEmail())
                 .grade(studentId.getGrade())
                 .cls(studentId.getCls())
-                .num(studentId.getNum())
-                .room(room.getName()).build();
+                .num(studentId.getNum()).build();
     }
 
     public StudentIdEntity toStudentId(User user, StudentIdRequest request) {

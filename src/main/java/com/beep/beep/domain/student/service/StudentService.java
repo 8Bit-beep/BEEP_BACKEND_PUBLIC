@@ -53,6 +53,7 @@ public class StudentService {
 
     public StudentInfoResponse getStudentInfo() {
         User user = userUtil.getCurrentUser();
+        Long userIdx = user.getIdx();
         return StudentMapper.toStudentInfoDto(user, studentIdRepository.findByUserIdx(userIdx), findRoomByUserIdx(userIdx));
     }
 
