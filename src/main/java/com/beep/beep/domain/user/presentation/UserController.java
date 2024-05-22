@@ -27,12 +27,10 @@ public class UserController {
 
     private final UserService userService;
 
-    @DeleteMapping()
+    @DeleteMapping("")
     @Operation(summary = "회원탈퇴", description = "회원탈퇴 요청합니다. (student,teacher,admin)")
-    public void withdrawal(
-            @RequestBody WithdrawalRequest request
-    ){
-        userService.withdrawal(request);
+    public void withdrawal(){
+        userService.withdrawal();
     }
 
     @GetMapping("/find-user")

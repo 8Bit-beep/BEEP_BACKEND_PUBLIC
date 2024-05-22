@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum ErrorCode {
+public enum ErrorCode implements ErrorProperty{
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에 오류가 발생하였습니다."),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),

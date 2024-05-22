@@ -2,6 +2,7 @@ package com.beep.beep.global.security.jwt;
 
 import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.exception.UserNotFoundException;
+import com.beep.beep.domain.user.mapper.UserMapper;
 import com.beep.beep.domain.user.presentation.dto.User;
 import com.beep.beep.global.security.auth.AuthDetails;
 import com.beep.beep.global.security.jwt.config.JwtProperties;
@@ -27,6 +28,7 @@ public class JwtExtractor {
 
     private final JwtProperties jwtProperties;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public Authentication getAuthentication(final String token) {
         final Jws<Claims> claims = getClaims(token);
@@ -35,11 +37,18 @@ public class JwtExtractor {
             throw TokenTypeException.EXCEPTION;
         }
 
-        User user = userRepository.findByEmail(claims.getBody().getSubject())
-                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
+        System.out.println("what's the matter");
+        User user = userRepository.findByEmail(claims
+                        .getBody()
+                        .getSubject())
+                .map(userMapper::toUserDto)
+                .orElseThrow(()-> UserNotFoundException.EXCEPTION );
+        System.out.println("here.");
 
         final AuthDetails details = new AuthDetails(user);
+        System.out.println(user.getAuthority());
 
+        System.out.println("네?");
         // 사용자 인증 정보를 생성 후 관리 (객체 생성을 통해)
         // UsernamePasswordAuthenticationToken(Principal, Credentials, Authorities) // 사용자의 주요정보, 인증과정의 비밀번호 저장 안하려고 null , 사용자의 권한 목록
         return new UsernamePasswordAuthenticationToken(details, null, details.getAuthorities());
@@ -83,8 +92,8 @@ public class JwtExtractor {
 //    }
 
 
-    public String getTokenSubject(String token){
-        return getClaims(token).getBody().getSubject();
-    }
+//    public String getTokenSubject(String token){
+//        return getClaims(token).getBody().getSubject();
+//    }
 
 }

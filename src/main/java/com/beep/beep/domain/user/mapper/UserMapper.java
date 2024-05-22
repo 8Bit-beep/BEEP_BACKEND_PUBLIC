@@ -13,4 +13,14 @@ public class UserMapper {
                 .password(user.getPassword())
                 .build();
     }
+
+    public User toUserDto(UserEntity userEntity){
+        return User.builder()
+                .idx(userEntity.getIdx())
+                .id(userEntity.getId())
+                .email(userEntity.getEmail())
+                .password(userEntity.getPassword())
+                .name(userEntity.getName())
+                .authority(userEntity.getAuthority()).build();
+    }
 }

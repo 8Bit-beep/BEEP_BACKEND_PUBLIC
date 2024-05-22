@@ -21,10 +21,6 @@ public class JwtProvider {
 
     private final JwtProperties jwtProperties;
 
-    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-
-
-
     public String generateAccessToken(final String email, final UserType authority){
         return Jwts.builder()
                 .setHeaderParam(Header.JWT_TYPE, JwtType.ACCESS)

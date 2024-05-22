@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class SaveJobRequest {
+    private String email;
     private String job;
     private String department;
 }

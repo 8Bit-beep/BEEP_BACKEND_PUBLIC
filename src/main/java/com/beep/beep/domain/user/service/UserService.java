@@ -6,13 +6,10 @@ import com.beep.beep.domain.user.exception.UserNotFoundException;
 import com.beep.beep.domain.user.mapper.UserMapper;
 import com.beep.beep.domain.user.presentation.dto.User;
 import com.beep.beep.domain.user.presentation.dto.request.WithdrawalRequest;
-import com.beep.beep.domain.user.domain.UserEntity;
 import com.beep.beep.domain.user.exception.PasswordWrongException;
-import com.beep.beep.domain.user.facade.UserFacade;
 import com.beep.beep.domain.user.presentation.dto.request.ChangePwRequest;
 import com.beep.beep.domain.user.presentation.dto.response.UserIdResponse;
-import com.beep.beep.global.common.repository.UserSecurity;
-import com.beep.beep.global.security.jwt.JwtProvider;
+import com.beep.beep.global.common.service.UserUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,42 +19,34 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserFacade userFacade;
     private final PasswordEncoder encoder;
-    private final UserSecurity userSecurity;
     private final UserRepository userRepository;
+    private final UserUtil userUtil;
     private final UserMapper userMapper;
 
-    public void withdrawal(WithdrawalRequest request) {
-        User user = userFacade.findUserByEmail(userSecurity.getUser().getEmail());
-
-        if (!encoder.matches(request.getPassword(), user.getPassword()))
-            throw PasswordWrongException.EXCEPTION;
+    public void withdrawal() {
+        User user = userUtil.getCurrentUser();
 
         userRepository.deleteById(user.getIdx());
     }
 
     public void idCheck(String id) {
-        userFacade.existsById(id);
+        userUtil.existsById(id);
     }
 
     public UserIdResponse findId(String email) {
-        String id = userRepository.findByEmail(email)
-                .get().getId();
-
         return UserIdResponse.builder()
-                .id(id).build();
+                .id(userUtil.findUserByEmail(email).getId()).build();
     }
 
     public void checkIdEmail(String id,String email) {
         userRepository.findByIdEmail(id,email)
-                .orElseThrow(() ->
-                        UserNotFoundException.EXCEPTION);
+                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
     }
 
     @Transactional
     public void changePw(ChangePwRequest request){
-        User user = userFacade.findUserByEmail(request.getEmail());
+        User user = userUtil.findUserByEmail(request.getEmail());
         user.setPassword(encoder.encode(request.getPassword()));
         userRepository.save(userMapper.toEdit(user));
     }

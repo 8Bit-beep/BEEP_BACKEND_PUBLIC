@@ -1,10 +1,8 @@
 package com.beep.beep.domain.auth.service;
 
 import com.beep.beep.domain.auth.mapper.AuthMapper;
-import com.beep.beep.domain.auth.presentation.dto.request.AdminSignUpRequest;
-import com.beep.beep.domain.auth.presentation.dto.request.TeacherSignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.SignInRequest;
-import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpRequest;
+import com.beep.beep.domain.auth.presentation.dto.request.SignUpRequest;
 import com.beep.beep.domain.auth.presentation.dto.request.TokenRefreshRequest;
 import com.beep.beep.domain.auth.presentation.dto.response.SignInResponse;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshResponse;
@@ -12,7 +10,7 @@ import com.beep.beep.domain.user.domain.UserEntity;
 import com.beep.beep.domain.user.domain.enums.UserType;
 import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.exception.PasswordWrongException;
-import com.beep.beep.domain.user.facade.UserFacade;
+import com.beep.beep.global.common.service.UserUtil;
 import com.beep.beep.global.security.jwt.JwtExtractor;
 import com.beep.beep.global.security.jwt.JwtProvider;
 import com.beep.beep.global.security.jwt.enums.JwtType;
@@ -23,40 +21,36 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.beep.beep.domain.user.domain.enums.UserType.ADMIN;
+import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
+import static com.beep.beep.domain.user.domain.enums.UserType.TEACHER;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
     private final PasswordEncoder encoder;
     private final JwtProvider jwtProvider;
-    private final UserFacade userFacade;
+    private final JwtExtractor jwtExtractor;
     private final AuthMapper authMapper;
     private final UserRepository userRepository;
-    private final JwtExtractor jwtExtractor;
+    private final UserUtil userUtil;
 
-    public void studentSignUp(StudentSignUpRequest request){
-        userFacade.existsById(request.getId());
-
-        userRepository.save(authMapper.toStudent(encoder.encode(request.getPassword()),request));
+    /** 학생 회원가입 */
+    public void studentSignUp(SignUpRequest request){
+        signUp(request,STUDENT);
     }
 
-    public void teacherSignUp(TeacherSignUpRequest request){
-        userFacade.existsById(request.getId());
-
-        userRepository.save(authMapper.toTeacher(encoder.encode(request.getPassword()),request));
-
-
+    public void teacherSignUp(SignUpRequest request){
+        signUp(request,TEACHER);
     }
 
-    public void adminSignUp(AdminSignUpRequest request){
-        userFacade.existsById(request.getId());
-
-        UserEntity userEntity = authMapper.toAdmin(encoder.encode(request.getPassword()),request);
-        userRepository.save(userEntity);
+    public void adminSignUp(SignUpRequest request){
+        signUp(request,ADMIN);
     }
 
     public SignInResponse signIn(SignInRequest request){
-        UserEntity user = userFacade.findUserById(request.getId());
+        UserEntity user = userUtil.findUserById(request.getId());
 
         if (!encoder.matches(request.getPassword(), user.getPassword()))
             throw PasswordWrongException.EXCEPTION;
@@ -75,6 +69,18 @@ public class AuthService {
 
         return TokenRefreshResponse.builder()
                 .accessToken(jwtProvider.generateAccessToken(claims.getBody().getSubject(), (UserType) claims.getHeader().get("authority"))).build();
+    }
+
+    private void signUp(SignUpRequest request,UserType authority){
+        existsById(request.getId()); // id 중복 체크
+        userUtil.checkEmail(request.getEmail()); // email 중복 체크
+
+        request.setPassword(encoder.encode(request.getPassword())); // password 인코딩
+        userRepository.save(authMapper.toUser(request,authority)); // 저장
+    }
+
+    private void existsById(String id){
+        userUtil.existsById(id);
     }
 
 

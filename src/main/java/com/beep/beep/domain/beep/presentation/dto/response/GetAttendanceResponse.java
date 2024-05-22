@@ -9,8 +9,7 @@ import lombok.Getter;
 @Builder @AllArgsConstructor
 public class GetAttendanceResponse {
 
-    private String name;
-
+    private String userName;
     private int grade;
     private int cls;
     private int num;

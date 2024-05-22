@@ -35,17 +35,17 @@ public class EmailController {
         emailService.sendEmail(request);
     }
 
-//    @GetMapping("/verify")
-//    @Operation(summary = "이메일 인증", description = "이메일에 전송한 코드와 param으로 받은 코드를 대조하여 인증합니다. (unauthenticated)")
-//    public void verifyEmail(
-//            @RequestParam String email,
-//            @RequestParam String code
-//    ) {
-//        emailService.verifyEmail(email,code);
-//    }
+    @GetMapping("/verify")
+    @Operation(summary = "이메일 인증", description = "이메일에 전송한 코드와 param으로 받은 코드를 대조하여 인증합니다. (unauthenticated)")
+    public void verifyEmail(
+            @RequestParam String email,
+            @RequestParam String code
+    ) {
+        emailService.verifyEmail(email,code);
+    }
 
     @GetMapping("/check")
-    @Operation(summary = "이메일 존재여부 확인", description = "이 이메일이 이미 유저계정 중에 사용 중인것인지 확인합니다. (unauthenticated)")
+    @Operation(summary = "이메일 중복 확인", description = "이 이메일이 이미 유저계정 중에 사용 중인것인지 확인합니다. (unauthenticated)")
     public void checkEmail(
             @RequestParam String email
     ){

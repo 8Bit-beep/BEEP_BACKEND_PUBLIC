@@ -1,10 +1,11 @@
 package com.beep.beep.domain.beep.presentation;
 
+import com.beep.beep.domain.beep.presentation.dto.request.SaveAttendanceRequest;
 import com.beep.beep.domain.beep.service.BeepService;
 import com.beep.beep.domain.beep.presentation.dto.request.EnterRoomRequest;
 import com.beep.beep.domain.beep.presentation.dto.request.ExitRoomRequest;
 import com.beep.beep.domain.beep.presentation.dto.response.GetAttendanceResponse;
-import com.beep.beep.domain.beep.presentation.dto.response.GetRoomResponse;
+import com.beep.beep.domain.beep.presentation.dto.Room;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -31,9 +31,11 @@ public class BeepController {
 
     @PostMapping("/attendances")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "입실 요청", description = "입실을 요청합니다.(student)")
-    public void saveAttendance() {
-        beepService.saveAttendance();
+    @Operation(summary = "출석정보 초기화", description = "출석정보 초기값을 설정합니다.(student)")
+    public void saveAttendance(
+            @RequestBody SaveAttendanceRequest request
+    ) {
+        beepService.saveAttendance(request);
     }
 
     @PutMapping("/enter")
@@ -56,7 +58,7 @@ public class BeepController {
 
     @GetMapping("/rooms")
     @Operation(summary = "실 조회", description = "실 이름으로 실을 조회합니다.(teacher)")
-    public List<GetRoomResponse> getRooms(
+    public List<Room> getRooms(
             @RequestParam String name
     ){
         return beepService.getRooms(name);

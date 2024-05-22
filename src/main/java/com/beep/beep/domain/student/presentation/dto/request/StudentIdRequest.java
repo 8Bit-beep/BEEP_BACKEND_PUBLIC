@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class StudentIdRequest {
+    private String email;
 
     private int grade;
     private int cls;
