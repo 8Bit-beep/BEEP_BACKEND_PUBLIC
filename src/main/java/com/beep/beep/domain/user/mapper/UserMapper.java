@@ -1,26 +1,26 @@
 package com.beep.beep.domain.user.mapper;
 
 
-import com.beep.beep.domain.user.domain.UserEntity;
-import com.beep.beep.domain.user.presentation.dto.User;
+import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.presentation.dto.UserVO;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
 
-    public UserEntity toEdit(User user){
-        return UserEntity.builder()
-                .password(user.getPassword())
+    public User toEdit(UserVO userVO){
+        return User.builder()
+                .password(userVO.getPassword())
                 .build();
     }
 
-    public User toUserDto(UserEntity userEntity){
-        return User.builder()
-                .idx(userEntity.getIdx())
-                .id(userEntity.getId())
-                .email(userEntity.getEmail())
-                .password(userEntity.getPassword())
-                .name(userEntity.getName())
-                .authority(userEntity.getAuthority()).build();
+    public UserVO toUserDto(User user){
+        return UserVO.builder()
+                .idx(user.getIdx())
+                .id(user.getId())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .name(user.getName())
+                .authority(user.getAuthority()).build();
     }
 }

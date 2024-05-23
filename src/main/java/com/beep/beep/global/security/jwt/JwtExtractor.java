@@ -1,13 +1,11 @@
 package com.beep.beep.global.security.jwt;
 
-import com.beep.beep.domain.user.domain.repository.UserRepository;
-import com.beep.beep.domain.user.exception.UserNotFoundException;
+import com.beep.beep.domain.user.domain.repository.UserRepo;
 import com.beep.beep.domain.user.mapper.UserMapper;
-import com.beep.beep.domain.user.presentation.dto.User;
+import com.beep.beep.domain.user.presentation.dto.UserVO;
 import com.beep.beep.global.security.auth.AuthDetails;
 import com.beep.beep.global.security.jwt.config.JwtProperties;
 import com.beep.beep.global.security.jwt.enums.JwtType;
-import com.beep.beep.global.security.jwt.exception.TokenTypeException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Header;
@@ -27,26 +25,26 @@ import org.springframework.util.StringUtils;
 public class JwtExtractor {
 
     private final JwtProperties jwtProperties;
-    private final UserRepository userRepository;
+    private final UserRepo userRepository;
     private final UserMapper userMapper;
 
     public Authentication getAuthentication(final String token) {
         final Jws<Claims> claims = getClaims(token);
 
         if (isWrongType(claims, JwtType.ACCESS)) {
-            throw TokenTypeException.EXCEPTION;
+            throw new IllegalArgumentException("토큰 타입이 옳지 않습니다");
         }
 
         System.out.println("what's the matter");
-        User user = userRepository.findByEmail(claims
+        UserVO userVO = userRepository.findByEmail(claims
                         .getBody()
                         .getSubject())
                 .map(userMapper::toUserDto)
-                .orElseThrow(()-> UserNotFoundException.EXCEPTION );
+                .orElseThrow(()-> new IllegalArgumentException("유저가 존재하지 않습니다") );
         System.out.println("here.");
 
-        final AuthDetails details = new AuthDetails(user);
-        System.out.println(user.getAuthority());
+        final AuthDetails details = new AuthDetails(userVO);
+        System.out.println(userVO.getAuthority());
 
         System.out.println("네?");
         // 사용자 인증 정보를 생성 후 관리 (객체 생성을 통해)
@@ -83,17 +81,5 @@ public class JwtExtractor {
         }
         return token; // 토큰 이상하면 그냥 token return
     }
-
-//    public String parseToken(String bearerToken) {
-//        if (bearerToken != null && bearerToken.startsWith(jwtProperties.getPrefix())){
-//            return bearerToken.replace(jwtProperties.getPrefix(),"").replaceAll("\\s", "");
-//        }
-//        return null;
-//    }
-
-
-//    public String getTokenSubject(String token){
-//        return getClaims(token).getBody().getSubject();
-//    }
 
 }

@@ -1,22 +1,19 @@
 package com.beep.beep.domain.auth.mapper;
 
-import com.beep.beep.domain.auth.presentation.dto.request.SignUpRequest;
-import com.beep.beep.domain.user.domain.UserEntity;
+import com.beep.beep.domain.auth.presentation.dto.request.SignUpReq;
+import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.UserType;
 import org.springframework.stereotype.Component;
-
-import static com.beep.beep.domain.user.domain.enums.UserType.ADMIN;
-import static com.beep.beep.domain.user.domain.enums.UserType.TEACHER;
 
 @Component
 public class AuthMapper {
 
-    public UserEntity toUser(SignUpRequest request, UserType authority){
-        return UserEntity.builder()
-                .id(request.getId())
-                .password(request.getPassword())
-                .email(request.getEmail())
-                .name(request.getName())
+    public User toUser(SignUpReq req, UserType authority){
+        return User.builder()
+                .id(req.getId())
+                .password(req.getPassword())
+                .email(req.getEmail())
+                .name(req.getName())
                 .authority(authority).build();
     }
 
