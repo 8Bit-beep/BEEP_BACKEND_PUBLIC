@@ -14,7 +14,7 @@ import static com.beep.beep.domain.beep.domain.QRoom.room;
 
 @Repository
 @RequiredArgsConstructor
-public class RoomRepositoryCustomImpl implements RoomRepositoryCustom {
+public class RoomRepoCustomImpl implements RoomRepositoryCustom {
 
     private final JPAQueryFactory query;
 

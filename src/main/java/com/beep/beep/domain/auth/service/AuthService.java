@@ -8,7 +8,7 @@ import com.beep.beep.domain.auth.presentation.dto.response.SignInRes;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshRes;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.UserType;
-import com.beep.beep.domain.user.domain.repository.UserRepo;
+import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.exception.PasswordWrongException;
 import com.beep.beep.global.common.service.UserUtil;
 import com.beep.beep.global.security.jwt.JwtExtractor;
@@ -33,7 +33,7 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final JwtExtractor jwtExtractor;
     private final AuthMapper authMapper;
-    private final UserRepo userRepository;
+    private final UserRepository userRepository;
     private final UserUtil userUtil;
 
     /** 학생 회원가입 */

@@ -2,7 +2,7 @@ package com.beep.beep.global.common.service;
 
 import com.beep.beep.domain.email.exception.EmailAlreadyExistsException;
 import com.beep.beep.domain.user.domain.User;
-import com.beep.beep.domain.user.domain.repository.UserRepo;
+import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.exception.UserAlreadyExistsException;
 import com.beep.beep.domain.user.exception.UserNotFoundException;
 import com.beep.beep.domain.user.mapper.UserMapper;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class UserUtil {
 
     private final UserSecurity userSecurity;
-    private final UserRepo userRepository;
+    private final UserRepository userRepository;
     private final UserMapper userMapper;
 
     public UserVO getCurrentUser() {

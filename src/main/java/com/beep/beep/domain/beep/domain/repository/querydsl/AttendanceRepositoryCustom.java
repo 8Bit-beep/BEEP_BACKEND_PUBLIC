@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface AttendanceRepositoryCustom {
 
-    List<StudentByGradeClsRes> studentListByGradeCls(StudentByGradeClsReq request);
-
     List<AttendanceByCodeRes> attendanceListByCode(String code);
 
     StudentByUserRes studentByUser(UserVO userVO);

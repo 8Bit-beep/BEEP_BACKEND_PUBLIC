@@ -1,6 +1,6 @@
 package com.beep.beep.domain.user.service;
 
-import com.beep.beep.domain.user.domain.repository.UserRepo;
+import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.domain.user.exception.UserAlreadyExistsException;
 import com.beep.beep.domain.user.mapper.UserMapper;
 import com.beep.beep.domain.user.presentation.dto.UserVO;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final PasswordEncoder encoder;
-    private final UserRepo userRepository;
+    private final UserRepository userRepository;
     private final UserUtil userUtil;
     private final UserMapper userMapper;
 

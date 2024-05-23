@@ -10,7 +10,7 @@ import com.beep.beep.domain.student.presentation.dto.response.ClsByGradeRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentByGradeClsRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentByNameRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentByUserRes;
-import com.beep.beep.domain.user.domain.repository.UserRepo;
+import com.beep.beep.domain.user.domain.repository.UserRepository;
 import com.beep.beep.global.common.dto.request.PageRequest;
 import com.beep.beep.global.common.service.UserUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class StudentService {
     private final UserUtil userUtil;
     private final StudentIdRepository studentIdRepository;
     private final AttendanceRepository attendanceRepository;
-    private final UserRepo userRepository;
+    private final UserRepository userRepository;
 
     public void saveStudentId(SaveStudentIdReq request){
         studentIdRepository.save(studentMapper.toStudentId(userUtil.findUserByEmail(request.getEmail()),request));
@@ -41,7 +41,7 @@ public class StudentService {
     }
 
     public List<StudentByGradeClsRes> studentListByGradeCls(StudentByGradeClsReq request){
-        return attendanceRepository.studentListByGradeCls(request);
+        return studentIdRepository.studentListByGradeCls(request);
     }
 
     public List<StudentByNameRes> studentListByName(String name){
