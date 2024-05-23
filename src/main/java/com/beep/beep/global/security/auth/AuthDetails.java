@@ -1,6 +1,6 @@
 package com.beep.beep.global.security.auth;
 
-import com.beep.beep.domain.user.presentation.dto.User;
+import com.beep.beep.domain.user.presentation.dto.UserVO;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,31 +11,25 @@ import java.util.Collections;
 @Getter
 public class AuthDetails implements UserDetails {
 
-    private final User user;
-    private Collection<? extends GrantedAuthority> authorities;
+    private final UserVO userVO;
 
-    private AuthDetails(final User user, final Collection<? extends GrantedAuthority> authorities) {
-        this.user = user;
-        this.authorities = authorities;
-    }
-
-    public AuthDetails(final User user) {
-        this.user = user;
+    public AuthDetails(final UserVO userVO) {
+        this.userVO = userVO;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton((GrantedAuthority) user.getAuthority()::getAuthority);
+        return Collections.singleton((GrantedAuthority) userVO.getAuthority()::getAuthority);
     }
 
     @Override
     public String getPassword() {
-        return this.user.getPassword();
+        return this.userVO.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.user.getEmail();
+        return this.userVO.getEmail();
     }
 
     @Override
