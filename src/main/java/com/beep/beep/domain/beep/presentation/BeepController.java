@@ -1,11 +1,11 @@
 package com.beep.beep.domain.beep.presentation;
 
-import com.beep.beep.domain.beep.presentation.dto.request.SaveAttendanceRequest;
+import com.beep.beep.domain.beep.presentation.dto.request.InitializeAttendanceReq;
 import com.beep.beep.domain.beep.service.BeepService;
-import com.beep.beep.domain.beep.presentation.dto.request.EnterRoomRequest;
-import com.beep.beep.domain.beep.presentation.dto.request.ExitRoomRequest;
-import com.beep.beep.domain.beep.presentation.dto.response.GetAttendanceResponse;
-import com.beep.beep.domain.beep.presentation.dto.Room;
+import com.beep.beep.domain.beep.presentation.dto.request.EnterRoomReq;
+import com.beep.beep.domain.beep.presentation.dto.request.ExitRoomReq;
+import com.beep.beep.domain.beep.presentation.dto.response.AttendanceByCodeRes;
+import com.beep.beep.domain.beep.presentation.dto.RoomVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -32,17 +32,17 @@ public class BeepController {
     @PostMapping("/attendances")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "출석정보 초기화", description = "출석정보 초기값을 설정합니다.(student)")
-    public void saveAttendance(
-            @RequestBody SaveAttendanceRequest request
+    public void initializeAttendance(
+            @RequestBody InitializeAttendanceReq request
     ) {
-        beepService.saveAttendance(request);
+        beepService.initializeAttendance(request);
     }
 
     @PutMapping("/enter")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "입실 요청", description = "입실을 요청합니다.(student)")
     public void enterRoom(
-            @RequestBody EnterRoomRequest request
+            @RequestBody EnterRoomReq request
     ) {
         beepService.enter(request);
     }
@@ -51,24 +51,25 @@ public class BeepController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "퇴실 요청", description = "퇴실을 요청합니다.(student)")
     public void exitRoom(
-            @RequestBody ExitRoomRequest request
+            @RequestBody ExitRoomReq request
     ) {
         beepService.exit(request);
     }
 
     @GetMapping("/rooms")
     @Operation(summary = "실 조회", description = "실 이름으로 실을 조회합니다.(teacher)")
-    public List<Room> getRooms(
+    public List<RoomVO> roomListByName(
             @RequestParam String name
     ){
-        return beepService.getRooms(name);
+        return beepService.roomListByName(name);
     }
 
     @GetMapping("/attendances")
     @Operation(summary = "출석 조회", description = "실 코드로 입실한 학생목록 조회합니다. (teacher)")
-    public List<GetAttendanceResponse> getAttendance(
+    public List<AttendanceByCodeRes> attendanceByCode(
             @RequestParam String code
     ){
-        return beepService.getAttendance(code);
+        return beepService.attendanceByCode(code);
     }
+
 }

@@ -1,14 +1,11 @@
 package com.beep.beep.domain.user.service;
 
-
 import com.beep.beep.domain.user.domain.repository.UserRepository;
-import com.beep.beep.domain.user.exception.UserNotFoundException;
+import com.beep.beep.domain.user.exception.UserAlreadyExistsException;
 import com.beep.beep.domain.user.mapper.UserMapper;
-import com.beep.beep.domain.user.presentation.dto.User;
-import com.beep.beep.domain.user.presentation.dto.request.WithdrawalRequest;
-import com.beep.beep.domain.user.exception.PasswordWrongException;
-import com.beep.beep.domain.user.presentation.dto.request.ChangePwRequest;
-import com.beep.beep.domain.user.presentation.dto.response.UserIdResponse;
+import com.beep.beep.domain.user.presentation.dto.UserVO;
+import com.beep.beep.domain.user.presentation.dto.request.ChangePwReq;
+import com.beep.beep.domain.user.presentation.dto.response.UserIdRes;
 import com.beep.beep.global.common.service.UserUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,31 +21,29 @@ public class UserService {
     private final UserUtil userUtil;
     private final UserMapper userMapper;
 
-    public void withdrawal() {
-        User user = userUtil.getCurrentUser();
-
-        userRepository.deleteById(user.getIdx());
+    public void withdrawal(){
+        userRepository.deleteById(userUtil.getCurrentUser().getIdx());
     }
 
     public void idCheck(String id) {
         userUtil.existsById(id);
     }
 
-    public UserIdResponse findId(String email) {
-        return UserIdResponse.builder()
+    public UserIdRes findId(String email) {
+        return UserIdRes.builder()
                 .id(userUtil.findUserByEmail(email).getId()).build();
     }
 
     public void checkIdEmail(String id,String email) {
-        userRepository.findByIdEmail(id,email)
-                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
+        if(!userRepository.existsByIdEmail(id,email))
+            throw UserAlreadyExistsException.EXCEPTION;
     }
 
     @Transactional
-    public void changePw(ChangePwRequest request){
-        User user = userUtil.findUserByEmail(request.getEmail());
-        user.setPassword(encoder.encode(request.getPassword()));
-        userRepository.save(userMapper.toEdit(user));
+    public void changePw(ChangePwReq request){
+        UserVO userVO = userUtil.findUserByEmail(request.getEmail());
+        userVO.setPassword(encoder.encode(request.getPassword()));
+        userRepository.save(userMapper.toEdit(userVO));
     }
 
 }

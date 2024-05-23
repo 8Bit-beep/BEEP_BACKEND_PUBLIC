@@ -23,7 +23,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String token = jwtExtractor.extractTokenFromRequest(request);
-        System.out.println(token);
 
         if (token != null) { // 토큰이 존재하면
             // 사용자 인증정보를 SecurityContext에 설정하는 과정

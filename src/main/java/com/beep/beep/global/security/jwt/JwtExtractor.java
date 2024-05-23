@@ -1,13 +1,11 @@
 package com.beep.beep.global.security.jwt;
 
 import com.beep.beep.domain.user.domain.repository.UserRepository;
-import com.beep.beep.domain.user.exception.UserNotFoundException;
 import com.beep.beep.domain.user.mapper.UserMapper;
-import com.beep.beep.domain.user.presentation.dto.User;
+import com.beep.beep.domain.user.presentation.dto.UserVO;
 import com.beep.beep.global.security.auth.AuthDetails;
 import com.beep.beep.global.security.jwt.config.JwtProperties;
 import com.beep.beep.global.security.jwt.enums.JwtType;
-import com.beep.beep.global.security.jwt.exception.TokenTypeException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Header;
@@ -34,21 +32,17 @@ public class JwtExtractor {
         final Jws<Claims> claims = getClaims(token);
 
         if (isWrongType(claims, JwtType.ACCESS)) {
-            throw TokenTypeException.EXCEPTION;
+            throw new IllegalArgumentException("토큰 타입이 옳지 않습니다");
         }
 
-        System.out.println("what's the matter");
-        User user = userRepository.findByEmail(claims
+        UserVO userVO = userRepository.findByEmail(claims
                         .getBody()
                         .getSubject())
                 .map(userMapper::toUserDto)
-                .orElseThrow(()-> UserNotFoundException.EXCEPTION );
-        System.out.println("here.");
+                .orElseThrow(()-> new IllegalArgumentException("유저가 존재하지 않습니다") );
 
-        final AuthDetails details = new AuthDetails(user);
-        System.out.println(user.getAuthority());
+        final AuthDetails details = new AuthDetails(userVO);
 
-        System.out.println("네?");
         // 사용자 인증 정보를 생성 후 관리 (객체 생성을 통해)
         // UsernamePasswordAuthenticationToken(Principal, Credentials, Authorities) // 사용자의 주요정보, 인증과정의 비밀번호 저장 안하려고 null , 사용자의 권한 목록
         return new UsernamePasswordAuthenticationToken(details, null, details.getAuthorities());
@@ -83,17 +77,5 @@ public class JwtExtractor {
         }
         return token; // 토큰 이상하면 그냥 token return
     }
-
-//    public String parseToken(String bearerToken) {
-//        if (bearerToken != null && bearerToken.startsWith(jwtProperties.getPrefix())){
-//            return bearerToken.replace(jwtProperties.getPrefix(),"").replaceAll("\\s", "");
-//        }
-//        return null;
-//    }
-
-
-//    public String getTokenSubject(String token){
-//        return getClaims(token).getBody().getSubject();
-//    }
 
 }
