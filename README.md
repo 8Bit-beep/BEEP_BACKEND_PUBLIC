@@ -2,6 +2,8 @@
 
 레디스 배포
 https://adjh54.tistory.com/449#google_vignette
+네트워크 구축
+https://velog.io/@eenaa/Docker-container%EC%8B%A4%ED%96%89%ED%96%88%EC%9D%84-%EB%95%8C-Redis%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88-%EC%97%B0%EA%B2%B0
 
 QueryDSL
 https://m.blog.naver.com/anstnsp/222109155983
