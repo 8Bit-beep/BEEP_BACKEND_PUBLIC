@@ -35,18 +35,14 @@ public class JwtExtractor {
             throw new IllegalArgumentException("토큰 타입이 옳지 않습니다");
         }
 
-        System.out.println("what's the matter");
         UserVO userVO = userRepository.findByEmail(claims
                         .getBody()
                         .getSubject())
                 .map(userMapper::toUserDto)
                 .orElseThrow(()-> new IllegalArgumentException("유저가 존재하지 않습니다") );
-        System.out.println("here.");
 
         final AuthDetails details = new AuthDetails(userVO);
-        System.out.println(userVO.getAuthority());
 
-        System.out.println("네?");
         // 사용자 인증 정보를 생성 후 관리 (객체 생성을 통해)
         // UsernamePasswordAuthenticationToken(Principal, Credentials, Authorities) // 사용자의 주요정보, 인증과정의 비밀번호 저장 안하려고 null , 사용자의 권한 목록
         return new UsernamePasswordAuthenticationToken(details, null, details.getAuthorities());

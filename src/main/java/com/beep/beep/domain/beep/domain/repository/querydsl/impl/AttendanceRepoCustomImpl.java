@@ -1,7 +1,7 @@
 package com.beep.beep.domain.beep.domain.repository.querydsl.impl;
 
 
-import com.beep.beep.domain.beep.domain.repository.querydsl.AttendanceRepositoryCustom;
+import com.beep.beep.domain.beep.domain.repository.querydsl.AttendanceRepoCustom;
 import com.beep.beep.domain.beep.presentation.dto.response.AttendanceByCodeRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentByUserRes;
 import com.beep.beep.domain.user.presentation.dto.UserVO;
@@ -20,7 +20,7 @@ import static com.beep.beep.domain.user.domain.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
-public class AttendanceRepoCustomImpl implements AttendanceRepositoryCustom {
+public class AttendanceRepoCustomImpl implements AttendanceRepoCustom {
 
     private final JPAQueryFactory query;
 
