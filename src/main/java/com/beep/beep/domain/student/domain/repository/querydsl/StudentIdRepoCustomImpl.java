@@ -26,7 +26,12 @@ public class StudentIdRepoCustomImpl implements StudentIdRepoCustom {
 
     @Override
     public List<StudentByGradeClsRes> studentListByGradeCls(StudentByGradeClsReq req) {
-        return query.select(memberListConstructorExpression())
+        return query.select(Projections.constructor(StudentByGradeClsRes.class,
+                        user.idx,
+                        user.name,
+                        studentId.num,
+                        room.floor,
+                        room.name))
                 .from(studentId)
                 .innerJoin(attendance).on(attendance.userIdx.eq(studentId.userIdx))
                 .innerJoin(room).on(room.code.eq(attendance.code))
@@ -48,14 +53,6 @@ public class StudentIdRepoCustomImpl implements StudentIdRepoCustom {
                 .where(studentId.grade.eq(grade))
                 .groupBy(studentId.cls)
                 .fetch();
-    }
-
-    private ConstructorExpression<StudentByGradeClsRes> memberListConstructorExpression() {
-        return Projections.constructor(StudentByGradeClsRes.class,
-                user.name,
-                studentId.num,
-                room.floor,
-                room.name);
     }
 
 }

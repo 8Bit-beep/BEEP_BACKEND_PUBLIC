@@ -29,7 +29,11 @@ public class AttendanceRepoCustomImpl implements AttendanceRepoCustom {
     @Override
     public List<AttendanceByCodeRes> attendanceListByCode(String code) {
         return query
-                .select(attendanceListConstructorExpression())
+                .select(Projections.constructor(AttendanceByCodeRes.class,
+                        user.name,
+                        studentId.grade,
+                        studentId.cls,
+                        studentId.num))
                 .from(attendance)
                 .innerJoin(user).on(user.idx.eq(attendance.userIdx))
                 .innerJoin(studentId).on(studentId.userIdx.eq(attendance.userIdx))
@@ -50,14 +54,6 @@ public class AttendanceRepoCustomImpl implements AttendanceRepoCustom {
                 .fetchFirst();
     }
 
-    private ConstructorExpression<AttendanceByCodeRes> attendanceListConstructorExpression() {
-        return Projections.constructor(AttendanceByCodeRes.class,
-                user.name,
-                studentId.grade,
-                studentId.cls,
-                studentId.num);
-    }
-
     private ConstructorExpression<StudentByUserRes> studentInfoConstructorExpression(UserVO vo) {
         return Projections.constructor(StudentByUserRes.class,
                 user.name,
@@ -65,6 +61,7 @@ public class AttendanceRepoCustomImpl implements AttendanceRepoCustom {
                 studentId.grade,
                 studentId.cls,
                 studentId.num,
+                room.floor,
                 room.name);
     }
 

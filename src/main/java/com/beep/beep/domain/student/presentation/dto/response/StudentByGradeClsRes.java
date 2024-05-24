@@ -8,6 +8,8 @@ import lombok.Getter;
 @Builder @AllArgsConstructor
 public class StudentByGradeClsRes {
 
+    private Long userIdx;
+
     private String name;
 
     private int num;

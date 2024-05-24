@@ -60,7 +60,11 @@ public class UserRepoCustomImpl implements UserRepoCustom {
     @Override
     public TeacherByUserRes teacherByUser(UserVO userVO){
         return query
-                .select(teacherByUserConstructorExpression())
+                .select(Projections.constructor(TeacherByUserRes.class,
+                        user.name,
+                        user.email,
+                        job1.department,
+                        job1.job))
                 .from(user)
                 .innerJoin(job1).on(job1.userIdx.eq(user.idx))
                 .where(user.idx.eq(userVO.getIdx()))
@@ -69,37 +73,25 @@ public class UserRepoCustomImpl implements UserRepoCustom {
 
     @Override
     public boolean existsByIdEmail(String id, String email) {
-        return Optional.ofNullable(query.selectFrom(user)
+        return query.selectFrom(user)
                 .where(user.email.eq(email), user.id.eq(id))
-                .fetchFirst()).isPresent();
+                .fetchFirst() != null;
     }
 
     @Override
     public List<StudentByNameRes> studentListByName(String name) {
-        return query.select(studentListByNameConstructorExpression())
+        return query.select(Projections.constructor(StudentByNameRes.class,
+                        user.name,
+                        studentId.grade,
+                        studentId.cls,
+                        studentId.num,
+                        room.name))
                 .from(studentId)
                 .innerJoin(attendance).on(attendance.userIdx.eq(studentId.userIdx))
                 .innerJoin(room).on(room.code.eq(attendance.code))
                 .innerJoin(user).on(user.idx.eq(studentId.userIdx))
                 .where(user.name.contains(name))
                 .fetch();
-    }
-
-    private ConstructorExpression<StudentByNameRes> studentListByNameConstructorExpression() {
-        return Projections.constructor(StudentByNameRes.class,
-                user.name,
-                studentId.grade,
-                studentId.cls,
-                studentId.num,
-                room.name);
-    }
-
-    private ConstructorExpression<TeacherByUserRes> teacherByUserConstructorExpression() {
-        return Projections.constructor(TeacherByUserRes.class,
-                user.name,
-                user.email,
-                job1.department,
-                job1.job);
     }
 
     private ConstructorExpression<TeacherRes> teacherListConstructorExpression() {

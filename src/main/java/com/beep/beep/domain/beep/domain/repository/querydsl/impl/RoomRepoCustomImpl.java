@@ -20,18 +20,13 @@ public class RoomRepoCustomImpl implements RoomRepoCustom {
 
     @Override
     public List<RoomVO> roomListByName(String name) {
-        return query.select(roomConstructorExpression())
+        return query.select(Projections.constructor(RoomVO.class,
+                        room.code,
+                        room.name,
+                        room.floor))
                 .from(room)
                 .where(room.name.contains(name))
                 .fetch();
-    }
-
-
-    private ConstructorExpression<RoomVO> roomConstructorExpression() {
-        return Projections.constructor(RoomVO.class,
-                room.code,
-                room.name,
-                room.floor);
     }
 
 }
