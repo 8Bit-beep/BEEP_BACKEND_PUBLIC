@@ -20,7 +20,6 @@ public class UserUtil {
     private final UserMapper userMapper;
 
     public UserVO getCurrentUser() {
-        System.out.println("여기임?");
         return userSecurity.getUser();
     }
 

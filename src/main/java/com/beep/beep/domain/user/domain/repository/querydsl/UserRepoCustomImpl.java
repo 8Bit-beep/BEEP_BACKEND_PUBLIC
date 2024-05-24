@@ -69,9 +69,9 @@ public class UserRepoCustomImpl implements UserRepoCustom {
 
     @Override
     public boolean existsByIdEmail(String id, String email) {
-        return Optional.ofNullable(query.selectFrom(user)
+        return query.selectFrom(user)
                 .where(user.email.eq(email), user.id.eq(id))
-                .fetchFirst()).isPresent();
+                .fetchFirst() != null;
     }
 
     @Override

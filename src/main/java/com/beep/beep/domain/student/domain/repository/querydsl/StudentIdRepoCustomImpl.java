@@ -52,10 +52,12 @@ public class StudentIdRepoCustomImpl implements StudentIdRepoCustom {
 
     private ConstructorExpression<StudentByGradeClsRes> memberListConstructorExpression() {
         return Projections.constructor(StudentByGradeClsRes.class,
+                user.idx,
                 user.name,
                 studentId.num,
                 room.floor,
                 room.name);
     }
+
 
 }
