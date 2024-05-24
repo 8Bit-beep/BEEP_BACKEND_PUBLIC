@@ -65,6 +65,7 @@ public class AttendanceRepoCustomImpl implements AttendanceRepoCustom {
                 studentId.grade,
                 studentId.cls,
                 studentId.num,
+                room.floor,
                 room.name);
     }
 
