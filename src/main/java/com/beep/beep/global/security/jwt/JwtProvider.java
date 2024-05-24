@@ -6,12 +6,10 @@ import com.beep.beep.global.security.jwt.enums.JwtType;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 
-import java.security.Key;
 import java.util.Date;
 
 
