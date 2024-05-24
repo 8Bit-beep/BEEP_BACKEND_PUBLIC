@@ -15,6 +15,7 @@ public class StudentByNameRes {
     private int cls;
     private int num;
 
+    private int floor;
     private String roomName;
 
 }
