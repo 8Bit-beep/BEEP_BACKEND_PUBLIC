@@ -10,8 +10,8 @@ import lombok.Getter;
 public class AttendanceByCodeRes {
 
     private String userName;
-    private int grade;
-    private int cls;
-    private int num;
+    private Integer grade;
+    private Integer cls;
+    private Integer num;
 
 }

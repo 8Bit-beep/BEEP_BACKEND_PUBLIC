@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class StudentByGradeClsReq {
 
-    private int grade;
-    private int cls;
+    private Integer grade;
+    private Integer cls;
 
 }

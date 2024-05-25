@@ -22,5 +22,5 @@ public class Room {
     private String name;
 
     @Column(nullable = false)
-    private int floor;
+    private Integer floor;
 }

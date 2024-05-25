@@ -6,7 +6,7 @@ import lombok.Getter;
 public class SaveStudentIdReq {
     private String email;
 
-    private int grade;
-    private int cls;
-    private int num;
+    private Integer grade;
+    private Integer cls;
+    private Integer num;
 }

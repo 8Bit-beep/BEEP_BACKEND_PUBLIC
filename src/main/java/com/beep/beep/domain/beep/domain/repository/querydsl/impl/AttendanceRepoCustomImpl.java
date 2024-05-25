@@ -45,7 +45,7 @@ public class AttendanceRepoCustomImpl implements AttendanceRepoCustom {
 
     @Override
     public StudentByUserRes studentByUser(UserVO userVO) {
-        return query.select(studentInfoConstructorExpression(userVO))
+        return query.select(studentInfoConstructorExpression())
                 .from(attendance)
                 .innerJoin(user).on(user.idx.eq(attendance.userIdx))
                 .innerJoin(studentId).on(studentId.userIdx.eq(attendance.userIdx))
@@ -54,7 +54,7 @@ public class AttendanceRepoCustomImpl implements AttendanceRepoCustom {
                 .fetchFirst();
     }
 
-    private ConstructorExpression<StudentByUserRes> studentInfoConstructorExpression(UserVO vo) {
+    private ConstructorExpression<StudentByUserRes> studentInfoConstructorExpression() {
         return Projections.constructor(StudentByUserRes.class,
                 user.name,
                 user.email,

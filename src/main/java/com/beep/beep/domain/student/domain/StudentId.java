@@ -20,7 +20,7 @@ public class StudentId {
     private Long userIdx;
 
     @Column(nullable = false)
-    private int cls;
-    private int grade;
-    private int num;
+    private Integer cls;
+    private Integer grade;
+    private Integer num;
 }
