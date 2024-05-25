@@ -11,11 +11,11 @@ public class StudentByNameRes {
 
     private String name;
 
-    private int grade;
-    private int cls;
-    private int num;
+    private Integer grade;
+    private Integer cls;
+    private Integer num;
 
-    private int floor;
+    private Integer floor;
     private String roomName;
 
 }

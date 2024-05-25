@@ -13,9 +13,9 @@ public class StudentRes {
     private String name;
     private String email;
 
-    private int grade;
-    private int cls;
-    private int num;
+    private Integer grade;
+    private Integer cls;
+    private Integer num;
 
     private String code;
 }

@@ -12,9 +12,9 @@ public class StudentByGradeClsRes {
 
     private String name;
 
-    private int num;
+    private Integer num;
 
-    private int floor;
+    private Integer floor;
 
     private String roomName;
 
