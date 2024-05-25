@@ -9,6 +9,6 @@ import lombok.Getter;
 @Builder @AllArgsConstructor
 public class RoomVO {
     private String code;
-    private int floor;
+    private Integer floor;
     private String name;
 }
