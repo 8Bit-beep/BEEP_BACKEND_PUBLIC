@@ -34,12 +34,13 @@ spring:
         smtp.timeout: 50000 # SMTP ??? ??? ???? ??? ???? ?? ??? 50,000ms
         smtp.starttls.enable: true
 
-jwt:
-  refresh-exp: 2592000000 #30일
-  access-exp: 86400000 # 24시간
-  prefix: Bearer
-  header: Authorization
-  secret-key: ${secrets.JWT_SECRET_KEY}
+application:
+  jwt:
+    refresh-exp: 2592000000 #30일
+    access-exp: 86400000 # 24시간
+    prefix: Bearer
+    header: Authorization
+    secret-key: ${secrets.JWT_SECRET_KEY}
 
 springdoc:
   api-docs:
