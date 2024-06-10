@@ -40,7 +40,7 @@ application:
     access-exp: 86400000 # 24시간
     prefix: Bearer
     header: Authorization
-    secret-key: ${secrets.JWT_SECRET_KEY}
+    secretKey: ${secrets.JWT_SECRET_KEY}
 
 springdoc:
   api-docs:
