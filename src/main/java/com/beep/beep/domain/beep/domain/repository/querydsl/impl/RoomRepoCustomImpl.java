@@ -3,6 +3,7 @@ package com.beep.beep.domain.beep.domain.repository.querydsl.impl;
 
 import com.beep.beep.domain.beep.domain.repository.querydsl.RoomRepoCustom;
 import com.beep.beep.domain.beep.presentation.dto.RoomVO;
+import com.beep.beep.domain.beep.presentation.dto.response.RoomByFloorRes;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +30,9 @@ public class RoomRepoCustomImpl implements RoomRepoCustom {
     }
 
     @Override
-    public List<RoomVO> roomListByFloor(Integer floor) {
-        return query.select(Projections.constructor(RoomVO.class,
+    public List<RoomByFloorRes> roomListByFloor(Integer floor) {
+        return query.select(Projections.constructor(RoomByFloorRes.class,
                 room.code,
-                room.floor,
                 room.name))
                 .from(room)
                 .where(room.floor.eq(floor))

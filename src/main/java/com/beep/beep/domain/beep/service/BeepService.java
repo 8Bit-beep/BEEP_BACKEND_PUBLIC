@@ -12,6 +12,7 @@ import com.beep.beep.domain.beep.presentation.dto.request.InitializeAttendanceRe
 import com.beep.beep.domain.beep.presentation.dto.request.EnterRoomReq;
 import com.beep.beep.domain.beep.presentation.dto.request.ExitRoomReq;
 import com.beep.beep.domain.beep.presentation.dto.response.AttendanceByCodeRes;
+import com.beep.beep.domain.beep.presentation.dto.response.RoomByFloorRes;
 import com.beep.beep.global.common.service.UserUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +63,7 @@ public class BeepService {
         return roomRepository.roomListByName(name);
     }
 
-    public List<RoomVO> roomListByFloor(Integer floor){
+    public List<RoomByFloorRes> roomListByFloor(Integer floor){
         return roomRepository.roomListByFloor(floor);
     }
 
