@@ -62,6 +62,10 @@ public class BeepService {
         return roomRepository.roomListByName(name);
     }
 
+    public List<RoomVO> roomListByFloor(Integer floor){
+        return roomRepository.roomListByFloor(floor);
+    }
+
     public List<AttendanceByCodeRes> attendanceByCode(String code){
         return attendanceRepository.attendanceListByCode(code);
     }

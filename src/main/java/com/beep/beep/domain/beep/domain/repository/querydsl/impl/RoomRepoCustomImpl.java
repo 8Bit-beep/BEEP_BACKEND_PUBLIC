@@ -28,4 +28,15 @@ public class RoomRepoCustomImpl implements RoomRepoCustom {
                 .fetch();
     }
 
+    @Override
+    public List<RoomVO> roomListByFloor(Integer floor) {
+        return query.select(Projections.constructor(RoomVO.class,
+                room.code,
+                room.floor,
+                room.name))
+                .from(room)
+                .where(room.floor.eq(floor))
+                .fetch();
+    }
+
 }
