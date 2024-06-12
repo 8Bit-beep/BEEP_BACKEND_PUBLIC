@@ -8,5 +8,5 @@ import lombok.Getter;
 @Builder @AllArgsConstructor
 public class RoomByFloorRes {
     private String code;
-    private String name;
+    private String roomName;
 }
