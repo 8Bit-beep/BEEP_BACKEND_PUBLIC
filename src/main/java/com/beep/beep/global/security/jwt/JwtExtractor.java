@@ -1,7 +1,10 @@
 package com.beep.beep.global.security.jwt;
 
-import com.beep.beep.domain.user.domain.repository.UserRepository;
-import com.beep.beep.domain.user.mapper.UserMapper;
+import com.beep.beep.domain.student.domain.repository.StudentJpaRepo;
+import com.beep.beep.domain.student.service.StudentService;
+import com.beep.beep.domain.teacher.domain.repository.TeacherJpaRepo;
+import com.beep.beep.domain.teacher.service.TeacherService;
+import com.beep.beep.domain.user.domain.enums.UserType;
 import com.beep.beep.domain.user.presentation.dto.UserVO;
 import com.beep.beep.global.security.auth.AuthDetails;
 import com.beep.beep.global.security.jwt.config.JwtProperties;
@@ -20,13 +23,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
+
 @Component
 @RequiredArgsConstructor
 public class JwtExtractor {
 
     private final JwtProperties jwtProperties;
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final StudentService studentService;
+    private final TeacherService teacherService;
 
     public Authentication getAuthentication(final String token) {
         final Jws<Claims> claims = getClaims(token);
@@ -35,11 +40,14 @@ public class JwtExtractor {
             throw new IllegalArgumentException("토큰 타입이 옳지 않습니다");
         }
 
-        UserVO userVO = userRepository.findByEmail(claims
-                        .getBody()
-                        .getSubject())
-                .map(userMapper::toUserDto)
-                .orElseThrow(()-> new IllegalArgumentException("유저가 존재하지 않습니다") );
+        String email = claims.getBody().getSubject();
+
+        UserVO userVO;
+        if(claims.getBody().get("authority", UserType.class) == STUDENT){
+            userVO = UserVO.fromStudent(studentService.findByEmail(email));
+        } else{
+            userVO = UserVO.fromTeacher(teacherService.findByEmail(email));
+        }
 
         final AuthDetails details = new AuthDetails(userVO);
 
