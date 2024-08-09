@@ -16,3 +16,6 @@ https://velog.io/@zeesoo/Linux-vi-%ED%8E%B8%EC%A7%91%EA%B8%B0-%EC%82%AC%EC%9A%A9
 
 스왑 메모리 생성
 https://hagenti0612.github.io/aws/aws-memory/
+
+이메일 인증 만들기
+https://green-bin.tistory.com/83
