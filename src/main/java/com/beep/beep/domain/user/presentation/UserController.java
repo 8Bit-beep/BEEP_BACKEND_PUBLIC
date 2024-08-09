@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +27,7 @@ public class UserController {
         return Response.ok("회원탈퇴 성공");
     }
 
-    @PutMapping("/change-pw")
+    @PatchMapping("/change-pw")
     @Operation(summary = "비밀번호 변경", description = "이메일과 변경할 비번 값을 받아 비번을 변경해줍니다.(unauthenticated)")
     public Response changePw(
             @RequestBody ChangePwReq request

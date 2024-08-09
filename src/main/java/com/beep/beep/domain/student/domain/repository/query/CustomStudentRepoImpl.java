@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.beep.beep.domain.student.domain.QStudent.student;
+
 @Repository
 @RequiredArgsConstructor
 public class CustomStudentRepoImpl implements CustomStudentRepo {
@@ -19,27 +21,27 @@ public class CustomStudentRepoImpl implements CustomStudentRepo {
 
     @Override
     public List<AttendListRes> attendList(RoomCode code) {
-//        return query.select(Projections.constructor(AttendListRes.class,
-//                        student.name,
-//                        student.grade,
-//                        student.cls,
-//                        student.num))
-//                .from(student)
-//                .where(student.code.eq(code));
-        return List.of();
+        return query.select(Projections.constructor(AttendListRes.class,
+                        student.name,
+                        student.grade,
+                        student.cls,
+                        student.num))
+                .from(student)
+                .where(student.code.eq(code))
+                .fetch();
     }
 
     @Override
     public List<MemberListRes> memberList(MemberListReq req) {
-//        return query.select(Projections.constructor(MemberListRes.class,
-//                        student.name,
-//                        student.num,
-//                        student.code,
-//                        student.code.getCode()))
-//                .from(student)
-//                .where(student.grade.eq(req.grade()),student.cls.eq(req.cls()));
-        return List.of();
+        return query.select(Projections.fields(MemberListRes.class,
+                        student.name.as("name"),
+                        student.num.as("num"),
+                        student.code.as("roomName"),
+                        student.code.getRoot()
+                ))
+                .from(student)
+                .where(student.grade.eq(req.grade()), student.cls.eq(req.cls()))
+                .fetch();
     }
-
 
 }

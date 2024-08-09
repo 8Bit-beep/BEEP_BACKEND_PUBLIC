@@ -4,6 +4,7 @@ import com.beep.beep.domain.student.domain.Student;
 import com.beep.beep.domain.student.service.StudentService;
 import com.beep.beep.domain.user.presentation.dto.request.ChangePwReq;
 import com.beep.beep.global.common.repository.UserSessionHolder;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ public class UserUseCase {
         studentService.deleteById(userSessionHolder.getUser().id());
     }
 
+    @Transactional
     public void changePw(ChangePwReq req){
         Student student = studentService.findByEmail(userSessionHolder.getUser().email());
         student.updatePassword(encoder.encode(req.password()));
