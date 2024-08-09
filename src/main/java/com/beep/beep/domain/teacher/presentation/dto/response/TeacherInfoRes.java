@@ -4,12 +4,11 @@ import com.beep.beep.domain.teacher.domain.Teacher;
 import lombok.Builder;
 
 @Builder
-public record TeacherInfoRes(String email, String name, String department, String job) {
+public record TeacherInfoRes(String email, String name, String department) {
     public static TeacherInfoRes of(Teacher teacher) {
         return TeacherInfoRes.builder()
                 .email(teacher.getEmail())
                 .name(teacher.getName())
-                .department(teacher.getDepartment())
-                .job(teacher.getJob()).build();
+                .department(teacher.getDepartment()).build();
     }
 }

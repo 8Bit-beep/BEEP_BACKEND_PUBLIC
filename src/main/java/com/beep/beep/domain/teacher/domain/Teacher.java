@@ -34,7 +34,4 @@ public class Teacher {
     @Column(nullable = false)
     private String department;
 
-    @Column(nullable = false)
-    private String job;
-
 }
