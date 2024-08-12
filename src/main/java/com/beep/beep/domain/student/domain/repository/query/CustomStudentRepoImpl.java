@@ -1,6 +1,5 @@
 package com.beep.beep.domain.student.domain.repository.query;
 
-import com.beep.beep.domain.student.domain.enums.RoomCode;
 import com.beep.beep.domain.student.presentation.dto.request.MemberListReq;
 import com.beep.beep.domain.student.presentation.dto.response.AttendListRes;
 import com.beep.beep.domain.student.presentation.dto.response.MemberListRes;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.beep.beep.domain.room.domain.QRoom.room;
 import static com.beep.beep.domain.student.domain.QStudent.student;
 
 @Repository
@@ -20,7 +20,7 @@ public class CustomStudentRepoImpl implements CustomStudentRepo {
     private final JPAQueryFactory query;
 
     @Override
-    public List<AttendListRes> attendList(RoomCode code) {
+    public List<AttendListRes> attendList(String code) {
         return query.select(Projections.constructor(AttendListRes.class,
                         student.name,
                         student.grade,
@@ -36,11 +36,13 @@ public class CustomStudentRepoImpl implements CustomStudentRepo {
         return query.select(Projections.fields(MemberListRes.class,
                         student.name.as("name"),
                         student.num.as("num"),
-                        student.code.as("roomName"),
-                        student.code.getRoot()
+                        room.name,
+                room.floor
                 ))
                 .from(student)
+                .innerJoin(room).on(room.code.eq(student.code))
                 .where(student.grade.eq(req.grade()), student.cls.eq(req.cls()))
+                .orderBy(student.num.asc())
                 .fetch();
     }
 

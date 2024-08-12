@@ -43,10 +43,9 @@ public class Student {
     @Column(nullable = false)
     private Integer num;
 
-    @Enumerated(EnumType.STRING)
-    private RoomCode code;
+    private String code;
 
-    public void updateCode(RoomCode code){
+    public void updateCode(String code){
         this.code = code;
     }
 

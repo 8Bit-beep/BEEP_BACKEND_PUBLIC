@@ -51,7 +51,7 @@ public class StudentController {
     @GetMapping("/attend-list")
     @Operation(summary = "출석부 조회", description = "실 코드로 입실한 학생목록 조회합니다. (teacher)")
     public ResponseData<List<AttendListRes>> attendList(
-            @RequestParam RoomCode code
+            @RequestParam String code
     ){
         return ResponseData.ok("출석부 조회 성공",
                 studentUseCase.attendList(code)

@@ -23,7 +23,7 @@ public class StudentService {
                 () -> UserNotFoundException.EXCEPTION);
     }
 
-    public List<AttendListRes> attendList(RoomCode code){
+    public List<AttendListRes> attendList(String code){
         return studentJpaRepo.attendList(code);
     }
 

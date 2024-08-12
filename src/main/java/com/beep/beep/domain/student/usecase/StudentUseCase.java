@@ -1,5 +1,8 @@
 package com.beep.beep.domain.student.usecase;
 
+import com.beep.beep.domain.room.domain.repository.RoomRepository;
+import com.beep.beep.domain.room.exception.RoomNotFoundException;
+import com.beep.beep.domain.room.service.RoomService;
 import com.beep.beep.domain.student.domain.Student;
 import com.beep.beep.domain.student.domain.enums.RoomCode;
 import com.beep.beep.domain.student.exception.NotAllowedAttendException;
@@ -23,6 +26,7 @@ public class StudentUseCase {
 
     private final UserSessionHolder userSessionHolder;
     private final StudentService studentService;
+    private final RoomService roomService;
 
     public StudentInfoRes studentInfo() {
         return StudentInfoRes.of(studentService.findByEmail(userSessionHolder.getUser().email()));
@@ -31,7 +35,9 @@ public class StudentUseCase {
     @Transactional
     public AttendRes attend(AttendReq req) {
         Student student = studentService.findByEmail(userSessionHolder.getUser().email());
-        RoomCode code = student.getCode();
+        String code = student.getCode();
+
+        roomService.existsByCode(code);
 
         if(code == null && req.code() != null){ // 입실해야하면?
             student.updateCode(req.code());
@@ -44,7 +50,8 @@ public class StudentUseCase {
         }
     }
 
-    public List<AttendListRes> attendList(RoomCode code) {
+    public List<AttendListRes> attendList(String code) {
+        roomService.existsByCode(code);
         return studentService.attendList(code);
     }
 

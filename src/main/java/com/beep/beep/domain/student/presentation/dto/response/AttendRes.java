@@ -4,8 +4,8 @@ import com.beep.beep.domain.student.domain.enums.RoomCode;
 import lombok.Builder;
 
 @Builder
-public record AttendRes(RoomCode code) {
-    public static AttendRes of(RoomCode code) {
+public record AttendRes(String code) {
+    public static AttendRes of(String code) {
         return AttendRes.builder().code(code).build();
     }
 }
