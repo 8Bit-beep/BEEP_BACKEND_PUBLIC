@@ -48,7 +48,7 @@ public class StudentController {
         );
     }
 
-    @GetMapping("/attendList")
+    @GetMapping("/attend-list")
     @Operation(summary = "출석부 조회", description = "실 코드로 입실한 학생목록 조회합니다. (teacher)")
     public ResponseData<List<AttendListRes>> attendList(
             @RequestParam RoomCode code
@@ -58,7 +58,7 @@ public class StudentController {
         );
     }
 
-    @GetMapping("/memberList")
+    @GetMapping("/member-list")
     @Operation(summary = "반 구성원 조회", description = "학년-반으로 반 구성원 목록을 조회합니다. (teacher)")
     public ResponseData<List<MemberListRes>> memberList(
             @ModelAttribute MemberListReq req
