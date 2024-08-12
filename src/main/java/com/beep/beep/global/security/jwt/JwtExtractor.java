@@ -1,10 +1,7 @@
 package com.beep.beep.global.security.jwt;
 
-import com.beep.beep.domain.student.domain.repository.StudentJpaRepo;
 import com.beep.beep.domain.student.service.StudentService;
-import com.beep.beep.domain.teacher.domain.repository.TeacherJpaRepo;
 import com.beep.beep.domain.teacher.service.TeacherService;
-import com.beep.beep.domain.user.domain.enums.UserType;
 import com.beep.beep.domain.user.presentation.dto.UserVO;
 import com.beep.beep.global.security.auth.AuthDetails;
 import com.beep.beep.global.security.jwt.config.JwtProperties;
@@ -43,10 +40,12 @@ public class JwtExtractor {
         String email = claims.getBody().getSubject();
 
         UserVO userVO;
-        if(claims.getBody().get("authority", UserType.class) == STUDENT){
+        try{if(claims.getBody().get("authority", String.class).equals(STUDENT.getAuthority())){
             userVO = UserVO.fromStudent(studentService.findByEmail(email));
         } else{
             userVO = UserVO.fromTeacher(teacherService.findByEmail(email));
+        }}catch(Exception e){
+            throw new IllegalArgumentException("찾을 수 없는 유저");
         }
 
         final AuthDetails details = new AuthDetails(userVO);

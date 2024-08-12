@@ -24,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
+import static com.beep.beep.domain.user.domain.enums.UserType.TEACHER;
 
 @Service
 @RequiredArgsConstructor
@@ -54,17 +55,18 @@ public class AuthService {
                     .accessToken(jwtProvider.generateAccessToken(student.getEmail(), STUDENT))
                     .refreshToken(jwtProvider.generateRefreshToken(student.getEmail(), STUDENT))
                     .build();
-        } else {
+        } else if (req.authority() == TEACHER){
             Teacher teacher = teacherJpaRepo.findByEmail(req.email())
                     .orElseThrow(() -> UserNotFoundException.EXCEPTION);
 
             comparePassword(req,teacher.getPassword());
 
             return SignInRes.builder()
-                    .accessToken(jwtProvider.generateAccessToken(teacher.getEmail(), STUDENT))
-                    .refreshToken(jwtProvider.generateRefreshToken(teacher.getEmail(), STUDENT))
+                    .accessToken(jwtProvider.generateAccessToken(teacher.getEmail(), TEACHER))
+                    .refreshToken(jwtProvider.generateRefreshToken(teacher.getEmail(), TEACHER))
                     .build();
         }
+        return null;
     }
 
     public TokenRefreshRes refresh(TokenRefreshReq req){
