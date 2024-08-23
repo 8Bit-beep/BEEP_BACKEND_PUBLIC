@@ -12,6 +12,7 @@ import com.beep.beep.domain.teacher.domain.Teacher;
 import com.beep.beep.domain.teacher.domain.repository.TeacherJpaRepo;
 import com.beep.beep.domain.user.domain.enums.UserType;
 import com.beep.beep.domain.user.exception.PasswordWrongException;
+import com.beep.beep.domain.user.exception.UserAlreadyExistsException;
 import com.beep.beep.domain.user.exception.UserNotFoundException;
 import com.beep.beep.global.security.jwt.JwtExtractor;
 import com.beep.beep.global.security.jwt.JwtProvider;
@@ -37,10 +38,16 @@ public class AuthService {
     private final JwtExtractor jwtExtractor;
 
     public void studentSignUp(StudentSignUpReq req){
+        if(studentJpaRepo.existsByEmail(req.email()))
+            throw UserAlreadyExistsException.EXCEPTION;
+
         studentJpaRepo.save(req.toStudentEntity(encoder.encode(req.password())));
     }
 
     public void teacherSignUp(TeacherSignUpReq req){
+        if(teacherJpaRepo.existsByEmail(req.email()))
+            throw UserAlreadyExistsException.EXCEPTION;
+
         teacherJpaRepo.save(req.toTeacherEntity(encoder.encode(req.password())));
     }
 
