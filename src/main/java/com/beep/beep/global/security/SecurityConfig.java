@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
                         .requestMatchers("/teacher/**").hasAuthority(TEACHER.getAuthority())
-                        .requestMatchers("/student/info","/student/attend").hasAuthority(STUDENT.getAuthority())
+                        .requestMatchers("/student/info","/student/code","/student/attend").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers("/student/attendList","/student/memberList").hasAuthority(TEACHER.getAuthority())
                         .requestMatchers("/user/**","/email/**","/auth/**").permitAll()
                         .anyRequest().permitAll()

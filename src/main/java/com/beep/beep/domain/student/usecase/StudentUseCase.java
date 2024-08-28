@@ -11,6 +11,7 @@ import com.beep.beep.domain.student.presentation.dto.request.MemberListReq;
 import com.beep.beep.domain.student.presentation.dto.response.AttendListRes;
 import com.beep.beep.domain.student.presentation.dto.response.AttendRes;
 import com.beep.beep.domain.student.presentation.dto.response.MemberListRes;
+import com.beep.beep.domain.student.presentation.dto.response.StudentCodeRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentInfoRes;
 import com.beep.beep.domain.student.service.StudentService;
 import com.beep.beep.global.common.repository.UserSessionHolder;
@@ -30,6 +31,10 @@ public class StudentUseCase {
 
     public StudentInfoRes studentInfo() {
         return StudentInfoRes.of(studentService.findByEmail(userSessionHolder.getUser().email()));
+    }
+
+    public StudentCodeRes studentCode() {
+        return StudentCodeRes.of(studentService.findByEmail(userSessionHolder.getUser().email()).getCode());
     }
 
     @Transactional
