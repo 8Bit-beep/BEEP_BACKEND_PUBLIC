@@ -42,28 +42,10 @@ public class SecurityConfig {
                 .exceptionHandling(handlingConfigures -> handlingConfigures.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
-                        .requestMatchers("/auth/**","/email/**").permitAll()
-
-                        .requestMatchers("/beep/enter").hasAuthority(STUDENT.getAuthority())
-                        .requestMatchers("/beep/exit").hasAuthority(STUDENT.getAuthority())
-                        .requestMatchers("/beep/rooms/**").hasAuthority(TEACHER.getAuthority())
-                        .requestMatchers(HttpMethod.POST,"/beep/attendances").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/beep/attendances").hasAuthority(TEACHER.getAuthority())
-
-                        .requestMatchers("/teachers/job").permitAll()
-                        .requestMatchers("/teachers").hasAuthority(ADMIN.getAuthority())
-                        .requestMatchers("/teachers/info").hasAuthority(TEACHER.getAuthority())
-
-                        .requestMatchers("/students").hasAuthority(ADMIN.getAuthority())
-                        .requestMatchers("/students/id").permitAll()
-                        .requestMatchers("/students/info").hasAuthority(STUDENT.getAuthority())
-                        .requestMatchers("/students/cls").hasAuthority(TEACHER.getAuthority())
-                        .requestMatchers("/students/member").hasAuthority(TEACHER.getAuthority())
-                        .requestMatchers("/students/name").hasAuthority(TEACHER.getAuthority())
-
-                        .requestMatchers("/users/find-user","/users/change-pw","/users/find-id","/id-check").permitAll()
-                        .requestMatchers("/users").authenticated()
-
+                        .requestMatchers("/teacher/**").hasAuthority(TEACHER.getAuthority())
+                        .requestMatchers("/student/info","/student/attend").hasAuthority(STUDENT.getAuthority())
+                        .requestMatchers("/student/attendList","/student/memberList").hasAuthority(TEACHER.getAuthority())
+                        .requestMatchers("/user/**","/email/**","/auth/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

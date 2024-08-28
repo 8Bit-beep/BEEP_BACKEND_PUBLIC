@@ -1,9 +1,6 @@
 package com.beep.beep.domain.auth.presentation.dto.request;
 
-import lombok.Getter;
+import com.beep.beep.domain.user.domain.enums.UserType;
 
-@Getter
-public class SignInReq {
-    private String id;
-    private String password;
+public record SignInReq(String email, String password, UserType authority) {
 }

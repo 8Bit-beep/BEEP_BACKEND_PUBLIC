@@ -1,11 +1,9 @@
 spring:
-  profiles:
-    active: prod
   datasource:
-    url: ${secrets.DB_URL}
+    url: jdbc:mysql://beepdatabase-ver2.c96ms6m44sen.ap-northeast-2.rds.amazonaws.com:3306/beepDatabase?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ${secrets.DB_USERNAME}
-    password: ${secrets.DB_PASSWORD}
+    username: beep_user
+    password: qwer1234
 
   jpa:
     hibernate:
@@ -23,8 +21,8 @@ spring:
         port: 6379
 
   mail:
-    username: ${secrets.MAIL_USERNAME}
-    password: ${secrets.MAIL_PASSWORD}
+    username: heunseo9@gmail.com
+    password: cyje eoaq uxsv upst
     host: smtp.gmail.com
     port: 587
     properties:
@@ -40,7 +38,7 @@ application:
     access-exp: 86400000 # 24시간
     prefix: Bearer
     header: Authorization
-    secretKey: ${secrets.JWT_SECRET_KEY}
+    secretKey: 17e837880e3be483ceb38282686c6e274c9eda3ea4ecdb62f05f93ac8bc70e5a
 
 springdoc:
   api-docs:

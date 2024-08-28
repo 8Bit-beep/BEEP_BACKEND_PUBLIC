@@ -1,18 +1,12 @@
 package com.beep.beep.domain.student.service;
 
-import com.beep.beep.domain.beep.domain.repository.AttendanceRepository;
-import com.beep.beep.domain.student.domain.repository.StudentIdRepository;
-import com.beep.beep.domain.student.mapper.StudentMapper;
-import com.beep.beep.domain.student.presentation.dto.request.StudentByGradeClsReq;
-import com.beep.beep.domain.student.presentation.dto.request.SaveStudentIdReq;
-import com.beep.beep.domain.student.presentation.dto.response.StudentRes;
-import com.beep.beep.domain.student.presentation.dto.response.ClsByGradeRes;
-import com.beep.beep.domain.student.presentation.dto.response.StudentByGradeClsRes;
-import com.beep.beep.domain.student.presentation.dto.response.StudentByNameRes;
-import com.beep.beep.domain.student.presentation.dto.response.StudentByUserRes;
-import com.beep.beep.domain.user.domain.repository.UserRepository;
-import com.beep.beep.global.common.dto.request.PageRequest;
-import com.beep.beep.global.common.service.UserUtil;
+import com.beep.beep.domain.student.domain.Student;
+import com.beep.beep.domain.student.domain.enums.RoomCode;
+import com.beep.beep.domain.student.domain.repository.StudentJpaRepo;
+import com.beep.beep.domain.student.presentation.dto.request.MemberListReq;
+import com.beep.beep.domain.student.presentation.dto.response.AttendListRes;
+import com.beep.beep.domain.student.presentation.dto.response.MemberListRes;
+import com.beep.beep.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,34 +16,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentService {
 
-    private final StudentMapper studentMapper;
-    private final UserUtil userUtil;
-    private final StudentIdRepository studentIdRepository;
-    private final AttendanceRepository attendanceRepository;
-    private final UserRepository userRepository;
+    private final StudentJpaRepo studentJpaRepo;
 
-    public void saveStudentId(SaveStudentIdReq request){
-        studentIdRepository.save(studentMapper.toStudentId(userUtil.findUserByEmail(request.getEmail()),request));
+    public Student findByEmail(String email) {
+        return studentJpaRepo.findByEmail(email).orElseThrow(
+                () -> UserNotFoundException.EXCEPTION);
     }
 
-    public List<StudentRes> studentList(PageRequest request){
-        return userRepository.studentList(request);
+    public List<AttendListRes> attendList(String code){
+        return studentJpaRepo.attendList(code);
     }
 
-    public StudentByUserRes studentByUser() {
-        return attendanceRepository.studentByUser(userUtil.getCurrentUser());
+    public List<MemberListRes> memberList(MemberListReq req){
+        return studentJpaRepo.memberList(req);
     }
 
-    public List<StudentByGradeClsRes> studentListByGradeCls(StudentByGradeClsReq request){
-        return studentIdRepository.studentListByGradeCls(request);
-    }
-
-    public List<StudentByNameRes> studentListByName(String name){
-        return userRepository.studentListByName(name);
-    }
-
-    public List<ClsByGradeRes> clsListByGrade(int grade){
-        return studentIdRepository.clsListByGrade(grade);
+    public void deleteById(Long id) {
+        studentJpaRepo.deleteById(id);
     }
 
 }

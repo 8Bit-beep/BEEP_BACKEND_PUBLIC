@@ -19,17 +19,17 @@ public class AuthDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton((GrantedAuthority) userVO.getAuthority()::getAuthority);
+        return Collections.singleton((GrantedAuthority) userVO.authority()::getAuthority);
     }
 
     @Override
     public String getPassword() {
-        return this.userVO.getPassword();
+        return this.userVO.password();
     }
 
     @Override
     public String getUsername() {
-        return this.userVO.getEmail();
+        return this.userVO.email();
     }
 
     @Override
