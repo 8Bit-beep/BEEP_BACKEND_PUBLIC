@@ -1,11 +1,11 @@
 package com.beep.beep.domain.student.presentation;
 
-import com.beep.beep.domain.student.domain.enums.RoomCode;
 import com.beep.beep.domain.student.presentation.dto.request.AttendReq;
 import com.beep.beep.domain.student.presentation.dto.request.MemberListReq;
 import com.beep.beep.domain.student.presentation.dto.response.AttendListRes;
 import com.beep.beep.domain.student.presentation.dto.response.AttendRes;
 import com.beep.beep.domain.student.presentation.dto.response.MemberListRes;
+import com.beep.beep.domain.student.presentation.dto.response.StudentCodeRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentInfoRes;
 import com.beep.beep.domain.student.usecase.StudentUseCase;
 import com.beep.beep.global.common.dto.response.ResponseData;
@@ -35,6 +35,14 @@ public class StudentController {
     public ResponseData<StudentInfoRes> studentInfo() {
         return ResponseData.ok("출석 성공",
                 studentUseCase.studentInfo()
+        );
+    }
+
+    @GetMapping("/code")
+    @Operation(summary = "학생 실 코드 조회", description = "학생 실 코드를 조회합니다 (student)")
+    public ResponseData<StudentCodeRes> studentCode() {
+        return ResponseData.ok("학생 실 코드 조회 완료",
+                studentUseCase.studentCode()
         );
     }
 

@@ -4,14 +4,27 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: beep_user
     password: qwer1234
+    hikari:
+      connection-timeout: 3000
+      validation-timeout: 3000
+      minimum-idle: 5
+      maximum-pool-size: 20
 
   jpa:
-    hibernate:
-      ddl-auto: update
+    database: MYSQL                               # JPA의 데이터베이스 설정을 MySQL로 변경
     show-sql: true
+    open-in-view: true
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.MySQLDialect  # MySQL용 Hibernate Dialect
+    hibernate:
+      ddl-auto: update  # 운영 환경에서는 적절히 설정 (update, validate, none 등)
     properties:
       hibernate:
         format_sql: true
+        show_sql: true
+        use_sql_comments: true
+    defer-datasource-initialization: true
+
   cache:
     type: redis
   data:
