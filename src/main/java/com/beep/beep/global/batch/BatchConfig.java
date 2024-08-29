@@ -19,8 +19,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class BatchConfig {
 
     private final RepeatScheduleTasklet repeatScheduleTasklet;
-    private final SendNotificationTasklet sendNotificationTasklet;
-    private final SendFailNotificationTasklet sendFailNotificationTasklet;
 
     @Bean
     public Job createRepeatSchedule(JobRepository jobRepository, Step createScheduleStep) {
@@ -41,20 +39,6 @@ public class BatchConfig {
         return new JobBuilder("sendNotificationSchedule", jobRepository)
                 .start(sendNotificationStep)
                 .next(sendFailNotificationStep)
-                .build();
-    }
-
-    @Bean
-    public Step sendNotificationStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-        return new StepBuilder("sendNotificationStep", jobRepository)
-                .tasklet(sendNotificationTasklet, transactionManager)
-                .build();
-    }
-
-    @Bean
-    public Step sendFailNotificationStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-        return new StepBuilder("sendFailNotificationStep", jobRepository)
-                .tasklet(sendFailNotificationTasklet, transactionManager)
                 .build();
     }
 
