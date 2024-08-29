@@ -1,6 +1,5 @@
 package com.beep.beep.domain.student.presentation;
 
-import com.beep.beep.domain.student.domain.enums.RoomCode;
 import com.beep.beep.domain.student.presentation.dto.request.AttendReq;
 import com.beep.beep.domain.student.presentation.dto.request.MemberListReq;
 import com.beep.beep.domain.student.presentation.dto.response.AttendListRes;
