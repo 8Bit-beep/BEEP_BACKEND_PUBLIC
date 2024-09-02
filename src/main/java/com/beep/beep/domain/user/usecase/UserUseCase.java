@@ -23,7 +23,7 @@ public class UserUseCase {
 
     @Transactional
     public void changePw(ChangePwReq req){
-        Student student = studentService.findByEmail(userSessionHolder.getUser().email());
+        Student student = studentService.findByEmail(req.email());
         student.updatePassword(encoder.encode(req.password()));
     }
 
