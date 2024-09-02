@@ -27,8 +27,8 @@ public class StudentService {
         return studentJpaRepo.attendList(code);
     }
 
-    public List<MemberListRes> memberList(MemberListReq req){
-        return studentJpaRepo.memberList(req);
+    public List<MemberListRes> memberList(Integer grade,Integer cls){
+        return studentJpaRepo.memberList(grade,cls);
     }
 
     public void deleteById(Long id) {

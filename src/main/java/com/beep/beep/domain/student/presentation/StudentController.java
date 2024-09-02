@@ -69,10 +69,11 @@ public class StudentController {
     @GetMapping("/member-list")
     @Operation(summary = "반 구성원 조회", description = "학년-반으로 반 구성원 목록을 조회합니다. (teacher)")
     public ResponseData<List<MemberListRes>> memberList(
-            @ModelAttribute MemberListReq req
+            @RequestParam Integer grade,
+            @RequestParam Integer cls
     ){
         return ResponseData.ok("반 구성원 조회 성공",
-                studentUseCase.memberList(req)
+                studentUseCase.memberList(grade,cls)
         );
     }
 

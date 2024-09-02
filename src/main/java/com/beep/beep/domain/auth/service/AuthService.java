@@ -4,8 +4,8 @@ import com.beep.beep.domain.auth.presentation.dto.request.SignInReq;
 import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpReq;
 import com.beep.beep.domain.auth.presentation.dto.request.TeacherSignUpReq;
 import com.beep.beep.domain.auth.presentation.dto.request.TokenRefreshReq;
-import com.beep.beep.domain.auth.presentation.dto.response.SignInRes;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshRes;
+import com.beep.beep.domain.auth.presentation.dto.response.TokenRes;
 import com.beep.beep.domain.student.domain.Student;
 import com.beep.beep.domain.student.domain.repository.StudentJpaRepo;
 import com.beep.beep.domain.teacher.domain.Teacher;
@@ -51,27 +51,18 @@ public class AuthService {
         teacherJpaRepo.save(req.toTeacherEntity(encoder.encode(req.password())));
     }
 
-    public SignInRes signIn(SignInReq req){
+    public TokenRes signIn(SignInReq req){
         if(req.authority() == STUDENT){
             Student student = studentJpaRepo.findByEmail(req.email())
                     .orElseThrow(() -> UserNotFoundException.EXCEPTION);
-
             comparePassword(req,student.getPassword());
+            return jwtProvider.generateToken(student.getEmail(), STUDENT);
 
-            return SignInRes.builder()
-                    .accessToken(jwtProvider.generateAccessToken(student.getEmail(), STUDENT))
-                    .refreshToken(jwtProvider.generateRefreshToken(student.getEmail(), STUDENT))
-                    .build();
         } else if (req.authority() == TEACHER){
             Teacher teacher = teacherJpaRepo.findByEmail(req.email())
                     .orElseThrow(() -> UserNotFoundException.EXCEPTION);
-
             comparePassword(req,teacher.getPassword());
-
-            return SignInRes.builder()
-                    .accessToken(jwtProvider.generateAccessToken(teacher.getEmail(), TEACHER))
-                    .refreshToken(jwtProvider.generateRefreshToken(teacher.getEmail(), TEACHER))
-                    .build();
+            return jwtProvider.generateToken(teacher.getEmail(), TEACHER);
         }
         return null;
     }

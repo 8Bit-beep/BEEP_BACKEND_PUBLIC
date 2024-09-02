@@ -60,8 +60,8 @@ public class StudentUseCase {
         return studentService.attendList(code);
     }
 
-    public List<MemberListRes> memberList(MemberListReq req) {
-        return studentService.memberList(req);
+    public List<MemberListRes> memberList(Integer grade,Integer cls) {
+        return studentService.memberList(grade,cls);
     }
 
 

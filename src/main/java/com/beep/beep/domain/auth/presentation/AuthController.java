@@ -4,8 +4,8 @@ import com.beep.beep.domain.auth.presentation.dto.request.SignInReq;
 import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpReq;
 import com.beep.beep.domain.auth.presentation.dto.request.TeacherSignUpReq;
 import com.beep.beep.domain.auth.presentation.dto.request.TokenRefreshReq;
-import com.beep.beep.domain.auth.presentation.dto.response.SignInRes;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshRes;
+import com.beep.beep.domain.auth.presentation.dto.response.TokenRes;
 import com.beep.beep.domain.auth.service.AuthService;
 import com.beep.beep.global.common.dto.response.Response;
 import com.beep.beep.global.common.dto.response.ResponseData;
@@ -51,7 +51,7 @@ public class AuthController {
 
     @PostMapping("/sign-in")
     @Operation(summary = "로그인", description = "모든 계정이 이 요청을 통해 로그인 합니다. (unauthenticated)")
-    public ResponseData<SignInRes> signIn(
+    public ResponseData<TokenRes> signIn(
             @Validated @RequestBody SignInReq req
     ) {
         return ResponseData.ok("로그인 성공",authService.signIn(req));

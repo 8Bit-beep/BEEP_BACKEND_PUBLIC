@@ -32,17 +32,16 @@ public class CustomStudentRepoImpl implements CustomStudentRepo {
     }
 
     @Override
-    public List<MemberListRes> memberList(MemberListReq req) {
-        return query.select(Projections.fields(MemberListRes.class,
-                        student.name.as("name"),
+    public List<MemberListRes> memberList(Integer grade,Integer cls) {
+        return query.select(Projections.constructor(MemberListRes.class,
+                        student.name.as("studentName"),
                         student.num.as("num"),
-                        room.name,
-                room.floor
+                        room.name.as("roomName"),
+                        room.floor.as("floor")
                 ))
                 .from(student)
-                .innerJoin(room).on(room.code.eq(student.code))
-                .where(student.grade.eq(req.grade()), student.cls.eq(req.cls()))
-                .orderBy(student.num.asc())
+                .leftJoin(room).on(room.code.eq(student.code)).fetchJoin()
+                .where(student.grade.eq(grade),student.cls.eq(cls))
                 .fetch();
     }
 
