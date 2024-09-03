@@ -1,8 +1,7 @@
 package com.beep.beep.domain.auth.presentation;
 
 import com.beep.beep.domain.auth.presentation.dto.request.SignInReq;
-import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpReq;
-import com.beep.beep.domain.auth.presentation.dto.request.TeacherSignUpReq;
+import com.beep.beep.domain.auth.presentation.dto.request.SignUpReq;
 import com.beep.beep.domain.auth.presentation.dto.request.TokenRefreshReq;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshRes;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRes;
@@ -29,24 +28,14 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/sign-up/student")
+    @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "학생 회원가입", description = "학생계정으로 회원가입합니다. (unauthenticated)")
-    public Response studentSignUp(
-            @RequestBody StudentSignUpReq req
+    @Operation(summary = "회원가입", description = "회원가입합니다. (unauthenticated)")
+    public Response signUp(
+            @RequestBody SignUpReq req
     ){
-        authService.studentSignUp(req);
-        return Response.created("학생 회원가입 성공");
-    }
-
-    @PostMapping("/sign-up/teacher")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "선생님 회원가입", description = "선생님계정으로 회원가입합니다. (unauthenticated)")
-    public Response teacherSignUp(
-            @RequestBody TeacherSignUpReq req
-    ){
-        authService.teacherSignUp(req);
-        return Response.created("선생님 회원가입 성공");
+        authService.signUp(req);
+        return Response.created("회원가입 성공");
     }
 
     @PostMapping("/sign-in")

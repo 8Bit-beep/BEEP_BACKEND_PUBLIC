@@ -1,7 +1,6 @@
 package com.beep.beep.global.security.jwt;
 
-import com.beep.beep.domain.student.service.StudentService;
-import com.beep.beep.domain.teacher.service.TeacherService;
+import com.beep.beep.domain.user.domain.repo.UserJpaRepo;
 import com.beep.beep.domain.user.presentation.dto.UserVO;
 import com.beep.beep.global.security.auth.AuthDetails;
 import com.beep.beep.global.security.jwt.config.JwtProperties;
@@ -27,8 +26,7 @@ import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
 public class JwtExtractor {
 
     private final JwtProperties jwtProperties;
-    private final StudentService studentService;
-    private final TeacherService teacherService;
+    private final UserJpaRepo userJpaRepo;
 
     public Authentication getAuthentication(final String token) {
         final Jws<Claims> claims = getClaims(token);
@@ -37,16 +35,11 @@ public class JwtExtractor {
             throw new IllegalArgumentException("토큰 타입이 옳지 않습니다");
         }
 
-        String email = claims.getBody().getSubject();
-
-        UserVO userVO;
-        try{if(claims.getBody().get("authority", String.class).equals(STUDENT.getAuthority())){
-            userVO = UserVO.fromStudent(studentService.findByEmail(email));
-        } else{
-            userVO = UserVO.fromTeacher(teacherService.findByEmail(email));
-        }}catch(Exception e){
-            throw new IllegalArgumentException("찾을 수 없는 유저");
-        }
+        UserVO userVO = userJpaRepo.findById(claims
+                        .getBody()
+                        .getSubject())
+                .map(UserVO::fromUser)
+                .orElseThrow(()-> new IllegalArgumentException("유저가 존재하지 않습니다") );
 
         final AuthDetails details = new AuthDetails(userVO);
 

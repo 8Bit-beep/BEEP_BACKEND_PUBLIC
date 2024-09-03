@@ -2,6 +2,9 @@ package com.beep.beep.domain.user.usecase;
 
 import com.beep.beep.domain.student.domain.Student;
 import com.beep.beep.domain.student.service.StudentService;
+import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.domain.repo.UserJpaRepo;
+import com.beep.beep.domain.user.exception.UserNotFoundException;
 import com.beep.beep.domain.user.presentation.dto.request.ChangePwReq;
 import com.beep.beep.global.common.repository.UserSessionHolder;
 import jakarta.transaction.Transactional;
@@ -13,18 +16,22 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserUseCase {
 
-    private final StudentService studentService;
     private final UserSessionHolder userSessionHolder;
     private final PasswordEncoder encoder;
+    private final UserJpaRepo userJpaRepo;
+    private final StudentService studentService;
 
     public void withdrawal(){
-        studentService.deleteById(userSessionHolder.getUser().id());
+        String email = userSessionHolder.getUser().email();
+        userJpaRepo.deleteById(email);
+        studentService.deleteById(email);
     }
 
     @Transactional
     public void changePw(ChangePwReq req){
-        Student student = studentService.findByEmail(req.email());
-        student.updatePassword(encoder.encode(req.password()));
+        User user = userJpaRepo.findById(req.email())
+                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
+        user.updatePassword(encoder.encode(req.password()));
     }
 
 }

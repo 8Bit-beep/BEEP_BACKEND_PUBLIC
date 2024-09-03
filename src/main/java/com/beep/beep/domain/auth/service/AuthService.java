@@ -1,16 +1,13 @@
 package com.beep.beep.domain.auth.service;
 
 import com.beep.beep.domain.auth.presentation.dto.request.SignInReq;
-import com.beep.beep.domain.auth.presentation.dto.request.StudentSignUpReq;
-import com.beep.beep.domain.auth.presentation.dto.request.TeacherSignUpReq;
+import com.beep.beep.domain.auth.presentation.dto.request.SignUpReq;
 import com.beep.beep.domain.auth.presentation.dto.request.TokenRefreshReq;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshRes;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRes;
-import com.beep.beep.domain.student.domain.Student;
-import com.beep.beep.domain.student.domain.repository.StudentJpaRepo;
-import com.beep.beep.domain.teacher.domain.Teacher;
-import com.beep.beep.domain.teacher.domain.repository.TeacherJpaRepo;
+import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.UserType;
+import com.beep.beep.domain.user.domain.repo.UserJpaRepo;
 import com.beep.beep.domain.user.exception.PasswordWrongException;
 import com.beep.beep.domain.user.exception.UserAlreadyExistsException;
 import com.beep.beep.domain.user.exception.UserNotFoundException;
@@ -24,47 +21,28 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
-import static com.beep.beep.domain.user.domain.enums.UserType.TEACHER;
-
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final StudentJpaRepo studentJpaRepo;
-    private final TeacherJpaRepo teacherJpaRepo;
+    private final UserJpaRepo userJpaRepo;
     private final PasswordEncoder encoder;
     private final JwtProvider jwtProvider;
     private final JwtExtractor jwtExtractor;
 
-    public void studentSignUp(StudentSignUpReq req){
-        if(studentJpaRepo.existsByEmail(req.email()))
+    public void signUp(SignUpReq req){
+        if(userJpaRepo.existsById(req.email()))
             throw UserAlreadyExistsException.EXCEPTION;
 
-        studentJpaRepo.save(req.toStudentEntity(encoder.encode(req.password())));
-    }
-
-    public void teacherSignUp(TeacherSignUpReq req){
-        if(teacherJpaRepo.existsByEmail(req.email()))
-            throw UserAlreadyExistsException.EXCEPTION;
-
-        teacherJpaRepo.save(req.toTeacherEntity(encoder.encode(req.password())));
+        userJpaRepo.save(req.toUserEntity(encoder.encode(req.password())));
     }
 
     public TokenRes signIn(SignInReq req){
-        if(req.authority() == STUDENT){
-            Student student = studentJpaRepo.findByEmail(req.email())
-                    .orElseThrow(() -> UserNotFoundException.EXCEPTION);
-            comparePassword(req,student.getPassword());
-            return jwtProvider.generateToken(student.getEmail(), STUDENT);
+        User user = userJpaRepo.findById(req.email())
+                        .orElseThrow(() -> UserNotFoundException.EXCEPTION);
 
-        } else if (req.authority() == TEACHER){
-            Teacher teacher = teacherJpaRepo.findByEmail(req.email())
-                    .orElseThrow(() -> UserNotFoundException.EXCEPTION);
-            comparePassword(req,teacher.getPassword());
-            return jwtProvider.generateToken(teacher.getEmail(), TEACHER);
-        }
-        return null;
+        comparePassword(req,user.getPassword());
+        return jwtProvider.generateToken(user.getEmail(), user.getAuthority());
     }
 
     public TokenRefreshRes refresh(TokenRefreshReq req){

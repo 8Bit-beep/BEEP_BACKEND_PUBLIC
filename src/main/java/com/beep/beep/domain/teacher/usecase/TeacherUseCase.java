@@ -1,7 +1,9 @@
 package com.beep.beep.domain.teacher.usecase;
 
 import com.beep.beep.domain.teacher.presentation.dto.response.TeacherInfoRes;
-import com.beep.beep.domain.teacher.service.TeacherService;
+import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.domain.repo.UserJpaRepo;
+import com.beep.beep.domain.user.exception.UserNotFoundException;
 import com.beep.beep.global.common.repository.UserSessionHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,10 +13,13 @@ import org.springframework.stereotype.Component;
 public class TeacherUseCase {
 
     private final UserSessionHolder userSessionHolder;
-    private final TeacherService teacherService;
+    private final UserJpaRepo userJpaRepo;
 
     public TeacherInfoRes teacherInfo() {
-        return TeacherInfoRes.of(teacherService.findByEmail(userSessionHolder.getUser().email()));
+        User user = userJpaRepo.findById(userSessionHolder.getUser().email())
+                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
+
+        return TeacherInfoRes.of(user);
     }
 
 }

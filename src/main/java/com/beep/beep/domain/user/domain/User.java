@@ -1,9 +1,10 @@
 package com.beep.beep.domain.user.domain;
 
+import com.beep.beep.domain.user.domain.enums.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -26,4 +27,12 @@ public class User {
 
     @Column(nullable = false)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserType authority;
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }

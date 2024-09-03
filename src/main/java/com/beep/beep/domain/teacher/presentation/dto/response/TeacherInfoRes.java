@@ -1,14 +1,13 @@
 package com.beep.beep.domain.teacher.presentation.dto.response;
 
-import com.beep.beep.domain.teacher.domain.Teacher;
+import com.beep.beep.domain.user.domain.User;
 import lombok.Builder;
 
 @Builder
-public record TeacherInfoRes(String email, String name, String department) {
-    public static TeacherInfoRes of(Teacher teacher) {
+public record TeacherInfoRes(String email, String name) {
+    public static TeacherInfoRes of(User user) {
         return TeacherInfoRes.builder()
-                .email(teacher.getEmail())
-                .name(teacher.getName())
-                .department(teacher.getDepartment()).build();
+                .email(user.getEmail())
+                .name(user.getName()).build();
     }
 }

@@ -1,23 +1,26 @@
 package com.beep.beep.domain.student.presentation;
 
 import com.beep.beep.domain.student.presentation.dto.request.AttendReq;
-import com.beep.beep.domain.student.presentation.dto.request.MemberListReq;
+import com.beep.beep.domain.student.presentation.dto.request.StudentSignUpReq;
 import com.beep.beep.domain.student.presentation.dto.response.AttendListRes;
 import com.beep.beep.domain.student.presentation.dto.response.AttendRes;
 import com.beep.beep.domain.student.presentation.dto.response.MemberListRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentCodeRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentInfoRes;
 import com.beep.beep.domain.student.usecase.StudentUseCase;
+import com.beep.beep.global.common.dto.response.Response;
 import com.beep.beep.global.common.dto.response.ResponseData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -30,10 +33,20 @@ public class StudentController {
 
     private final StudentUseCase studentUseCase;
 
+    @PostMapping("/info")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "학생 기본정보 저장", description = "회원가입 시 학생 기본 정보를 저장합니다. (unauthenticated)")
+    public Response studentSignUp(
+            @RequestBody StudentSignUpReq req
+    ){
+        studentUseCase.signUp(req);
+        return Response.created("학생 기본정보 저장 성공");
+    }
+
     @GetMapping("/info")
     @Operation(summary = "학생프로필 조회", description = "학생프로필 조회입니다 (student)")
     public ResponseData<StudentInfoRes> studentInfo() {
-        return ResponseData.ok("출석 성공",
+        return ResponseData.ok("학생 프로필 조회 성공",
                 studentUseCase.studentInfo()
         );
     }
