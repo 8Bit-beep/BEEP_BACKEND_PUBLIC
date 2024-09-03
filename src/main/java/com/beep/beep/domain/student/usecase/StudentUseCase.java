@@ -42,7 +42,8 @@ public class StudentUseCase {
         Student student = studentService.findByEmail(userSessionHolder.getUser().email());
         String code = student.getCode();
 
-        roomService.existsByCode(code);
+        if(req.code() != null)
+            roomService.existsByCode(req.code());
 
         if(code == null && req.code() != null){ // 입실해야하면?
             student.updateCode(req.code());
