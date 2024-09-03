@@ -6,6 +6,7 @@ import com.beep.beep.domain.room.service.RoomService;
 import com.beep.beep.domain.student.domain.Student;
 import com.beep.beep.domain.student.domain.enums.RoomCode;
 import com.beep.beep.domain.student.exception.NotAllowedAttendException;
+import com.beep.beep.domain.student.exception.NotAllowedExitException;
 import com.beep.beep.domain.student.presentation.dto.request.AttendReq;
 import com.beep.beep.domain.student.presentation.dto.request.MemberListReq;
 import com.beep.beep.domain.student.presentation.dto.response.AttendListRes;
@@ -52,7 +53,10 @@ public class StudentUseCase {
             student.updateCode(null);
             return AttendRes.of(null);
         } else {
-            throw NotAllowedAttendException.EXCEPTION;
+            if(code == null)
+                throw NotAllowedExitException.EXCEPTION;
+            else
+                throw NotAllowedAttendException.EXCEPTION;
         }
     }
 

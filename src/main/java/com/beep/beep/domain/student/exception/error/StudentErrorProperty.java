@@ -10,7 +10,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum StudentErrorProperty implements ErrorProperty {
-    NOT_ALLOWED_ATTEND(HttpStatus.FORBIDDEN,"입실/퇴실을 하지 않았습니다.");
+    NOT_ALLOWED_ATTEND(HttpStatus.FORBIDDEN,"퇴실을 하지 않았습니다."),
+    NOT_ALLOWED_EXIT(HttpStatus.FORBIDDEN,"입실을 하지 않았습니다.");
 
     private final HttpStatus status;
     private final String message;
