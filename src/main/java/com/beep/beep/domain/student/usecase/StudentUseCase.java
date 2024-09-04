@@ -19,6 +19,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -58,9 +60,11 @@ public class StudentUseCase {
 
         if(code.isEmpty()){ // 빈문자열 -> 입실처리
             student.updateCode(req.code());
+            student.updateDate();
             return AttendRes.of(req.code());
         } else if(code.equals(req.code())){ // 빈문자열 아님, 저장된 코드 = 요청한 코드 -> 퇴실처리
             student.updateCode("");
+            student.updateDate();
             return AttendRes.of("");
         } else { // 빈문자열 아님, 저장된 코드 != 요청한 코드 -> 퇴실 불가 처리
             throw NotAllowedExitException.EXCEPTION;

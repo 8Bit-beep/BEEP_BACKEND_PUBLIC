@@ -1,6 +1,7 @@
 package com.beep.beep.domain.student.domain;
 
 import com.beep.beep.global.common.entity.BaseTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,13 +12,16 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @SuperBuilder
 @Table(name = "tb_student")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Student extends BaseTime {
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,8 +37,14 @@ public class Student extends BaseTime {
     @Column(nullable = false,unique = true)
     private String username;
 
+    @LastModifiedDate
+    protected LocalDateTime modifiedDate;
+
     public void updateCode(String code){
         this.code = code;
+    }
+    public void updateDate(){
+        this.modifiedDate = LocalDateTime.now();
     }
 
 }
