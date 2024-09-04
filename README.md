@@ -30,5 +30,26 @@ https://green-bin.tistory.com/83
 spring boot 3 batch
 https://4h-developer.tistory.com/23
 
-무중단 배포(나중에 할것)
+(나중에 할것)
+
+무중단 배포
+
 https://velog.io/@habins226/Gitlab-Jenkins-Docker-Docker-Hub-Nginx-Blue-Green-%EB%AC%B4%EC%A4%91%EB%8B%A8%EB%B0%B0%ED%8F%AC-CICD-%EA%B5%AC%EC%B6%95-1
+
+TDD
+
+https://mangkyu.tistory.com/182
+
+백엔드 개발자 유튜브
+
+https://www.youtube.com/watch?v=L3y3xk56SI8&list=PL8RgHPKtjlBjssE4aKLmdpup6AyrW9DE-
+
+SSL 인증
+
+https://www.youtube.com/watch?v=AmREvaxgsQI
+
+웹 도메인 연결
+
+https://velog.io/@ssssujini99/Web-AWS-Route53%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-%EB%8F%84%EB%A9%94%EC%9D%B8-%EC%97%B0%EA%B2%B0%ED%95%98%EA%B8%B0
+
+
