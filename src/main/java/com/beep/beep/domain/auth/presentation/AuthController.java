@@ -33,9 +33,8 @@ public class AuthController {
     @Operation(summary = "회원가입", description = "회원가입합니다. (unauthenticated)")
     public Response signUp(
             @RequestBody SignUpReq req
-    ){
-        authService.signUp(req);
-        return Response.created("회원가입 성공");
+    ) {
+        return authService.signUp(req);
     }
 
     @PostMapping("/sign-in")
@@ -43,7 +42,7 @@ public class AuthController {
     public ResponseData<TokenRes> signIn(
             @Validated @RequestBody SignInReq req
     ) {
-        return ResponseData.ok("로그인 성공",authService.signIn(req));
+        return authService.signIn(req);
     }
 
     @GetMapping("/refresh")
@@ -51,7 +50,7 @@ public class AuthController {
     public ResponseData<TokenRefreshRes> refresh(
             @Validated @RequestBody TokenRefreshReq req
     ) {
-        return ResponseData.ok("토큰 재발급 성공",authService.refresh(req));
+        return authService.refresh(req);
     }
 
 }

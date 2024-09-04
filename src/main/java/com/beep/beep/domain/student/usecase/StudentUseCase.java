@@ -14,6 +14,9 @@ import com.beep.beep.domain.student.service.StudentService;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.repo.UserJpaRepo;
 import com.beep.beep.domain.user.exception.UserNotFoundException;
+import com.beep.beep.domain.user.service.UserService;
+import com.beep.beep.global.common.dto.response.Response;
+import com.beep.beep.global.common.dto.response.ResponseData;
 import com.beep.beep.global.common.repository.UserSessionHolder;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,57 +28,58 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentUseCase {
 
-    private final UserSessionHolder userSessionHolder;
-    private final UserJpaRepo userJpaRepo;
     private final StudentService studentService;
     private final RoomService roomService;
+    private final UserService userService;
 
-    public void signUp(StudentSignUpReq req) {
-        if(!userJpaRepo.existsById(req.email()))
-            throw UserNotFoundException.EXCEPTION;
+    public Response signUp(StudentSignUpReq req) {
+        userService.notFoundEmail(req.email());
 
         studentService.save(req.toStudentEntity());
+        return Response.created("학생 기본정보 저장 성공");
     }
 
-    public StudentInfoRes studentInfo() {
-        User user = userJpaRepo.findById(userSessionHolder.getUser().email())
-                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
+    public ResponseData<StudentInfoRes> studentInfo() {
+        User user = userService.findByEmail(userService.getCurrentEmail());
 
         Student student = studentService.findByEmail(user.getEmail());
-        return StudentInfoRes.of(user,student);
+        return ResponseData.ok("학생 프로필 조회 성공",StudentInfoRes.of(user,student));
     }
 
-    public StudentCodeRes studentCode() {
-        return StudentCodeRes.of(studentService.findByEmail(userSessionHolder.getUser().email()).getCode());
+    public ResponseData<StudentCodeRes> studentCode() {
+        return ResponseData.ok("학생 실 코드 조회 완료",StudentCodeRes.of(studentService.findByEmail(userService.getCurrentEmail()).getCode()));
     }
 
     @Transactional
-    public AttendRes attend(AttendReq req) {
-        Student student = studentService.findByEmail(userSessionHolder.getUser().email());
+    public ResponseData<AttendRes> attend(AttendReq req) {
+        Student student = studentService.findByEmail(userService.getCurrentEmail());
         String code = student.getCode();
+        AttendRes res;
 
         roomService.existsByCode(req.code()); // 이 코드는 존재하는가?
 
         if(code.isEmpty()){ // 빈문자열 -> 입실처리
             student.updateCode(req.code());
             student.updateDate();
-            return AttendRes.of(req.code());
+            res = AttendRes.of(req.code());
         } else if(code.equals(req.code())){ // 빈문자열 아님, 저장된 코드 = 요청한 코드 -> 퇴실처리
             student.updateCode("");
             student.updateDate();
-            return AttendRes.of("");
+            res = AttendRes.of("");
         } else { // 빈문자열 아님, 저장된 코드 != 요청한 코드 -> 퇴실 불가 처리
             throw NotAllowedExitException.EXCEPTION;
         }
+
+        return ResponseData.ok("출석 성공", res);
     }
 
-    public List<AttendListRes> attendList(String code) {
+    public ResponseData<List<AttendListRes>> attendList(String code) {
         roomService.existsByCode(code);
-        return studentService.attendList(code);
+        return ResponseData.ok("출석부 조회 성공",studentService.attendList(code));
     }
 
-    public List<MemberListRes> memberList(Integer grade,Integer cls) {
-        return studentService.memberList(grade,cls);
+    public ResponseData<List<MemberListRes>> memberList(Integer grade,Integer cls) {
+        return ResponseData.ok("반 구성원 조회 성공",studentService.memberList(grade,cls));
     }
 
 }

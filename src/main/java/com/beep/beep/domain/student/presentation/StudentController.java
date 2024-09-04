@@ -39,24 +39,19 @@ public class StudentController {
     public Response studentSignUp(
             @RequestBody StudentSignUpReq req
     ){
-        studentUseCase.signUp(req);
-        return Response.created("학생 기본정보 저장 성공");
+        return studentUseCase.signUp(req);
     }
 
     @GetMapping("/info")
     @Operation(summary = "학생프로필 조회", description = "학생프로필 조회입니다 (student)")
     public ResponseData<StudentInfoRes> studentInfo() {
-        return ResponseData.ok("학생 프로필 조회 성공",
-                studentUseCase.studentInfo()
-        );
+        return studentUseCase.studentInfo();
     }
 
     @GetMapping("/code")
     @Operation(summary = "학생 실 코드 조회", description = "학생 실 코드를 조회합니다 (student)")
     public ResponseData<StudentCodeRes> studentCode() {
-        return ResponseData.ok("학생 실 코드 조회 완료",
-                studentUseCase.studentCode()
-        );
+        return studentUseCase.studentCode();
     }
 
     @PatchMapping("/attend")
@@ -64,9 +59,7 @@ public class StudentController {
     public ResponseData<AttendRes> attend(
             @RequestBody AttendReq req
     ) {
-        return ResponseData.ok("출석 성공",
-                studentUseCase.attend(req)
-        );
+        return studentUseCase.attend(req);
     }
 
     @GetMapping("/attend-list")
@@ -74,9 +67,7 @@ public class StudentController {
     public ResponseData<List<AttendListRes>> attendList(
             @RequestParam String code
     ){
-        return ResponseData.ok("출석부 조회 성공",
-                studentUseCase.attendList(code)
-        );
+        return studentUseCase.attendList(code);
     }
 
     @GetMapping("/member-list")
@@ -85,9 +76,7 @@ public class StudentController {
             @RequestParam Integer grade,
             @RequestParam Integer cls
     ){
-        return ResponseData.ok("반 구성원 조회 성공",
-                studentUseCase.memberList(grade,cls)
-        );
+        return studentUseCase.memberList(grade,cls);
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public class Response {
 
     private int status;
+
     private String message;
 
     public static Response of(HttpStatus status, String message) {
@@ -26,4 +27,5 @@ public class Response {
     public static Response noContent(String message) {
         return new Response(HttpStatus.NO_CONTENT.value(), message);
     }
+
 }
