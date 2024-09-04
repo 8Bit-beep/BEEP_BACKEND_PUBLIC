@@ -24,7 +24,7 @@ public class RepeatScheduleTasklet implements Tasklet {
             entityManager.getTransaction().begin();
 
             // Student 테이블의 모든 학생에 대해 code 컬럼을 null로 설정
-            entityManager.createQuery("UPDATE Student s SET s.code = NULL").executeUpdate();
+            entityManager.createQuery("UPDATE Student s SET s.code = \"\"").executeUpdate();
 
             entityManager.getTransaction().commit();
             log.info("All student codes have been set to null");

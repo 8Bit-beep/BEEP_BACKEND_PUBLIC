@@ -19,12 +19,26 @@ public class ScheduledTasks {
 
     private final Job createRepeatSchedule;
 
+    @Scheduled(cron = "0 0 0 * * ?") // 자정 (00:00)
+    public void runCreateRepeatScheduleAtMidnight() {
+        initializeCode();
+    }
+
+    @Scheduled(cron = "0 0 19 * * ?") // 오후 7시 (19:00)
+    public void runCreateRepeatScheduleAt7PM() {
+        initializeCode();
+    }
+
+    @Scheduled(cron = "0 45 20 * * ?") // 오후 8시 45분 (20:45)
+    public void runCreateRepeatScheduleAt845PM() {
+        initializeCode();
+    }
+
     /**
      * RepeatType에 따른 반복 일정 생성
      * @cron 매일 밤 자정에 생성
      */
-    @Scheduled(cron = "0 0 0 * * ?")
-    public void runCreateRepeatSchedule() {
+    public void initializeCode() {
         log.info("===========================================");
         log.info("각 학생 출석코드 초기화 배치를 시작합니다.");
         log.info("===========================================");
@@ -37,4 +51,5 @@ public class ScheduledTasks {
             log.error("각 학생 출석코드 초기화 배치를 실패하였습니다. : ", e);
         }
     }
+
 }

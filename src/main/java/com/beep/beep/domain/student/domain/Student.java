@@ -1,7 +1,5 @@
 package com.beep.beep.domain.student.domain;
 
-import com.beep.beep.global.common.entity.BaseTime;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
