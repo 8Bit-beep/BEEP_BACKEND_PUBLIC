@@ -1,12 +1,9 @@
 package com.beep.beep.domain.student.service;
 
 import com.beep.beep.domain.student.domain.Student;
-import com.beep.beep.domain.student.domain.enums.RoomCode;
 import com.beep.beep.domain.student.domain.repository.StudentJpaRepo;
-import com.beep.beep.domain.student.presentation.dto.request.MemberListReq;
 import com.beep.beep.domain.student.presentation.dto.response.AttendListRes;
 import com.beep.beep.domain.student.presentation.dto.response.MemberListRes;
-import com.beep.beep.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,21 +15,25 @@ public class StudentService {
 
     private final StudentJpaRepo studentJpaRepo;
 
+    public void save(Student studentEntity) {
+        studentJpaRepo.save(studentEntity);
+    }
+
     public Student findByEmail(String email) {
-        return studentJpaRepo.findByEmail(email).orElseThrow(
-                () -> UserNotFoundException.EXCEPTION);
+        return studentJpaRepo.findByUsername(email);
     }
 
     public List<AttendListRes> attendList(String code){
         return studentJpaRepo.attendList(code);
     }
 
-    public List<MemberListRes> memberList(MemberListReq req){
-        return studentJpaRepo.memberList(req);
+    public List<MemberListRes> memberList(Integer grade,Integer cls){
+        return studentJpaRepo.memberList(grade,cls);
     }
 
-    public void deleteById(Long id) {
-        studentJpaRepo.deleteById(id);
+    public void deleteById(String email) {
+        studentJpaRepo.deleteByUsername(email);
     }
+
 
 }

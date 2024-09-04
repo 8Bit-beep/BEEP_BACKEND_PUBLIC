@@ -1,10 +1,9 @@
 package com.beep.beep.domain.student.domain;
 
-import com.beep.beep.domain.student.domain.enums.RoomCode;
+import com.beep.beep.global.common.entity.BaseTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,6 +12,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,32 +27,24 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true,nullable = false)
-    private String email;
-
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
-    private String name;
-
     @Column(nullable = false)
     private Integer grade;
-
-    @Column(nullable = false)
     private Integer cls;
-
-    @Column(nullable = false)
     private Integer num;
-
     private String code;
+    private String studyCode;
+
+    @Column(nullable = false,unique = true)
+    private String username;
+
+    @LastModifiedDate
+    protected LocalDateTime modifiedDate;
 
     public void updateCode(String code){
         this.code = code;
     }
-
-    public void updatePassword(String password){
-        this.password = password;
+    public void updateDate(){
+        this.modifiedDate = LocalDateTime.now();
     }
 
 }

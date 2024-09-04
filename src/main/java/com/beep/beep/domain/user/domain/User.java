@@ -1,9 +1,10 @@
-package com.beep.beep.domain.teacher.domain;
+package com.beep.beep.domain.user.domain;
 
+import com.beep.beep.domain.user.domain.enums.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -14,14 +15,10 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Getter
 @SuperBuilder
-@Table(name = "tb_teacher")
+@Table(name = "tb_user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Teacher {
-
+public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(unique = true,nullable = false)
     private String email;
 
@@ -31,7 +28,11 @@ public class Teacher {
     @Column(nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String department;
+    private UserType authority;
 
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }

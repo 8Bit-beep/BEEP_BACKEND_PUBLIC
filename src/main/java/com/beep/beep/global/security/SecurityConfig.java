@@ -19,6 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import static com.beep.beep.domain.user.domain.enums.UserType.ADMIN;
 import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
 import static com.beep.beep.domain.user.domain.enums.UserType.TEACHER;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 
 
 @Configuration
@@ -43,8 +45,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
                         .requestMatchers("/teacher/**").hasAuthority(TEACHER.getAuthority())
-                        .requestMatchers("/student/info","/student/code","/student/attend").hasAuthority(STUDENT.getAuthority())
-                        .requestMatchers("/student/attendList","/student/memberList").hasAuthority(TEACHER.getAuthority())
+                        .requestMatchers("/student/code","/student/attend").hasAuthority(STUDENT.getAuthority())
+                        .requestMatchers(GET,"/student/info").hasAuthority(STUDENT.getAuthority())
+                        .requestMatchers("/student/attend-list","/student/member-list").hasAuthority(TEACHER.getAuthority())
                         .requestMatchers("/user/**","/email/**","/auth/**").permitAll()
                         .anyRequest().permitAll()
                 )

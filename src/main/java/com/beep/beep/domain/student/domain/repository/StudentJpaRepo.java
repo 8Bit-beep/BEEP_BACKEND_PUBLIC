@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface StudentJpaRepo extends JpaRepository<Student, Long> , CustomStudentRepo {
-    Optional<Student> findByEmail(String email);
-    boolean existsByEmail(String email);
+    Student findByUsername(String email);
+    void deleteByUsername(String email);
 }

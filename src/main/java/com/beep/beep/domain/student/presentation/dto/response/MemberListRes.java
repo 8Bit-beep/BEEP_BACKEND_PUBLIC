@@ -1,6 +1,8 @@
 package com.beep.beep.domain.student.presentation.dto.response;
 
-import com.beep.beep.domain.student.domain.enums.RoomCode;
 
-public record MemberListRes(String name, Integer num, RoomCode roomName,Integer floor) {
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+public record MemberListRes(String studentName, Integer num, String roomName, Integer floor, LocalDateTime modifiedDate) {
 }

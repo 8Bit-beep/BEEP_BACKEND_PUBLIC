@@ -1,5 +1,6 @@
 package com.beep.beep.global.security.jwt;
 
+import com.beep.beep.domain.auth.presentation.dto.response.TokenRes;
 import com.beep.beep.domain.user.domain.enums.UserType;
 import com.beep.beep.global.security.jwt.config.JwtProperties;
 import com.beep.beep.global.security.jwt.enums.JwtType;
@@ -18,6 +19,13 @@ import java.util.Date;
 public class JwtProvider {
 
     private final JwtProperties jwtProperties;
+
+    public TokenRes generateToken(String email, UserType userType) {
+        return TokenRes.builder()
+                .accessToken(generateAccessToken(email, userType))
+                .refreshToken(generateRefreshToken(email, userType))
+                .build();
+    }
 
     public String generateAccessToken(final String email, final UserType authority){
         return Jwts.builder()

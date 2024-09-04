@@ -7,7 +7,7 @@ import com.beep.beep.domain.email.exception.EmailNotFoundException;
 import com.beep.beep.domain.email.exception.InvalidCodeException;
 import com.beep.beep.domain.email.presentation.dto.request.EmailSendingRequest;
 import com.beep.beep.domain.student.domain.repository.StudentJpaRepo;
-import com.beep.beep.domain.teacher.domain.repository.TeacherJpaRepo;
+import com.beep.beep.domain.user.domain.repo.UserJpaRepo;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +25,10 @@ public class EmailService {
     private static final String MAIL_TITLE_CERTIFICATION = "안녕하세요~ 8bit입니다.삑의 회원이 돼주셔서 감사합니다! 인증번호를 확인해주세요 ";
     private final JavaMailSender mailSender;
     private final EmailCertificationDao emailDao;
-    private final StudentJpaRepo studentJpaRepo;
-    private final TeacherJpaRepo teacherJpaRepo;
+    private final UserJpaRepo userJpaRepo;
 
     public void sendEmail(EmailSendingRequest request) throws NoSuchAlgorithmException, MessagingException {
-        if(studentJpaRepo.existsByEmail(request.email()) || teacherJpaRepo.existsByEmail(request.email()))
+        if(userJpaRepo.existsById(request.email()))
             throw EmailAlreadyExistsException.EXCEPTION;
 
         String code = createCode();

@@ -1,6 +1,5 @@
 package com.beep.beep.domain.student.domain.repository.query;
 
-import com.beep.beep.domain.student.presentation.dto.request.MemberListReq;
 import com.beep.beep.domain.student.presentation.dto.response.AttendListRes;
 import com.beep.beep.domain.student.presentation.dto.response.MemberListRes;
 import com.querydsl.core.types.Projections;
@@ -12,6 +11,7 @@ import java.util.List;
 
 import static com.beep.beep.domain.room.domain.QRoom.room;
 import static com.beep.beep.domain.student.domain.QStudent.student;
+import static com.beep.beep.domain.user.domain.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,27 +22,32 @@ public class CustomStudentRepoImpl implements CustomStudentRepo {
     @Override
     public List<AttendListRes> attendList(String code) {
         return query.select(Projections.constructor(AttendListRes.class,
-                        student.name,
+                        user.name,
                         student.grade,
                         student.cls,
-                        student.num))
+                        student.num,
+                        student.studyCode.eq(student.code),
+                        student.modifiedDate
+                ))
                 .from(student)
-                .where(student.code.eq(code))
+                .innerJoin(user).on(user.email.eq(student.username))
+                .where(student.studyCode.eq(code))
                 .fetch();
     }
 
     @Override
-    public List<MemberListRes> memberList(MemberListReq req) {
-        return query.select(Projections.fields(MemberListRes.class,
-                        student.name.as("name"),
-                        student.num.as("num"),
+    public List<MemberListRes> memberList(Integer grade,Integer cls) {
+        return query.select(Projections.constructor(MemberListRes.class,
+                        user.name,
+                        student.num,
                         room.name,
-                room.floor
+                        room.floor,
+                        student.modifiedDate
                 ))
                 .from(student)
-                .innerJoin(room).on(room.code.eq(student.code))
-                .where(student.grade.eq(req.grade()), student.cls.eq(req.cls()))
-                .orderBy(student.num.asc())
+                .innerJoin(user).on(user.email.eq(student.username))
+                .leftJoin(room).on(room.code.eq(student.code)).fetchJoin()
+                .where(student.grade.eq(grade),student.cls.eq(cls))
                 .fetch();
     }
 
