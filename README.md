@@ -52,4 +52,7 @@ https://www.youtube.com/watch?v=AmREvaxgsQI
 
 https://velog.io/@ssssujini99/Web-AWS-Route53%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-%EB%8F%84%EB%A9%94%EC%9D%B8-%EC%97%B0%EA%B2%B0%ED%95%98%EA%B8%B0
 
+JPA 메소드 명명규칙
+
+https://zara49.tistory.com/130
 
