@@ -6,13 +6,13 @@ import lombok.Builder;
 
 @Builder
 public record StudentInfoRes(String email,String name,Integer grade,Integer cls,Integer num,String studyCode) {
-    public static StudentInfoRes of(User user, Student student) {
+    public static StudentInfoRes of(Student student) {
         return StudentInfoRes.builder()
-                .email(user.getEmail())
-                .name(user.getName())
+                .email(student.getUser().getEmail())
+                .name(student.getUser().getName())
                 .grade(student.getGrade())
                 .cls(student.getCls())
                 .num(student.getNum())
-                .studyCode(student.getStudyCode()).build();
+                .studyCode(student.getStudyRoom().getCode()).build();
     }
 }

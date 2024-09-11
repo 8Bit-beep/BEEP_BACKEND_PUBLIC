@@ -1,6 +1,8 @@
 package com.beep.beep.domain.room.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -20,5 +22,8 @@ public class Room {
     private String name;
 
     private Integer floor;
+
+    @Enumerated(EnumType.STRING)
+    private Club club;
 
 }

@@ -19,4 +19,12 @@ public record UserVO(String email, String password, String name, UserType author
                 .authority(user.getAuthority())
                 .build();
     }
+
+    public User toUserEntity() {
+        return User.builder()
+                .email(this.email)
+                .password(this.password)
+                .name(this.name)
+                .authority(this.authority).build();
+    }
 }
