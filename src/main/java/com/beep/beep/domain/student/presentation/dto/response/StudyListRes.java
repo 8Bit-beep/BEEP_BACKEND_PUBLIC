@@ -6,15 +6,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-public record StudyRes(String name, Integer grade, Integer cls, Integer num, boolean isExist, LocalDateTime modifiedDate) {
-    public static List<StudyRes> of(List<Student> students) {
+public record StudyListRes(String name, Integer grade, Integer cls, Integer num, boolean isExist, LocalDateTime modifiedDate) {
+    public static List<StudyListRes> of(List<Student> students) {
         return students.parallelStream()
-                .map(StudyRes::of)
+                .map(StudyListRes::of)
                 .toList();
     }
 
-    public static StudyRes of(Student student) {
-        return new StudyRes(
+    public static StudyListRes of(Student student) {
+        return new StudyListRes(
                 student.getUser().getName(),
                 student.getGrade(),
                 student.getCls(),

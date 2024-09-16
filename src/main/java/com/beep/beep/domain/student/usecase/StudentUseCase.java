@@ -12,7 +12,7 @@ import com.beep.beep.domain.student.presentation.dto.response.AttendRes;
 import com.beep.beep.domain.student.presentation.dto.response.MemberListRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentCodeRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentInfoRes;
-import com.beep.beep.domain.student.presentation.dto.response.StudyRes;
+import com.beep.beep.domain.student.presentation.dto.response.StudyListRes;
 import com.beep.beep.domain.student.service.StudentService;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.service.UserService;
@@ -87,9 +87,9 @@ public class StudentUseCase {
         return ResponseData.ok("반 구성원 조회 성공",result);
     }
 
-    public ResponseData<List<StudyRes>> studyList(Club club) {
+    public ResponseData<List<StudyListRes>> studyList(Club club) {
         Room room = roomService.findByClub(club);
-        List<StudyRes> result = StudyRes.of(studentService.getStudyMemberList(room));
+        List<StudyListRes> result = StudyListRes.of(studentService.getStudyMemberList(room));
         return ResponseData.ok("스터디 구성원 조회 성공",result);
     }
 }
