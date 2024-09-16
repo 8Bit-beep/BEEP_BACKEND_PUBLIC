@@ -34,6 +34,7 @@ public class StudentUseCase {
 
     public Response signUp(StudentSignUpReq req) {
         User user = userService.findByEmail(req.email());
+        studentService.isExists(user);
 
         studentService.save(req.toStudentEntity(user));
         return Response.created("학생 기본정보 저장 성공");

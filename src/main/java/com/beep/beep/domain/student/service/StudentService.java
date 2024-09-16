@@ -4,6 +4,7 @@ import com.beep.beep.domain.room.domain.Room;
 import com.beep.beep.domain.student.domain.Student;
 import com.beep.beep.domain.student.domain.repository.StudentJpaRepo;
 import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.exception.UserAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,11 @@ import java.util.List;
 public class StudentService {
 
     private final StudentJpaRepo studentJpaRepo;
+
+    public void isExists(User user) {
+        if(studentJpaRepo.existsByUser(user))
+            throw UserAlreadyExistsException.EXCEPTION;
+    }
 
     public void save(Student studentEntity) {
         studentJpaRepo.save(studentEntity);

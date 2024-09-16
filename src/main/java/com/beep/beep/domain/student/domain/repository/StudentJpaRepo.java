@@ -25,4 +25,7 @@ public interface StudentJpaRepo extends JpaRepository<Student, Long> {
     @EntityGraph(attributePaths = {"user"})
     void deleteByUser(User user);
 
+    @EntityGraph(attributePaths = {"user"})
+    boolean existsByUser(User user);
+
 }

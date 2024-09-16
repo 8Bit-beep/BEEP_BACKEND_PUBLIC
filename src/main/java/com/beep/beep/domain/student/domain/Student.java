@@ -41,7 +41,7 @@ public class Student {
     private Room studyRoom;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_user_id", nullable = false)
+    @JoinColumn(name = "fk_user_id", nullable = false,unique = true)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
