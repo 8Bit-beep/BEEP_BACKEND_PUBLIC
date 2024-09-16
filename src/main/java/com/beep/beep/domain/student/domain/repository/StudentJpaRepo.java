@@ -16,7 +16,7 @@ public interface StudentJpaRepo extends JpaRepository<Student, Long> {
     @EntityGraph(attributePaths = {"user"})
     List<Student> findAllByRoom(Room room);
 
-    @EntityGraph(attributePaths = {"user"})
+    @EntityGraph(attributePaths = {"user","room"})
     List<Student> findAllByGradeAndCls(Integer grade, Integer cls);
 
     @EntityGraph(attributePaths = {"user"})
