@@ -16,11 +16,19 @@ public record MemberListRes(String name, Integer num, String roomName, Integer f
     }
 
     public static MemberListRes of(Student student) {
+        String roomName = "";
+        Integer floor = -1;
+
+        if(student.getRoom() != null) {
+           roomName = student.getRoom().getName();
+           floor = student.getRoom().getFloor();
+        }
+
         return new MemberListRes(
                 student.getUser().getName(),
                 student.getNum(),
-                student.getRoom().getName(),
-                student.getRoom().getFloor(),
+                roomName,
+                floor,
                 student.getModifiedDate()
         );
     }
