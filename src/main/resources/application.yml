@@ -21,6 +21,10 @@ spring:
         host: beep-redis # ?? ???? ???? ???? ?? ??
         port: 6379
 
+  batch:
+    jdbc:
+      initialize-schema: always
+
   mail:
     username: heunseo9@gmail.com
     password: cyje eoaq uxsv upst

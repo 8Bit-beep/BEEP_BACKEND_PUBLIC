@@ -10,12 +10,14 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Slf4j
 @Configuration
-@EnableBatchProcessing
 @RequiredArgsConstructor
+@EnableBatchProcessing
 public class BatchConfig {
 
     private final RepeatScheduleTasklet repeatScheduleTasklet;
@@ -40,6 +42,11 @@ public class BatchConfig {
                 .start(sendNotificationStep)
                 .next(sendFailNotificationStep)
                 .build();
+    }
+
+    @Bean
+    public TaskExecutor taskExecutor() {
+        return new SimpleAsyncTaskExecutor();
     }
 
 }
