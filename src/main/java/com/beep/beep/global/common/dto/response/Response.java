@@ -1,5 +1,6 @@
 package com.beep.beep.global.common.dto.response;
 
+import com.beep.beep.global.exception.error.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -27,5 +28,9 @@ public class Response {
     public static Response noContent(String message) {
         return new Response(HttpStatus.NO_CONTENT.value(), message);
     }
+
+//    public static Response error(ErrorCode status,String message) {
+//        return new Response(status.getStatus().value(),message,);
+//    }
 
 }

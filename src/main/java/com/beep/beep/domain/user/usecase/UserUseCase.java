@@ -2,19 +2,14 @@ package com.beep.beep.domain.user.usecase;
 
 import com.beep.beep.domain.student.service.StudentService;
 import com.beep.beep.domain.user.domain.User;
-import com.beep.beep.domain.user.domain.enums.UserType;
-import com.beep.beep.domain.user.domain.repo.UserJpaRepo;
-import com.beep.beep.domain.user.exception.UserNotFoundException;
 import com.beep.beep.domain.user.exception.WithdrawalFailedException;
-import com.beep.beep.domain.user.presentation.dto.UserVO;
 import com.beep.beep.domain.user.presentation.dto.request.ChangePwReq;
 import com.beep.beep.domain.user.service.UserService;
 import com.beep.beep.global.common.dto.response.Response;
-import com.beep.beep.global.common.repository.UserSessionHolder;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
 
@@ -26,7 +21,7 @@ public class UserUseCase {
     private final UserService userService;
     private final StudentService studentService;
 
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public Response withdrawal(){
         try {
             User user = userService.getUser();

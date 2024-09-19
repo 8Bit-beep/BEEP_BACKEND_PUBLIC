@@ -18,12 +18,21 @@ import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.service.UserService;
 import com.beep.beep.global.common.dto.response.Response;
 import com.beep.beep.global.common.dto.response.ResponseData;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.concurrent.DelegatingSecurityContextExecutor;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
+import static com.beep.beep.global.exception.error.ErrorCode.FORBIDDEN;
+
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class StudentUseCase {
@@ -52,29 +61,46 @@ public class StudentUseCase {
         return ResponseData.ok("학생 실 코드 조회 완료",result);
     }
 
-    @Transactional
-    public ResponseData<AttendRes> attend(AttendReq req) {
+    @Async
+    @Transactional(rollbackFor = Exception.class)
+    public CompletableFuture<ResponseData<AttendRes>> attend(AttendReq req) {
         User user = userService.getUser();
+        ResponseData<AttendRes> attend = attendProcess(user, req);
+        return CompletableFuture.completedFuture(attend);
+    }
+
+    // 트랜잭션이 적용된 동기 메서드
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseData<AttendRes> attendProcess(User user,AttendReq req) {
+        System.out.println("why..??");
+//        User user = userService.getUser();
         Student student = studentService.getStudent(user);
+        System.out.println(student.getId());
         Room lastRoom = student.getRoom();
         AttendRes res;
 
+        System.out.println("여기까지");
+
+        // 룸 코드 확인
         Room room = roomService.findByCode(req.code()); // 이 코드는 존재하는가?
 
-        if(lastRoom == null){ // 빈문자열 -> 입실처리
+        if (lastRoom == null) { // 입실 처리
+            System.out.println("여긴왔어?");
             student.updateRoom(room);
             student.updateDate();
             res = AttendRes.of(req.code());
-        } else if(lastRoom.getCode().equals(req.code())){ // 빈문자열 아님, 저장된 코드 = 요청한 코드 -> 퇴실처리
+            System.out.println("왜 에러가 터지는거야?");
+        } else if (lastRoom.getCode().equals(req.code())) { // 퇴실 처리
             student.updateRoom(null);
             student.updateDate();
             res = AttendRes.of("");
-        } else { // 빈문자열 아님, 저장된 코드 != 요청한 코드 -> 퇴실 불가 처리
+        } else { // 퇴실 불가
             throw NotAllowedExitException.EXCEPTION;
         }
 
         return ResponseData.ok("출석 성공", res);
     }
+
 
     public ResponseData<List<AttendListRes>> attendList(String code) {
         Room room = roomService.findByCode(code);
