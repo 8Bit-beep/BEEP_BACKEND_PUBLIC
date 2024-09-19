@@ -30,6 +30,40 @@ https://green-bin.tistory.com/83
 spring boot 3 batch
 https://4h-developer.tistory.com/23
 
+batch 하면서 발견한 문제 
+1. 그냥 실행 자체가 안됨.. 설정한 시간이 되었으나 query를 안날림
+```
+@SpringBootApplication
+@EnableScheduling // <- 이거를 추가해야됨.
+public class YourApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(YourApplication.class, args);
+    }
+```
+
+2. 나쁜 sql 이라구요
+```
+org.springframework.jdbc.BadSqlGrammarException: PreparedStatementCallback; bad SQL grammar [SELECT JOB_INSTANCE_ID, JOB_NAME
+FROM BATCH_JOB_INSTANCE
+WHERE JOB_NAME = ?
+ and JOB_KEY = ?]
+```
+테이블 직접 쑤셔넣어줘야 함.
+
+SSL 인증
+
+https://www.youtube.com/watch?v=AmREvaxgsQI -> Route53, aws certificate manager 이용 (실패)
+https://usage.tistory.com/199 -> cloudflare에서 무료로 (성공)
+
+웹 도메인 연결
+
+https://velog.io/@soluinoon/%EA%B0%80%EB%B9%84%EC%95%84%EC%97%90%EC%84%9C-%EB%8F%84%EB%A9%94%EC%9D%B8-%EA%B5%AC%EB%A7%A4%ED%95%B4-%EC%A0%81%EC%9A%A9%ED%95%B4%EB%B3%B4%EA%B8%B0 
+
+JPA 메소드 명명규칙 (querydsl 삭제)
+
+https://zara49.tistory.com/130
+
 (나중에 할것)
 
 무중단 배포
@@ -44,15 +78,4 @@ https://mangkyu.tistory.com/182
 
 https://www.youtube.com/watch?v=L3y3xk56SI8&list=PL8RgHPKtjlBjssE4aKLmdpup6AyrW9DE-
 
-SSL 인증
-
-https://www.youtube.com/watch?v=AmREvaxgsQI
-
-웹 도메인 연결
-
-https://velog.io/@ssssujini99/Web-AWS-Route53%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-%EB%8F%84%EB%A9%94%EC%9D%B8-%EC%97%B0%EA%B2%B0%ED%95%98%EA%B8%B0
-
-JPA 메소드 명명규칙
-
-https://zara49.tistory.com/130
 
