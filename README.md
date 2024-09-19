@@ -54,6 +54,7 @@ WHERE JOB_NAME = ?
 SSL 인증
 
 https://www.youtube.com/watch?v=AmREvaxgsQI -> Route53, aws certificate manager 이용 (실패)
+
 https://usage.tistory.com/199 -> cloudflare에서 무료로 (성공)
 
 웹 도메인 연결
