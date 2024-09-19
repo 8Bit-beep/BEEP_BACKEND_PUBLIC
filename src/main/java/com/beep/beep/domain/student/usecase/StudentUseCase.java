@@ -72,24 +72,17 @@ public class StudentUseCase {
     // 트랜잭션이 적용된 동기 메서드
     @Transactional(rollbackFor = Exception.class)
     public ResponseData<AttendRes> attendProcess(User user,AttendReq req) {
-        System.out.println("why..??");
-//        User user = userService.getUser();
         Student student = studentService.getStudent(user);
-        System.out.println(student.getId());
         Room lastRoom = student.getRoom();
         AttendRes res;
-
-        System.out.println("여기까지");
 
         // 룸 코드 확인
         Room room = roomService.findByCode(req.code()); // 이 코드는 존재하는가?
 
         if (lastRoom == null) { // 입실 처리
-            System.out.println("여긴왔어?");
             student.updateRoom(room);
             student.updateDate();
             res = AttendRes.of(req.code());
-            System.out.println("왜 에러가 터지는거야?");
         } else if (lastRoom.getCode().equals(req.code())) { // 퇴실 처리
             student.updateRoom(null);
             student.updateDate();

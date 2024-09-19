@@ -68,14 +68,7 @@ public class StudentController {
     public CompletableFuture<ResponseData<AttendRes>> attend(
             @RequestBody AttendReq req
     ) {
-        System.out.println("hello");
-        CompletableFuture<ResponseData<AttendRes>> attend = studentUseCase.attend(req);
-        System.out.println(attend.state());
-
-        SecurityContext context = SecurityContextHolder.getContext();
-        System.out.println(context.getAuthentication().getName());
-
-        return attend;
+        return studentUseCase.attend(req);
     }
 
     @GetMapping("/attend-list")
