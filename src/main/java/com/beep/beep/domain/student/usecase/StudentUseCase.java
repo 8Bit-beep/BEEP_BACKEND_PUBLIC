@@ -88,7 +88,7 @@ public class StudentUseCase {
         Room room = roomService.findByCode(req.code()); // 이 코드는 존재하는가?
 
         if (lastRoom.getCode().equals("0")) { // 입실 처리
-            student.updateRoom(notFound);
+            student.updateRoom(room);
             student.updateDate();
             res = AttendRes.of(req.code());
         } else if (lastRoom.getCode().equals(req.code())) { // 퇴실 처리
