@@ -21,9 +21,7 @@ public class TeacherController {
     @GetMapping("/info")
     @Operation(summary = "선생님프로필 조회", description = "선생님프로필 조회합니다. (teacher)")
     public ResponseData<TeacherInfoRes> teacherInfo() {
-        return ResponseData.ok("선생님프로필 조회 성공",
-                teacherUseCase.teacherInfo()
-        );
+        return teacherUseCase.teacherInfo();
     }
 
 }

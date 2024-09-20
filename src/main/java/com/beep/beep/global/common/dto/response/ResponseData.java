@@ -1,5 +1,9 @@
 package com.beep.beep.global.common.dto.response;
 
+import com.beep.beep.domain.student.exception.error.StudentErrorProperty;
+import com.beep.beep.domain.student.presentation.dto.response.AttendRes;
+import com.beep.beep.global.exception.error.ErrorCode;
+import com.beep.beep.global.exception.error.ErrorProperty;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -24,4 +28,9 @@ public class ResponseData<T> extends Response {
     public static <T> ResponseData<T> created(String message, T data) {
         return new ResponseData<>(HttpStatus.CREATED, message, data);
     }
+
+    public static <T> ResponseData<T> error(ErrorCode errorCode, String message) {
+        return new ResponseData<>(errorCode.getStatus(), message, null);
+    }
+
 }

@@ -7,10 +7,10 @@ import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshRes;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRes;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.UserType;
-import com.beep.beep.domain.user.domain.repo.UserJpaRepo;
 import com.beep.beep.domain.user.exception.PasswordWrongException;
-import com.beep.beep.domain.user.exception.UserAlreadyExistsException;
-import com.beep.beep.domain.user.exception.UserNotFoundException;
+import com.beep.beep.domain.user.service.UserService;
+import com.beep.beep.global.common.dto.response.Response;
+import com.beep.beep.global.common.dto.response.ResponseData;
 import com.beep.beep.global.security.jwt.JwtExtractor;
 import com.beep.beep.global.security.jwt.JwtProvider;
 import com.beep.beep.global.security.jwt.enums.JwtType;
@@ -25,35 +25,39 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UserJpaRepo userJpaRepo;
+    private final UserService userService;
     private final PasswordEncoder encoder;
     private final JwtProvider jwtProvider;
     private final JwtExtractor jwtExtractor;
 
-    public void signUp(SignUpReq req){
-        if(userJpaRepo.existsById(req.email()))
-            throw UserAlreadyExistsException.EXCEPTION;
+    public Response signUp(SignUpReq req){
+        userService.existsByEmail(req.email());
 
-        userJpaRepo.save(req.toUserEntity(encoder.encode(req.password())));
+        userService.save(req.toUserEntity(encoder.encode(req.password())));
+        return Response.created("회원가입 성공");
     }
 
-    public TokenRes signIn(SignInReq req){
-        User user = userJpaRepo.findById(req.email())
-                        .orElseThrow(() -> UserNotFoundException.EXCEPTION);
+    public ResponseData<TokenRes> signIn(SignInReq req){
+        User user = userService.findByEmail(req.email());
 
         comparePassword(req,user.getPassword());
-        return jwtProvider.generateToken(user.getEmail(), user.getAuthority());
+        return ResponseData.ok("로그인 성공",jwtProvider.generateToken(user.getEmail(), user.getAuthority()));
     }
 
-    public TokenRefreshRes refresh(TokenRefreshReq req){
-        Jws<Claims> claims = jwtExtractor.getClaims(jwtExtractor.extractToken(req.refreshToken())); // 토큰 정보(payload key:value 들) 발췌
+    public ResponseData<TokenRefreshRes> refresh(TokenRefreshReq req) {
+        Jws<Claims> claims = jwtExtractor.getClaims(jwtExtractor.extractToken(req.refreshToken()));
 
-        if (jwtExtractor.isWrongType(claims, JwtType.REFRESH)) // refresh 토큰인지 확인
+        if (jwtExtractor.isWrongType(claims, JwtType.REFRESH)) {
             throw TokenTypeException.EXCEPTION;
+        }
 
-        return TokenRefreshRes.builder()
-                .accessToken(jwtProvider.generateAccessToken(claims.getBody().getSubject(), (UserType) claims.getHeader().get("authority"))).build();
+        String subject = claims.getBody().getSubject();
+        UserType authority = (UserType) claims.getHeader().get("authority");
+        String newAccessToken = jwtProvider.generateAccessToken(subject, authority);
+
+        return ResponseData.ok("토큰 재발급 성공", new TokenRefreshRes(newAccessToken));
     }
+
 
     private void comparePassword(SignInReq req, String password){
         if (!encoder.matches(req.password(), password))

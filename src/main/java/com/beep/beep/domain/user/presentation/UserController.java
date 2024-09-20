@@ -23,8 +23,7 @@ public class UserController {
     @DeleteMapping("")
     @Operation(summary = "회원탈퇴", description = "회원탈퇴 요청합니다. (student,teacher)")
     public Response withdrawal(){
-        userUseCase.withdrawal();
-        return Response.ok("회원탈퇴 성공");
+        return userUseCase.withdrawal();
     }
 
     @PatchMapping("/change-pw")
@@ -32,8 +31,7 @@ public class UserController {
     public Response changePw(
             @RequestBody ChangePwReq request
     ) {
-        userUseCase.changePw(request);
-        return Response.ok("비밀번호 변경 성공");
+        return userUseCase.changePw(request);
     }
 
 }

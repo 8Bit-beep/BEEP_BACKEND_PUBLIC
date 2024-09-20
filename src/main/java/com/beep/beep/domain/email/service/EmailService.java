@@ -8,6 +8,8 @@ import com.beep.beep.domain.email.exception.InvalidCodeException;
 import com.beep.beep.domain.email.presentation.dto.request.EmailSendingRequest;
 import com.beep.beep.domain.student.domain.repository.StudentJpaRepo;
 import com.beep.beep.domain.user.domain.repo.UserJpaRepo;
+import com.beep.beep.domain.user.service.UserService;
+import com.beep.beep.global.common.dto.response.Response;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +27,10 @@ public class EmailService {
     private static final String MAIL_TITLE_CERTIFICATION = "안녕하세요~ 8bit입니다.삑의 회원이 돼주셔서 감사합니다! 인증번호를 확인해주세요 ";
     private final JavaMailSender mailSender;
     private final EmailCertificationDao emailDao;
-    private final UserJpaRepo userJpaRepo;
+    private final UserService userService;
 
-    public void sendEmail(EmailSendingRequest request) throws NoSuchAlgorithmException, MessagingException {
-        if(userJpaRepo.existsById(request.email()))
-            throw EmailAlreadyExistsException.EXCEPTION;
+    public Response sendEmail(EmailSendingRequest request) throws NoSuchAlgorithmException, MessagingException {
+        userService.existsByEmail(request.email());
 
         String code = createCode();
         String content = String.format("반가워요,삑입니다:D \n 이메일 인증번호 : %s" , code);
@@ -37,13 +38,17 @@ public class EmailService {
 
         emailDao.saveCode(email,code);
         sendMail(email,content);
+
+        return Response.created("이메일 전송 성공");
     }
 
-    public void verifyEmail(String email, String code) {
+    public Response verifyEmail(String email, String code) {
         if (!isVerify(email, code))
             throw InvalidCodeException.EXCEPTION;
 
         emailDao.removeCode(email);
+
+        return Response.ok("이메일 인증 성공");
     }
 
     private String createCode() throws NoSuchAlgorithmException {

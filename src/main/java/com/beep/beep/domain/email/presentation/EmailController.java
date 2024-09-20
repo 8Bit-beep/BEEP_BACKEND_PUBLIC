@@ -30,8 +30,7 @@ public class EmailController {
     public Response sendEmail(
             @RequestBody EmailSendingRequest request
     ) throws MessagingException, NoSuchAlgorithmException {
-        emailService.sendEmail(request);
-        return Response.created("이메일 전송 성공");
+        return emailService.sendEmail(request);
     }
 
     @GetMapping("/verify")
@@ -40,8 +39,7 @@ public class EmailController {
             @RequestParam String email,
             @RequestParam String code
     ) {
-        emailService.verifyEmail(email,code);
-        return Response.ok("이메일 인증 성공");
+        return emailService.verifyEmail(email,code);
     }
 
 }

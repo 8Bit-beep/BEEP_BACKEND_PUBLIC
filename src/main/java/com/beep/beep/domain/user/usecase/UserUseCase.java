@@ -1,37 +1,47 @@
 package com.beep.beep.domain.user.usecase;
 
-import com.beep.beep.domain.student.domain.Student;
 import com.beep.beep.domain.student.service.StudentService;
 import com.beep.beep.domain.user.domain.User;
-import com.beep.beep.domain.user.domain.repo.UserJpaRepo;
-import com.beep.beep.domain.user.exception.UserNotFoundException;
+import com.beep.beep.domain.user.exception.WithdrawalFailedException;
 import com.beep.beep.domain.user.presentation.dto.request.ChangePwReq;
-import com.beep.beep.global.common.repository.UserSessionHolder;
-import jakarta.transaction.Transactional;
+import com.beep.beep.domain.user.service.UserService;
+import com.beep.beep.global.common.dto.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
 
 @Component
 @RequiredArgsConstructor
 public class UserUseCase {
 
-    private final UserSessionHolder userSessionHolder;
     private final PasswordEncoder encoder;
-    private final UserJpaRepo userJpaRepo;
+    private final UserService userService;
     private final StudentService studentService;
 
-    public void withdrawal(){
-        String email = userSessionHolder.getUser().email();
-        userJpaRepo.deleteById(email);
-        studentService.deleteById(email);
+    @Transactional(rollbackFor = Exception.class)
+    public Response withdrawal(){
+        try {
+            User user = userService.getUser();
+
+            if (user.getAuthority() == STUDENT) {
+                studentService.deleteByUser(user);
+            }
+            userService.deleteUser(user);
+
+            return Response.ok("회원탈퇴 성공");
+        } catch (Exception e) {
+            throw WithdrawalFailedException.EXCEPTION;
+        }
     }
 
     @Transactional
-    public void changePw(ChangePwReq req){
-        User user = userJpaRepo.findById(req.email())
-                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
+    public Response changePw(ChangePwReq req){
+        User user = userService.findByEmail(req.email());
         user.updatePassword(encoder.encode(req.password()));
+        return Response.ok("비밀번호 변경 성공");
     }
 
 }
