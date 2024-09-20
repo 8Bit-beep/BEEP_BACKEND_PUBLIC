@@ -77,14 +77,18 @@ public class StudentUseCase {
         AttendRes res;
 
         // 룸 코드 확인
+        Room notFound = Room.builder()
+                .code("0")
+                .name("미출석")
+                .floor(0).build();
         Room room = roomService.findByCode(req.code()); // 이 코드는 존재하는가?
 
-        if (lastRoom == null) { // 입실 처리
-            student.updateRoom(room);
+        if (lastRoom.getCode().equals("0")) { // 입실 처리
+            student.updateRoom(notFound);
             student.updateDate();
             res = AttendRes.of(req.code());
         } else if (lastRoom.getCode().equals(req.code())) { // 퇴실 처리
-            student.updateRoom(null);
+            student.updateRoom(notFound);
             student.updateDate();
             res = AttendRes.of("");
         } else { // 퇴실 불가
