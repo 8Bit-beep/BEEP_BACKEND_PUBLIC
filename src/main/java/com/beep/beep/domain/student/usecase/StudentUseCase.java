@@ -6,6 +6,7 @@ import com.beep.beep.domain.room.service.RoomService;
 import com.beep.beep.domain.student.domain.Student;
 import com.beep.beep.domain.student.exception.NotAllowedExitException;
 import com.beep.beep.domain.student.presentation.dto.request.AttendReq;
+import com.beep.beep.domain.student.presentation.dto.request.StudentSignUpByExcel;
 import com.beep.beep.domain.student.presentation.dto.request.StudentSignUpReq;
 import com.beep.beep.domain.student.presentation.dto.response.AttendListRes;
 import com.beep.beep.domain.student.presentation.dto.response.AttendRes;
@@ -21,16 +22,11 @@ import com.beep.beep.global.common.dto.response.ResponseData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.concurrent.DelegatingSecurityContextExecutor;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-import static com.beep.beep.global.exception.error.ErrorCode.FORBIDDEN;
 
 @Slf4j
 @Component
@@ -47,6 +43,14 @@ public class StudentUseCase {
 
         studentService.save(req.toStudentEntity(user));
         return Response.created("학생 기본정보 저장 성공");
+    }
+
+    public void signUpByExcel(StudentSignUpByExcel req) {
+        User user = userService.findByEmail(req.email());
+        Room studyRoom = roomService.findByCode(req.studyCode());
+
+        studentService.save(req.toStudentEntity(user,studyRoom));
+        Response.created("학생 기본정보 저장 성공");
     }
 
     public ResponseData<StudentInfoRes> studentInfo() {
@@ -114,5 +118,9 @@ public class StudentUseCase {
         Room room = roomService.findByClub(club);
         List<StudyListRes> result = StudyListRes.of(studentService.getStudyMemberList(room));
         return ResponseData.ok("스터디 구성원 조회 성공",result);
+    }
+
+    public List<Student> findAll() {
+        return studentService.findAll();
     }
 }

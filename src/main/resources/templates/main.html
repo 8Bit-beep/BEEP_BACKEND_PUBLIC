@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Excel 파일 업로드</title>
+</head>
+<body>
+
+<h1>계정 엑셀 파일 업로드</h1>
+
+<form th:action="@{/teacher/account}" method="post" enctype="multipart/form-data">
+    <!-- 엑셀 파일 입력 -->
+    <div>
+        <label for="file">엑셀 파일:</label>
+        <input type="file" id="file" name="file" accept=".xlsx,.xls" required>
+    </div>
+
+    <!-- 비밀번호 입력 -->
+    <div>
+        <label for="password">비밀번호:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+
+    <!-- 제출 버튼 -->
+    <div>
+        <button type="submit">업로드</button>
+    </div>
+</form>
+
+<form id="updateForm" method="post" enctype="multipart/form-data">
+    <!-- 엑셀 파일 입력 -->
+    <div>
+        <label for="file">엑셀 파일:</label>
+        <input type="file" id="file2" name="file" accept=".xlsx,.xls" required>
+    </div>
+
+    <!-- 제출 버튼 -->
+    <div>
+        <button type="submit">수정</button>
+    </div>
+</form>
+
+<h1>학생 스터디 리스트 엑셀 다운로드</h1>
+
+<form th:action="@{/student/excel}" method="get">
+    <button type="submit">엑셀 파일 다운로드</button>
+</form>
+
+<script>
+    // JavaScript로 PATCH 요청으로 변경
+    document.getElementById('updateForm').addEventListener('submit', function(event) {
+        event.preventDefault();  // 기본 폼 제출 동작 방지
+
+        var form = document.getElementById('updateForm');
+        var formData = new FormData(form);
+
+        fetch('/info', {
+            method: 'PATCH',  // PATCH 방식으로 설정
+            body: formData
+        })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;  // 성공시 리다이렉트
+                } else {
+                    alert('업데이트 실패!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+
+</script>
+
+</body>
+</html>

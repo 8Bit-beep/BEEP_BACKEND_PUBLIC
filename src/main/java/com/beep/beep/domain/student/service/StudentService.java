@@ -46,4 +46,7 @@ public class StudentService {
     }
 
 
+    public List<Student> findAll() {
+        return studentJpaRepo.findAll();
+    }
 }

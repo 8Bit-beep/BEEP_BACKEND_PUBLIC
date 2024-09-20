@@ -1,7 +1,10 @@
 package com.beep.beep.domain.student.presentation;
 
+import com.beep.beep.domain.auth.presentation.dto.request.SignUpReq;
 import com.beep.beep.domain.room.domain.Club;
+import com.beep.beep.domain.student.domain.Student;
 import com.beep.beep.domain.student.presentation.dto.request.AttendReq;
+import com.beep.beep.domain.student.presentation.dto.request.StudentSignUpByExcel;
 import com.beep.beep.domain.student.presentation.dto.request.StudentSignUpReq;
 import com.beep.beep.domain.student.presentation.dto.response.AttendListRes;
 import com.beep.beep.domain.student.presentation.dto.response.AttendRes;
@@ -14,8 +17,16 @@ import com.beep.beep.global.common.dto.response.Response;
 import com.beep.beep.global.common.dto.response.ResponseData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContext;
@@ -28,10 +39,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import static com.beep.beep.domain.user.domain.enums.UserType.TEACHER;
 
 @RestController
 @RequiredArgsConstructor
@@ -95,5 +112,70 @@ public class StudentController {
     ){
         return studentUseCase.studyList(club);
     }
+
+    @PatchMapping("info")
+    public String readExcel(@RequestParam("file") MultipartFile file)
+            throws IOException {
+
+        XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+        XSSFSheet worksheet = workbook.getSheetAt(0);
+
+        for(int i=1;i<worksheet.getPhysicalNumberOfRows() ;i++) {
+
+            DataFormatter formatter = new DataFormatter();
+            XSSFRow row = worksheet.getRow(i);
+
+            // 엑셀을 옮겨서 보낸다 -> 값을 수정해서 다시 저장
+            String email = formatter.formatCellValue(row.getCell(0));
+            Integer grade = Integer.valueOf(formatter.formatCellValue(row.getCell(2)));
+            Integer cls = Integer.valueOf(formatter.formatCellValue(row.getCell(3)));
+            Integer num = Integer.valueOf(formatter.formatCellValue(row.getCell(4)));
+            String studyCode = formatter.formatCellValue(row.getCell(6));
+
+            studentUseCase.signUpByExcel(new StudentSignUpByExcel(email,grade,cls,num,studyCode));
+        }
+        return "redirect:/success";
+    }
+
+    @GetMapping("excel")
+    public String downloadExcel(HttpServletResponse response) throws IOException {
+        // 엑셀 데이터 생성
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("고객 명단");
+        int rowNo = 0;
+
+        Row headerRow = sheet.createRow(rowNo++);
+        headerRow.createCell(0).setCellValue("이메일");
+        headerRow.createCell(1).setCellValue("이름");
+        headerRow.createCell(2).setCellValue("학년");
+        headerRow.createCell(3).setCellValue("반");
+        headerRow.createCell(4).setCellValue("번호");
+        headerRow.createCell(5).setCellValue("스터디");
+        headerRow.createCell(6).setCellValue("실코드(관리자가 채울것)");
+
+        // 비즈니스 로직 수행
+        List<Student> studentList = studentUseCase.findAll();
+
+        for (Student student : studentList) {
+            Row row = sheet.createRow(rowNo++);
+            row.createCell(0).setCellValue(student.getUser().getEmail());
+            row.createCell(1).setCellValue(student.getUser().getName());
+            row.createCell(2).setCellValue(student.getGrade());
+            row.createCell(3).setCellValue(student.getCls());
+            row.createCell(4).setCellValue(student.getNum());
+            row.createCell(5).setCellValue(String.valueOf(student.getStudyRoom().getClub()));
+        }
+
+        // 엑셀 응답 설정
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition",
+                "attachment; filename=\"" + URLEncoder.encode("삑 학생-스터디 리스트.xlsx", StandardCharsets.UTF_8) + "\"");
+
+        workbook.write(response.getOutputStream());
+        workbook.close();
+
+        return "redirect:/success";
+    }
+
 
 }
