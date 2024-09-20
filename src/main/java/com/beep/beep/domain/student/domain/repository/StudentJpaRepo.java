@@ -33,7 +33,12 @@ public interface StudentJpaRepo extends JpaRepository<Student, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Student s SET s.room = null")
-    void updateAllRoomToNull();
+    @Query("UPDATE Student s SET s.room = :room")
+    void updateAllRoomToNull(Room room);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Student s SET s.grade = :grade,s.cls = :cls,s.num = :num,s.room = :studyRoom where s.user = :user")
+    void updateAll(Integer grade,Integer cls,Integer num,Room studyRoom,User user);
 
 }

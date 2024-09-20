@@ -1,6 +1,5 @@
 package com.beep.beep.domain.student.presentation;
 
-import com.beep.beep.domain.auth.presentation.dto.request.SignUpReq;
 import com.beep.beep.domain.room.domain.Club;
 import com.beep.beep.domain.student.domain.Student;
 import com.beep.beep.domain.student.presentation.dto.request.AttendReq;
@@ -18,7 +17,6 @@ import com.beep.beep.global.common.dto.response.ResponseData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -29,8 +27,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,15 +37,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.DispatcherServlet;
 
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-
-import static com.beep.beep.domain.user.domain.enums.UserType.TEACHER;
 
 @RestController
 @RequiredArgsConstructor
@@ -113,10 +108,9 @@ public class StudentController {
         return studentUseCase.studyList(club);
     }
 
-    @PatchMapping("info")
-    public String readExcel(@RequestParam("file") MultipartFile file)
-            throws IOException {
-
+    @PostMapping("update")
+    @Transactional(rollbackFor = Exception.class)
+    public String readExcel(@RequestParam("file") MultipartFile file) throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
         XSSFSheet worksheet = workbook.getSheetAt(0);
 
@@ -131,8 +125,10 @@ public class StudentController {
             Integer cls = Integer.valueOf(formatter.formatCellValue(row.getCell(3)));
             Integer num = Integer.valueOf(formatter.formatCellValue(row.getCell(4)));
             String studyCode = formatter.formatCellValue(row.getCell(6));
+            String changed = formatter.formatCellValue(row.getCell(7));
 
-            studentUseCase.signUpByExcel(new StudentSignUpByExcel(email,grade,cls,num,studyCode));
+            if(Objects.equals(changed, "1"))
+                studentUseCase.updateByExcel(new StudentSignUpByExcel(email,grade,cls,num,studyCode));
         }
         return "redirect:/success";
     }

@@ -45,11 +45,11 @@ public class StudentUseCase {
         return Response.created("학생 기본정보 저장 성공");
     }
 
-    public void signUpByExcel(StudentSignUpByExcel req) {
+    public void updateByExcel(StudentSignUpByExcel req) {
         User user = userService.findByEmail(req.email());
         Room studyRoom = roomService.findByCode(req.studyCode());
 
-        studentService.save(req.toStudentEntity(user,studyRoom));
+        studentService.updateByExcel(req,user,studyRoom);
         Response.created("학생 기본정보 저장 성공");
     }
 

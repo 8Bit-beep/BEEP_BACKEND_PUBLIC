@@ -1,5 +1,6 @@
 package com.beep.beep.global.batch;
 
+import com.beep.beep.domain.room.domain.Room;
 import com.beep.beep.domain.student.domain.repository.StudentJpaRepo;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.transaction.Transactional;
@@ -22,7 +23,10 @@ public class RepeatScheduleTasklet implements Tasklet {
     @Transactional
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("Executing RepeatScheduleTasklet...");
-        studentJpaRepo.updateAllRoomToNull(); // Repository 메서드 호출
+        studentJpaRepo.updateAllRoomToNull(Room.builder()
+                .code("0")
+                .name("미출석")
+                .floor(0).build()); // Repository 메서드 호출
         log.info("All student codes have been set to null");
         return RepeatStatus.FINISHED;
     }
