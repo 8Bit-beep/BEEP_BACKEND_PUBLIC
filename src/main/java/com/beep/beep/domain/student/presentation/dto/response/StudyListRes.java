@@ -14,12 +14,18 @@ public record StudyListRes(String name, Integer grade, Integer cls, Integer num,
     }
 
     public static StudyListRes of(Student student) {
+        String code = "";
+
+        if(student.getRoom() != null) {
+            code = student.getRoom().getCode();
+        }
+
         return new StudyListRes(
                 student.getUser().getName(),
                 student.getGrade(),
                 student.getCls(),
                 student.getNum(),
-                Objects.equals(student.getStudyRoom().getCode(), student.getRoom().getCode()),
+                Objects.equals(student.getStudyRoom().getCode(), code),
                 student.getModifiedDate()
         );
     }

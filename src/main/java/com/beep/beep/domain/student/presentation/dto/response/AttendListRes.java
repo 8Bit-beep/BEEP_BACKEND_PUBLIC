@@ -15,13 +15,20 @@ public record AttendListRes(String name, Integer grade, Integer cls, Integer num
     }
 
     public static AttendListRes of(Student student) {
+        String code = "";
+
+        if(student.getRoom() != null) {
+            code = student.getRoom().getCode();
+        }
+
+
         return new AttendListRes(
                 student.getUser().getName(),
                 student.getGrade(),
                 student.getCls(),
                 student.getNum(),
-                student.getRoom().getClub(),
-                Objects.equals(student.getStudyRoom().getCode(), student.getRoom().getCode()),
+                student.getStudyRoom().getClub(),
+                Objects.equals(student.getStudyRoom().getCode(), code),
                 student.getModifiedDate()
         );
     }
