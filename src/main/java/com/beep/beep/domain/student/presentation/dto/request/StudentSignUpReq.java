@@ -10,11 +10,11 @@ public record StudentSignUpReq(Integer grade, Integer cls, Integer num, String e
                 .grade(this.grade)
                 .cls(this.cls)
                 .num(this.num)
-                .room(null)
-                .studyRoom(Room.builder()
+                .room(Room.builder()
                         .code("0")
                         .name("미출석")
                         .floor(0).build())
+                .studyRoom(null)
                 .user(user).build();
     }
 }
