@@ -1,5 +1,6 @@
 package com.beep.beep.domain.user.domain;
 
+import com.beep.beep.domain.room.domain.Club;
 import com.beep.beep.domain.student.presentation.dto.request.StudentSignUpReq;
 import com.beep.beep.domain.user.domain.enums.RoomCode;
 import com.beep.beep.domain.user.domain.enums.UserType;
@@ -62,5 +63,6 @@ public class User {
         this.cls = req.cls();
         this.num = req.num();
         this.currentRoom = RoomCode.of("0");
+        this.fixedRoom = RoomCode.of(req.club().getCode());
     }
 }
