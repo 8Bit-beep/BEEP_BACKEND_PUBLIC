@@ -15,17 +15,7 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
 
-    public Room findByCode(String code){
-        return roomRepository.findById(code)
-                .orElseThrow(() -> RoomNotFoundException.EXCEPTION);
-    }
-
     public List<Room> roomList(Integer floor){
         return roomRepository.findAllByFloor(floor);
-    }
-
-    public Room findByClub(Club club){
-        return roomRepository.findByClub(club)
-                .orElseThrow(()-> RoomNotFoundException.EXCEPTION);
     }
 }

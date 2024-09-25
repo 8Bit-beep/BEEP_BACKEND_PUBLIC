@@ -1,4 +1,4 @@
-package com.beep.beep.domain.view;
+package com.beep.beep.keep.view;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

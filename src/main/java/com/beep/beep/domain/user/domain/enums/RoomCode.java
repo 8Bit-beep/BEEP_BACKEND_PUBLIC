@@ -1,11 +1,14 @@
-package com.beep.beep.domain.student.domain.enums;
+package com.beep.beep.domain.user.domain.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 @Getter
 @RequiredArgsConstructor
 public enum RoomCode {
+    NOTFOUND("0"),
     PROJECT1("1101"),PROJECT2("1102"),
     LAB1("2201"), LAB2("2202"),
     PROJECT3("2203"),
@@ -22,4 +25,11 @@ public enum RoomCode {
     LAB20("3313"),LAB21("3314"),LAB22("3315");
 
     private final String code;
+
+    public static RoomCode of(String code) {
+        return Arrays.stream(values())
+                .filter(value -> value.code.equals(code))
+                .findAny()
+                .orElse(NOTFOUND);
+    }
 }

@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthUseCase {
 
     private final UserService userService;
     private final PasswordEncoder encoder;

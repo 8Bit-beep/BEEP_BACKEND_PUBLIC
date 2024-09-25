@@ -1,9 +1,6 @@
 package com.beep.beep.domain.room.presentation.dto.response;
 
 import com.beep.beep.domain.room.domain.Room;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
 
 import java.util.List;
 

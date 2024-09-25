@@ -2,12 +2,9 @@ package com.beep.beep.domain.email.service;
 
 
 import com.beep.beep.domain.email.dao.EmailCertificationDao;
-import com.beep.beep.domain.email.exception.EmailAlreadyExistsException;
 import com.beep.beep.domain.email.exception.EmailNotFoundException;
 import com.beep.beep.domain.email.exception.InvalidCodeException;
 import com.beep.beep.domain.email.presentation.dto.request.EmailSendingRequest;
-import com.beep.beep.domain.student.domain.repository.StudentJpaRepo;
-import com.beep.beep.domain.user.domain.repo.UserJpaRepo;
 import com.beep.beep.domain.user.service.UserService;
 import com.beep.beep.global.common.dto.response.Response;
 import jakarta.mail.MessagingException;

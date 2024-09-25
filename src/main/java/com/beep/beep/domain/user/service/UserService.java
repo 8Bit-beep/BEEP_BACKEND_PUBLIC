@@ -1,36 +1,29 @@
 package com.beep.beep.domain.user.service;
 
 import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.domain.enums.RoomCode;
 import com.beep.beep.domain.user.domain.repo.UserJpaRepo;
 import com.beep.beep.domain.user.exception.UserAlreadyExistsException;
 import com.beep.beep.domain.user.exception.UserNotFoundException;
-import com.beep.beep.domain.user.presentation.dto.UserVO;
-import com.beep.beep.global.common.repository.UserSessionHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserJpaRepo userJpaRepo;
-    private final UserSessionHolder userSessionHolder;
 
     public User findByEmail(String email) {
         return userJpaRepo.findById(email)
                 .orElseThrow(() -> UserNotFoundException.EXCEPTION);
     }
 
-    public void deleteUser(User user) {
-        userJpaRepo.delete(user);
-    }
-
-//    public String getCurrentEmail(){
-//        return getUser().getEmail();
-//    }
-
-    public User getUser(){
-        return userSessionHolder.getUser().toUserEntity();
+    public void deleteUser(String email) {
+        userJpaRepo.deleteById(email);
     }
 
     public void existsByEmail(String email) {
@@ -42,9 +35,16 @@ public class UserService {
         userJpaRepo.save(user);
     }
 
-//    public void notFoundEmail(String email){
-//        if(!userJpaRepo.existsById(email))
-//            throw UserNotFoundException.EXCEPTION;
-//    }
+    public User updateCurrentRoom(User user) {
+        user.setLastUpdated(LocalDateTime.now());
+        return userJpaRepo.save(user);
+    }
 
+    public List<User> getRoomAttendList(RoomCode code) {
+        return userJpaRepo.findAllByCurrentRoom(code);
+    }
+
+    public List<User> getClassMemberList(Integer grade, Integer cls) {
+        return userJpaRepo.findAllByGradeAndCls(grade,cls);
+    }
 }

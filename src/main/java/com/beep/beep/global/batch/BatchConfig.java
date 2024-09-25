@@ -20,7 +20,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @EnableBatchProcessing
 public class BatchConfig {
 
-    private final RepeatScheduleTasklet repeatScheduleTasklet;
+    private final InitScheduleTasklet initScheduleTasklet;
 
     @Bean
     public Job createRepeatSchedule(JobRepository jobRepository, Step createScheduleStep) {
@@ -32,7 +32,7 @@ public class BatchConfig {
     @Bean
     public Step createScheduleStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         return new StepBuilder("createScheduleStep", jobRepository)
-                .tasklet(repeatScheduleTasklet, transactionManager)
+                .tasklet(initScheduleTasklet, transactionManager)
                 .build();
     }
 

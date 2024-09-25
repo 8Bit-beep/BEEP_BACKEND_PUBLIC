@@ -1,28 +1,27 @@
 package com.beep.beep.domain.student.presentation.dto.response;
 
-import com.beep.beep.domain.room.domain.Club;
-import com.beep.beep.domain.student.domain.Student;
+import com.beep.beep.domain.user.domain.User;
+import com.beep.beep.domain.user.domain.enums.RoomCode;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
-public record AttendListRes(String name, Integer grade, Integer cls, Integer num, Club club, boolean isExist, LocalDateTime modifiedDate) {
-    public static List<AttendListRes> of(List<Student> students) {
-        return students.parallelStream()
+public record AttendListRes(String name, Integer grade, Integer cls, Integer num, RoomCode fixedRoom, boolean isExist, LocalDateTime modifiedDate) {
+    public static List<AttendListRes> of(List<User> users) {
+        return users.parallelStream()
                 .map(AttendListRes::of)
                 .toList();
     }
 
-    public static AttendListRes of(Student student) {
+    public static AttendListRes of(User user) {
         return new AttendListRes(
-                student.getUser().getName(),
-                student.getGrade(),
-                student.getCls(),
-                student.getNum(),
-                student.getStudyRoom().getClub(),
-                Objects.equals(student.getStudyRoom().getCode(), student.getRoom().getCode()),
-                student.getModifiedDate()
+                user.getName(),
+                user.getGrade(),
+                user.getCls(),
+                user.getNum(),
+                user.getFixedRoom(),
+                user.getFixedRoom().equals(user.getCurrentRoom()),
+                user.getLastUpdated() == null ? LocalDateTime.MIN : user.getLastUpdated()
         );
     }
 
