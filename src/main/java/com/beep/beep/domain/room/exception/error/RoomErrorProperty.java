@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum RoomErrorProperty implements ErrorProperty {
-    ROOM_NOT_FOUND(HttpStatus.NOT_FOUND,"실을 찾을 수 없습니다.");
+    FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"실 리스트 조회 실패");
 
     private final HttpStatus status;
     private final String message;
