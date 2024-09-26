@@ -46,7 +46,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/beep:0.0.1-SNAPSHOT
             
             docker run -d --name beep-redis --network redis-network redis
-            docker run -d -p 80:8080 --name beep --network redis-network \
+            docker run -d -p 8080:8080 --name beep --network redis-network \
               --env SPRING_REDIS_HOST=beep-redis --env SPRING_REDIS_PORT=6379 ${{ secrets.DOCKER_USERNAME }}/beep:0.0.1-SNAPSHOT
             
 
