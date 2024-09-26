@@ -14,5 +14,5 @@ public interface AttendLogJpaRepo extends JpaRepository<AttendLog, Long> {
             "SELECT u.email,u.current_room,u.last_updated,NOW(),:timeTable "+
             "FROM tb_user u WHERE u.authority = 'STUDENT'",nativeQuery = true)
     @Transactional(rollbackFor = Exception.class)
-    void saveAllAttendLog(@Param("timeTable") TimeTable timeTable);
+    void saveAllAttendLog(@Param("timeTable") String timeTable);
 }

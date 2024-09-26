@@ -33,7 +33,7 @@ public class InitScheduleTasklet implements Tasklet {
 
         // 1. 로그 저장
         log.info("Executing InitScheduleTasklet...");
-        attendLogJpaRepo.saveAllAttendLog(TimeTable.of());
+        attendLogJpaRepo.saveAllAttendLog(TimeTable.of().getValue());
         log.info("All student's attend-log saved");
 
         // 2. 유저 code 초기화
