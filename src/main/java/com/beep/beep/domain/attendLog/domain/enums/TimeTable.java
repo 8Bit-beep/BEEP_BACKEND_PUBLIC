@@ -8,7 +8,11 @@ import java.time.LocalTime;
 @Getter
 @RequiredArgsConstructor
 public enum TimeTable {
-    EIGHT,NINE,TEN,ELEVEN,ETC;
+    EIGHT,
+    NINE,
+    TEN,
+    ELEVEN,
+    ETC;
 
     public static TimeTable of(){
         LocalTime now = LocalTime.now(); // 현재 시간 가져오기
