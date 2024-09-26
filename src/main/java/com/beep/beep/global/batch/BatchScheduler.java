@@ -47,6 +47,12 @@ public class BatchScheduler {
         runJob("20:45 오후 8시 45분",true); // 초기화
     }
 
+    // 오후 9시 30분 (21:30)
+    @Scheduled(cron = "0 30 21 * * ?")
+    public void runCreateRepeatScheduleAt930PM() {
+        runJob("20:45 오후 8시 45분",true); // 초기화
+    }
+
     /**
      * RepeatType에 따른 반복 일정 생성
      * @param scheduleTime 실행 시간 정보

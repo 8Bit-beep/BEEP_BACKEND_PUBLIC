@@ -25,7 +25,7 @@ public enum TimeTable {
             return NINE;
         } else if (now.isAfter(LocalTime.of(19, 10)) && now.isBefore(LocalTime.of(20, 9))) {
             return TEN;
-        } else if (now.isAfter(LocalTime.of(20, 10)) && now.isBefore(LocalTime.of(0, 0))) {
+        } else if (now.isAfter(LocalTime.of(20, 10)) && now.isBefore(LocalTime.of(21, 40))) {
             return ELEVEN;
         } else {
             return ETC;
