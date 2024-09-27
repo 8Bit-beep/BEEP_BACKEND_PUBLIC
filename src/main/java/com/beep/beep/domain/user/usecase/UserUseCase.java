@@ -1,35 +1,30 @@
 package com.beep.beep.domain.user.usecase;
 
-import com.beep.beep.domain.student.service.StudentService;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.exception.WithdrawalFailedException;
+import com.beep.beep.domain.user.presentation.dto.UserVO;
 import com.beep.beep.domain.user.presentation.dto.request.ChangePwReq;
 import com.beep.beep.domain.user.service.UserService;
 import com.beep.beep.global.common.dto.response.Response;
+import com.beep.beep.global.common.repository.UserSessionHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
 
 @Component
 @RequiredArgsConstructor
 public class UserUseCase {
 
     private final PasswordEncoder encoder;
+    private final UserSessionHolder userSessionHolder;
     private final UserService userService;
-    private final StudentService studentService;
 
     @Transactional(rollbackFor = Exception.class)
     public Response withdrawal(){
         try {
-            User user = userService.getUser();
-
-            if (user.getAuthority() == STUDENT) {
-                studentService.deleteByUser(user);
-            }
-            userService.deleteUser(user);
+            UserVO user = userSessionHolder.getUser();
+            userService.deleteUser(user.email());
 
             return Response.ok("회원탈퇴 성공");
         } catch (Exception e) {

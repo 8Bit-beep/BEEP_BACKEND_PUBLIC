@@ -5,7 +5,7 @@ import com.beep.beep.domain.auth.presentation.dto.request.SignUpReq;
 import com.beep.beep.domain.auth.presentation.dto.request.TokenRefreshReq;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRefreshRes;
 import com.beep.beep.domain.auth.presentation.dto.response.TokenRes;
-import com.beep.beep.domain.auth.service.AuthService;
+import com.beep.beep.domain.auth.service.AuthUseCase;
 import com.beep.beep.global.common.dto.response.Response;
 import com.beep.beep.global.common.dto.response.ResponseData;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "AUTH", description = "auth API")
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthUseCase authService;
 
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)

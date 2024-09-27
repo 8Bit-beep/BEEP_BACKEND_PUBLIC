@@ -20,16 +20,18 @@ import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthUseCase {
 
     private final UserService userService;
     private final PasswordEncoder encoder;
     private final JwtProvider jwtProvider;
     private final JwtExtractor jwtExtractor;
 
+    @Transactional(rollbackFor = Exception.class)
     public Response signUp(SignUpReq req){
         userService.existsByEmail(req.email());
 
