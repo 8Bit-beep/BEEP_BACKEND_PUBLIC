@@ -37,6 +37,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PRIVATE_KEY }} # EC2 private key
           envs: GITHUB_SHA
+          port: 22
           script: |
             docker stop beep
             docker stop beep-redis
