@@ -87,7 +87,7 @@ public class StudentUseCase {
 
     public ResponseData<List<StudyListRes>> studyList(Club club) {
         RoomCode requestedRoom = RoomCode.of(club.getCode());
-        List<StudyListRes> result = StudyListRes.of(userService.getRoomAttendList(requestedRoom));
+        List<StudyListRes> result = StudyListRes.of(userService.getRoomStudyList(requestedRoom));
         return ResponseData.ok("스터디 구성원 조회 성공",result);
     }
 }
