@@ -17,12 +17,12 @@ public class RoomController {
 
     private final RoomUseCase roomUseCase;
 
-    @GetMapping("")
-    @Operation(summary = "층별 정보 조회",description = "층을 보내면 그 층에 해당하는 실을 반환합니다.(teacher)")
-    public ResponseData<String> roomList(
-            @RequestParam Integer floor
-    ){
-        return roomUseCase.roomList(floor);
-    }
+//    @GetMapping("")
+//    @Operation(summary = "층별 정보 조회",description = "층을 보내면 그 층에 해당하는 실을 반환합니다.(teacher)")
+//    public ResponseData<List<RoomRes>> roomList(
+//            @RequestParam Integer floor
+//    ){
+//        return roomUseCase.roomList(floor);
+//    }
 
 }

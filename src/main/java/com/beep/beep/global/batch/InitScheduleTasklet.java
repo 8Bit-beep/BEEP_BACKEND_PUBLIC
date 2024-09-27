@@ -12,6 +12,9 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 import static com.beep.beep.domain.user.domain.enums.RoomCode.NOTFOUND;
 
 @Slf4j
@@ -30,10 +33,11 @@ public class InitScheduleTasklet implements Tasklet {
                 .getJobParameters()
                 .get("init")
                 .toString());
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
         // 1. 로그 저장
         log.info("Executing InitScheduleTasklet...");
-        attendLogJpaRepo.saveAllAttendLog(TimeTable.of().getValue());
+        attendLogJpaRepo.saveAllAttendLog(now,TimeTable.of().getValue());
         log.info("All student's attend-log saved");
 
         // 2. 유저 code 초기화
