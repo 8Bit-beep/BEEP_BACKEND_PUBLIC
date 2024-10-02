@@ -2,13 +2,17 @@ package com.beep.beep.domain.attendLog.domain;
 
 
 import com.beep.beep.domain.attendLog.domain.enums.TimeTable;
+import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.RoomCode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,8 +33,6 @@ public class AttendLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
-
     private RoomCode currentRoom;
 
     private LocalDateTime lastUpdated;
@@ -39,4 +41,8 @@ public class AttendLog {
 
     @Enumerated(EnumType.STRING)
     private TimeTable timeTable;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_user_id")
+    private User user;
 }

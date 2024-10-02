@@ -8,13 +8,17 @@ import java.time.LocalTime;
 @Getter
 @RequiredArgsConstructor
 public enum TimeTable {
-    EIGHT("EIGHT"),
-    NINE("NINE"),
-    TEN("TEN"),
-    ELEVEN("ELEVEN"),
-    ETC("ETC");
+    EIGHT("EIGHT",17,25,0),
+    NINE("NINE",18,20,0),
+    TEN("TEN",20,0,0),
+    ELEVEN("ELEVEN",20,45,0),
+    ELEVEN2("ELEVEN2",21,30,0),
+    ETC("ETC",0,0,0);
 
     private final String value;
+    private final Integer hour;
+    private final Integer minute;
+    private final Integer second;
 
     public static TimeTable of(){
         LocalTime now = LocalTime.now(); // 현재 시간 가져오기
