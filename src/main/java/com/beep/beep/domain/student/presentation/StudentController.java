@@ -9,6 +9,7 @@ import com.beep.beep.domain.student.presentation.dto.response.MemberListRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentCodeRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentInfoRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudyListRes;
+import com.beep.beep.domain.student.presentation.dto.response.StudyRes;
 import com.beep.beep.domain.student.usecase.StudentUseCase;
 import com.beep.beep.global.common.dto.response.Response;
 import com.beep.beep.global.common.dto.response.ResponseData;
@@ -83,7 +84,7 @@ public class StudentController {
 
     @GetMapping("/study-list")
     @Operation(summary = "스터디 구성원 조회", description = "스터디 출석정보 구성원 조회합니다.(teacher)")
-    public ResponseData<List<StudyListRes>> studyList(
+    public ResponseData<StudyListRes> studyList(
             @RequestParam Club club
     ){
         return studentUseCase.studyList(club);
