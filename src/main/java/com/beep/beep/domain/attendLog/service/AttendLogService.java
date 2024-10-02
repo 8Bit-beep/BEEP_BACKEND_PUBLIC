@@ -15,8 +15,7 @@ public class AttendLogService {
 
     private final AttendLogJpaRepo attendLogJpaRepo;
 
-    public List<AttendLog> getAttendLogList(int year, int month, int date, TimeTable timeTable) {
-        LocalDateTime dateTime = LocalDateTime.of(year,month,month,timeTable.getHour(), timeTable.getMinute(), timeTable.getSecond());
-        return attendLogJpaRepo.findAllByCurrentDt(dateTime);
+    public List<AttendLog> getAttendLogList(String year, String month, String date, TimeTable timeTable) {
+        return attendLogJpaRepo.findAllByCurrentDt(year,month,date,timeTable);
     }
 }

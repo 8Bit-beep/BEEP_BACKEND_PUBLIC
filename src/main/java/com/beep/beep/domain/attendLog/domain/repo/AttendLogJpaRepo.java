@@ -21,6 +21,12 @@ public interface AttendLogJpaRepo extends JpaRepository<AttendLog, Long> {
     @Transactional(rollbackFor = Exception.class)
     void saveAllAttendLog(@Param("current_dt") LocalDateTime current_dt, @Param("timeTable") String timeTable);
 
-    @EntityGraph(attributePaths = {"attendLog.user"})
-    List<AttendLog> findAllByCurrentDt(LocalDateTime currentDt);
+    @Query("select a from AttendLog a "+
+            "join a.user u " +
+            "where year(a.currentDt) = :year and " +
+            "month(a.currentDt) = :month and " +
+            "day(a.currentDt) = :date and " +
+            "a.timeTable = :timeTable")
+    List<AttendLog> findAllByCurrentDt(@Param("year") String year,@Param("month") String month,@Param("date") String date,@Param("timeTable") TimeTable timeTable);
+
 }
