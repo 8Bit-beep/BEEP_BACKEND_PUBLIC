@@ -15,7 +15,6 @@ public enum TimeTable {
     ETC("ETC");
 
     private final String value;
-
     public static TimeTable of(){
         LocalTime now = LocalTime.now(); // 현재 시간 가져오기
 

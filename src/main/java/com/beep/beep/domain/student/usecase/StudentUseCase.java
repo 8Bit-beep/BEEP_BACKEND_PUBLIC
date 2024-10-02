@@ -1,6 +1,7 @@
 package com.beep.beep.domain.student.usecase;
 
 import com.beep.beep.domain.room.domain.Club;
+import com.beep.beep.domain.student.presentation.dto.response.StudyListRes;
 import com.beep.beep.domain.user.domain.enums.RoomCode;
 import com.beep.beep.domain.user.presentation.dto.UserVO;
 import com.beep.beep.global.common.repository.UserSessionHolder;
@@ -12,7 +13,7 @@ import com.beep.beep.domain.student.presentation.dto.response.AttendRes;
 import com.beep.beep.domain.student.presentation.dto.response.MemberListRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentCodeRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentInfoRes;
-import com.beep.beep.domain.student.presentation.dto.response.StudyListRes;
+import com.beep.beep.domain.student.presentation.dto.response.StudyRes;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.service.UserService;
 import com.beep.beep.global.common.dto.response.Response;
@@ -85,9 +86,10 @@ public class StudentUseCase {
         return ResponseData.ok("반 구성원 조회 성공",result);
     }
 
-    public ResponseData<List<StudyListRes>> studyList(Club club) {
+    public ResponseData<StudyListRes> studyList(Club club) {
         RoomCode requestedRoom = RoomCode.of(club.getCode());
-        List<StudyListRes> result = StudyListRes.of(userService.getRoomAttendList(requestedRoom));
+        List<StudyRes> studyList = StudyRes.of(userService.getRoomStudyList(requestedRoom));
+        StudyListRes result = new StudyListRes(requestedRoom, studyList);
         return ResponseData.ok("스터디 구성원 조회 성공",result);
     }
 }

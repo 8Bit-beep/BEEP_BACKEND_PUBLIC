@@ -18,4 +18,6 @@ public interface UserJpaRepo extends JpaRepository<User,String> {
     @Transactional
     @Query("UPDATE User s SET s.currentRoom = :code")
     void updateAllRoomToNotFound(@Param("code") RoomCode code);
+
+    List<User> findAllByFixedRoom(RoomCode code);
 }
