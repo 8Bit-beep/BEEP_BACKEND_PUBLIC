@@ -69,6 +69,9 @@ LocalDateTime 쓰는법 (지역시간 설정하기)
 
 https://covenant.tistory.com/255
 
+iTerm2 커스텀
+https://ooeunz.tistory.com/21
+
 (나중에 할것)
 
 무중단 배포
