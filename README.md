@@ -74,6 +74,12 @@ https://ooeunz.tistory.com/21
 
 (나중에 할것)
 
+비동기처리
+
+jpa - https://freedeveloper.tistory.com/139
+
+api - https://lovethefeel.tistory.com/126
+
 무중단 배포
 
 https://velog.io/@habins226/Gitlab-Jenkins-Docker-Docker-Hub-Nginx-Blue-Green-%EB%AC%B4%EC%A4%91%EB%8B%A8%EB%B0%B0%ED%8F%AC-CICD-%EA%B5%AC%EC%B6%95-1
@@ -81,6 +87,7 @@ https://velog.io/@habins226/Gitlab-Jenkins-Docker-Docker-Hub-Nginx-Blue-Green-%E
 TDD
 
 https://mangkyu.tistory.com/182
+
 
 백엔드 개발자 유튜브
 
