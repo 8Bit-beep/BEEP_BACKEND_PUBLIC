@@ -4,6 +4,7 @@ package com.beep.beep.domain.attendLog.domain;
 import com.beep.beep.domain.attendLog.domain.enums.TimeTable;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.RoomCode;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -33,6 +34,7 @@ public class AttendLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private RoomCode currentRoom;
 
     private LocalDateTime lastUpdated;

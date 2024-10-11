@@ -25,6 +25,7 @@ public record AttendLogRes(
 
     public static AttendLogRes of(AttendLog attendLog) {
         User user = attendLog.getUser();
+        System.out.println(attendLog.getCurrentRoom());
 
         return new AttendLogRes(
                 attendLog.getId(),

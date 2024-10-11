@@ -54,7 +54,7 @@ public class SecurityConfig {
                 .exceptionHandling(handlingConfigures -> handlingConfigures.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
-                        .requestMatchers("/teacher/info","room/**").hasAuthority(TEACHER.getAuthority())
+                        .requestMatchers("/teacher/info","room/**","/attend-log/**").hasAuthority(TEACHER.getAuthority())
                         .requestMatchers("/student/code","/student/attend").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers(GET,"/student/info").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers("/student/attend-list","/student/member-list","/student/study-list").hasAuthority(TEACHER.getAuthority())
