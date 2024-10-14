@@ -64,6 +64,6 @@ public class User {
         this.num = req.num();
         this.currentRoom = RoomCode.of("0");
         this.fixedRoom = RoomCode.of(req.club().getCode());
-        this.lastUpdated = LocalDateTime.MIN;
+        this.lastUpdated = LocalDateTime.now();
     }
 }
