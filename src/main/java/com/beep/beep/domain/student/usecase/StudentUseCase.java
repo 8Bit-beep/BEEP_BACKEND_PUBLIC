@@ -1,7 +1,6 @@
 package com.beep.beep.domain.student.usecase;
 
 import com.beep.beep.domain.room.domain.Club;
-import com.beep.beep.domain.student.presentation.dto.response.StudyListRes;
 import com.beep.beep.domain.user.domain.enums.RoomCode;
 import com.beep.beep.domain.user.presentation.dto.UserVO;
 import com.beep.beep.global.common.repository.UserSessionHolder;
@@ -86,10 +85,9 @@ public class StudentUseCase {
         return ResponseData.ok("반 구성원 조회 성공",result);
     }
 
-    public ResponseData<StudyListRes> studyList(Club club) {
+    public ResponseData<List<StudyRes>> studyList(Club club) {
         RoomCode requestedRoom = RoomCode.of(club.getCode());
-        List<StudyRes> studyList = StudyRes.of(userService.getRoomStudyList(requestedRoom));
-        StudyListRes result = new StudyListRes(requestedRoom, studyList);
+        List<StudyRes> result = StudyRes.of(requestedRoom,userService.getRoomStudyList(requestedRoom));
         return ResponseData.ok("스터디 구성원 조회 성공",result);
     }
 }

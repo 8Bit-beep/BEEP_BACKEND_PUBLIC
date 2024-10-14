@@ -84,7 +84,7 @@ public class StudentController {
 
     @GetMapping("/study-list")
     @Operation(summary = "스터디 구성원 조회", description = "스터디 출석정보 구성원 조회합니다.(teacher)")
-    public ResponseData<StudyListRes> studyList(
+    public ResponseData<List<StudyRes>> studyList(
             @RequestParam Club club
     ){
         return studentUseCase.studyList(club);
