@@ -1,7 +1,10 @@
 package com.beep.beep.domain.room.domain;
 
+import com.beep.beep.domain.user.domain.enums.RoomCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
 
 @Getter
 @RequiredArgsConstructor
@@ -18,4 +21,12 @@ public enum Club {
     BIND("3312");
 
     private final String code;
+
+    // Find Club by code
+    public static Club of(String code) {
+        return Arrays.stream(values())
+                .filter(value -> value.code.equals(code))
+                .findAny()
+                .orElse(null);
+    }
 }

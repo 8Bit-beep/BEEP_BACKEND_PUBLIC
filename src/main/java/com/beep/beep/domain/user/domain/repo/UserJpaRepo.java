@@ -20,4 +20,7 @@ public interface UserJpaRepo extends JpaRepository<User,String> {
     void updateAllRoomToNotFound(@Param("code") RoomCode code);
 
     List<User> findAllByFixedRoom(RoomCode code);
+
+    @Query("SELECT u FROM User u WHERE u.fixedRoom IN :rooms")
+    List<User> findAllByFixedRooms(List<RoomCode> rooms);
 }

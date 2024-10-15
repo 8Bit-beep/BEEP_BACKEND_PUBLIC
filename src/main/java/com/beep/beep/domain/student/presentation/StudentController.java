@@ -10,6 +10,7 @@ import com.beep.beep.domain.student.presentation.dto.response.StudentCodeRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentInfoRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudyListRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudyRes;
+import com.beep.beep.domain.student.presentation.dto.response.StudyResByFloor;
 import com.beep.beep.domain.student.usecase.StudentUseCase;
 import com.beep.beep.global.common.dto.response.Response;
 import com.beep.beep.global.common.dto.response.ResponseData;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -88,6 +90,14 @@ public class StudentController {
             @RequestParam Club club
     ){
         return studentUseCase.studyList(club);
+    }
+
+    @GetMapping("/{floor}/study-list")
+    @Operation(summary = "실별 스터디 구성원 조회", description = "실별 스터디 출석정보 구성원 조회합니다.(teacher)")
+    public ResponseData<List<StudyResByFloor>> studyListByFloor(
+            @PathVariable("floor") Integer floor
+    ){
+        return studentUseCase.studyListByFloor(floor);
     }
 
 }

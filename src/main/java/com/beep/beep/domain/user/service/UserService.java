@@ -51,4 +51,8 @@ public class UserService {
     public List<User> getClassMemberList(Integer grade, Integer cls) {
         return userJpaRepo.findAllByGradeAndCls(grade,cls);
     }
+
+    public List<User> getStudyListByFloor(List<RoomCode> rooms) {
+        return userJpaRepo.findAllByFixedRooms(rooms);
+    }
 }

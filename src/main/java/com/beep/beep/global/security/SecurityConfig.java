@@ -57,7 +57,7 @@ public class SecurityConfig {
                         .requestMatchers("/teacher/info","room/**","/attend-log/**").hasAuthority(TEACHER.getAuthority())
                         .requestMatchers("/student/code","/student/attend").hasAuthority(STUDENT.getAuthority())
                         .requestMatchers(GET,"/student/info").hasAuthority(STUDENT.getAuthority())
-                        .requestMatchers("/student/attend-list","/student/member-list","/student/study-list").hasAuthority(TEACHER.getAuthority())
+                        .requestMatchers("/student/attend-list","/student/member-list","/student/study-list","/student/{floor}/study-list").hasAuthority(TEACHER.getAuthority())
                         .requestMatchers(DELETE,"/user").authenticated()
                         .anyRequest().permitAll()
                 )
