@@ -93,7 +93,7 @@ public class StudentController {
     }
 
     @GetMapping("/{floor}/study-list")
-    @Operation(summary = "실별 스터디 구성원 조회", description = "실별 스터디 출석정보 구성원 조회합니다.(teacher)")
+    @Operation(summary = "층별 스터디 구성원 조회", description = "층별 스터디 출석정보 구성원 조회합니다.(teacher)")
     public ResponseData<List<StudyResByFloor>> studyListByFloor(
             @PathVariable("floor") Integer floor
     ){

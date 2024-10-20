@@ -1,7 +1,13 @@
 package com.beep.beep.domain.student.usecase;
 
+import com.beep.beep.domain.attendLog.domain.AttendLog;
+import com.beep.beep.domain.attendLog.domain.enums.TimeTable;
+import com.beep.beep.domain.attendLog.domain.repo.AttendLogJpaRepo;
+import com.beep.beep.domain.attendLog.service.AttendLogService;
 import com.beep.beep.domain.room.domain.Club;
+import com.beep.beep.domain.student.mapper.StudentMapper;
 import com.beep.beep.domain.student.presentation.dto.response.StudyResByFloor;
+import com.beep.beep.domain.student.presentation.dto.response.TodayLastLogs;
 import com.beep.beep.domain.user.domain.enums.RoomCode;
 import com.beep.beep.domain.user.presentation.dto.UserVO;
 import com.beep.beep.global.common.repository.UserSessionHolder;
@@ -23,6 +29,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import static com.beep.beep.domain.user.domain.enums.RoomCode.NOTFOUND;
@@ -34,6 +44,8 @@ public class StudentUseCase {
 
     private final UserSessionHolder userSessionHolder;
     private final UserService userService;
+    private final AttendLogService attendLogService;
+    private final StudentMapper studentMapper;
 
     @Transactional
     public Response signUp(StudentSignUpReq req) {
@@ -87,8 +99,9 @@ public class StudentUseCase {
     }
 
     public ResponseData<List<StudyRes>> studyList(Club club) {
-        RoomCode requestedRoom = RoomCode.of(club.getCode());
-        List<StudyRes> result = StudyRes.of(requestedRoom,userService.getRoomStudyList(requestedRoom));
+        RoomCode requestedRoom = RoomCode.of(club.getCode()); // 요청된 club의 실 코드 구하기
+        List<User> users = userService.getRoomStudyList(requestedRoom);
+        List<StudyRes> result = studentMapper.of(requestedRoom,users);
         return ResponseData.ok("스터디 구성원 조회 성공",result);
     }
 

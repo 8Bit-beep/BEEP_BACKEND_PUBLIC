@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalTime;
+import java.time.ZoneId;
 
 @Getter
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ public enum TimeTable {
 
     private final String value;
     public static TimeTable of(){
-        LocalTime now = LocalTime.now(); // 현재 시간 가져오기
+        LocalTime now = LocalTime.now(ZoneId.of("Asia/Seoul")); // 현재 시간 가져오기
 
         if (now.isAfter(LocalTime.of(16, 30)) && now.isBefore(LocalTime.of(17, 29))) {
             return EIGHT;

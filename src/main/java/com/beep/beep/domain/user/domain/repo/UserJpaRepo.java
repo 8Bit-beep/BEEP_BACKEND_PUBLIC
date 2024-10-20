@@ -23,4 +23,5 @@ public interface UserJpaRepo extends JpaRepository<User,String> {
 
     @Query("SELECT u FROM User u WHERE u.fixedRoom IN :rooms")
     List<User> findAllByFixedRooms(List<RoomCode> rooms);
+
 }
