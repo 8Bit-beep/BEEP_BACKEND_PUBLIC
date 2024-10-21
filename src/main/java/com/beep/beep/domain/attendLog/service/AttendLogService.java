@@ -7,11 +7,13 @@ import com.beep.beep.domain.student.presentation.dto.response.TodayLastLogs;
 import com.beep.beep.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AttendLogService {
 
@@ -23,5 +25,9 @@ public class AttendLogService {
 
     public List<TodayLastLogs> getTodayLog(User user) {
         return attendLogJpaRepo.findAllByCurrentDtAndUser(user);
+    }
+
+    public List<AttendLog> getMonthlyAttendLogs(String year, String month) {
+        return attendLogJpaRepo.findAllByMonth(year,month);
     }
 }
