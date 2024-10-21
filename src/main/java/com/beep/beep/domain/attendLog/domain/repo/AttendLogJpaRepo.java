@@ -35,9 +35,9 @@ public interface AttendLogJpaRepo extends JpaRepository<AttendLog, Long> {
     @Query("SELECT new com.beep.beep.domain.student.presentation.dto.response.TodayLastLogs(a.timeTable,a.lastUpdated,a.currentRoom) " +
             "FROM AttendLog a " +
             "JOIN a.user u " +
-            "WHERE FUNCTION('DATE', a.currentDt) = CURRENT_DATE AND " +
+            "WHERE DATE(a.currentDt) = :now AND " +
             "a.user = :user")
-    List<TodayLastLogs> findAllByCurrentDtAndUser(@Param("user") User user);
+    List<TodayLastLogs> findAllByCurrentDtAndUser(@Param("user") User user,@Param("now") LocalDate now);
 
     @Query("select a from AttendLog a "+
             "join fetch a.user u " +

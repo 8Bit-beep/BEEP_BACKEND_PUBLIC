@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -24,7 +26,7 @@ public class AttendLogService {
     }
 
     public List<TodayLastLogs> getTodayLog(User user) {
-        return attendLogJpaRepo.findAllByCurrentDtAndUser(user);
+        return attendLogJpaRepo.findAllByCurrentDtAndUser(user, LocalDate.now(ZoneId.of("Asia/Seoul")));
     }
 
     public List<AttendLog> getMonthlyAttendLogs(String year, String month) {

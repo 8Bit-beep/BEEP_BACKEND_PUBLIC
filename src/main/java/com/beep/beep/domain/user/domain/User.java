@@ -18,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import static com.beep.beep.domain.user.domain.enums.RoomCode.NOTFOUND;
 
@@ -64,6 +65,6 @@ public class User {
         this.num = req.num();
         this.currentRoom = RoomCode.of("0");
         this.fixedRoom = RoomCode.of(req.club().getCode());
-        this.lastUpdated = LocalDateTime.now();
+        this.lastUpdated = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 }

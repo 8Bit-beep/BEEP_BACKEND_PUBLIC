@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -36,7 +37,7 @@ public class UserService {
     }
 
     public User updateCurrentRoom(User user) {
-        user.setLastUpdated(LocalDateTime.now());
+        user.setLastUpdated(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
         return userJpaRepo.save(user);
     }
 
