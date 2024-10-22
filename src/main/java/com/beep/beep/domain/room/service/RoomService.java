@@ -15,4 +15,8 @@ public class RoomService {
     public List<Room> roomList(Integer floor){
         return roomJpaRepo.findAllByFloor(floor);
     }
+
+    public List<Room> getRoomsByName(String keyword) {
+        return roomJpaRepo.findAllByName(keyword);
+    }
 }

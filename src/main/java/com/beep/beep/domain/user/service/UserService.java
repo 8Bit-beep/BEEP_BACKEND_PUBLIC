@@ -56,4 +56,8 @@ public class UserService {
     public List<User> getStudyListByFloor(List<RoomCode> rooms) {
         return userJpaRepo.findAllByFixedRooms(rooms);
     }
+
+    public List<User> getStudentByName(String keyword) {
+        return userJpaRepo.findAllByName(keyword);
+    }
 }

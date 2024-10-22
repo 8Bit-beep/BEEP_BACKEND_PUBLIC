@@ -5,6 +5,7 @@ import com.beep.beep.domain.student.presentation.dto.request.AttendReq;
 import com.beep.beep.domain.student.presentation.dto.request.StudentSignUpReq;
 import com.beep.beep.domain.student.presentation.dto.response.AttendListRes;
 import com.beep.beep.domain.student.presentation.dto.response.AttendRes;
+import com.beep.beep.domain.student.presentation.dto.response.GetStudentOrRoomRes;
 import com.beep.beep.domain.student.presentation.dto.response.MemberListRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentCodeRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudentInfoRes;
@@ -98,6 +99,14 @@ public class StudentController {
             @PathVariable("floor") Integer floor
     ){
         return studentUseCase.studyListByFloor(floor);
+    }
+
+    @GetMapping("")
+    @Operation(summary = "학생과 실 조회", description = "검색어를 받아 학생과 실을 검색합니다.(teacher)")
+    public ResponseData<GetStudentOrRoomRes> getStudentOrRoom(
+            @RequestParam String keyword
+    ){
+        return studentUseCase.getStudentOrRoom(keyword);
     }
 
 }

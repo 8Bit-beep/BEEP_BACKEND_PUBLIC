@@ -24,4 +24,9 @@ public interface UserJpaRepo extends JpaRepository<User,String> {
     @Query("SELECT u FROM User u WHERE u.fixedRoom IN :rooms")
     List<User> findAllByFixedRooms(List<RoomCode> rooms);
 
+
+    @Query(value = "SELECT * FROM tb_user u " +
+            "WHERE REPLACE(u.name, ' ', '') LIKE CONCAT('%', REPLACE(:keyword, ' ', ''), '%') " +
+            "AND u.authority = 'STUDENT'", nativeQuery = true)
+    List<User> findAllByName(@Param("keyword") String keyword);
 }
