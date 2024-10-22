@@ -80,6 +80,8 @@ JMETER로 tps 체크
 
 header사용법 - https://m.blog.naver.com/pcmola/221980258911
 
+json - https://velog.io/@rkfksh/JMeter-%EB%AC%B4%EC%9E%91%EC%A0%95-%EB%94%B0%EB%9D%BC%ED%95%B4%EB%B3%B4%EA%B8%B0Windows
+
 (나중에 할것)
 
 비동기처리
