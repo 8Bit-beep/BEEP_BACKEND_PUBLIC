@@ -76,7 +76,9 @@ https://ooeunz.tistory.com/21
 https://velog.io/@joonghyun/Springboot-%EA%B2%80%EC%83%89-%EA%B8%B0%EB%8A%A5-%EA%B0%9C%EC%84%A0%ED%95%98%EA%B8%B01-%EB%9D%84%EC%96%B4%EC%93%B0%EA%B8%B0-%EC%97%86%EB%8A%94-%EB%AC%B8%EC%9E%90%EC%97%B4%EB%A1%9C-%EA%B2%80%EC%83%89%ED%96%88%EC%9D%84-%EB%95%8C-%EA%B2%B0%EA%B3%BC-%EB%B0%98%ED%99%98%ED%95%98%EA%B8%B0
 
 JMETER로 tps 체크
-https://junuuu.tistory.com/901
+설치 - https://junuuu.tistory.com/901
+
+header사용법 - https://m.blog.naver.com/pcmola/221980258911
 
 (나중에 할것)
 
