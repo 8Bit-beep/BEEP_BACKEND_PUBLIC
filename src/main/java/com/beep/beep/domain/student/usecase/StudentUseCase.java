@@ -1,7 +1,12 @@
 package com.beep.beep.domain.student.usecase;
 
+import com.beep.beep.domain.attendLog.service.AttendLogService;
 import com.beep.beep.domain.room.domain.Club;
-import com.beep.beep.domain.student.presentation.dto.response.StudyListRes;
+import com.beep.beep.domain.room.presentation.dto.RoomRes;
+import com.beep.beep.domain.room.service.RoomService;
+import com.beep.beep.domain.student.mapper.StudentMapper;
+import com.beep.beep.domain.student.presentation.dto.response.GetStudentOrRoomRes;
+import com.beep.beep.domain.student.presentation.dto.response.StudyResByFloor;
 import com.beep.beep.domain.user.domain.enums.RoomCode;
 import com.beep.beep.domain.user.presentation.dto.UserVO;
 import com.beep.beep.global.common.repository.UserSessionHolder;
@@ -34,6 +39,8 @@ public class StudentUseCase {
 
     private final UserSessionHolder userSessionHolder;
     private final UserService userService;
+    private final StudentMapper studentMapper;
+    private final RoomService roomService;
 
     @Transactional
     public Response signUp(StudentSignUpReq req) {
@@ -86,10 +93,24 @@ public class StudentUseCase {
         return ResponseData.ok("반 구성원 조회 성공",result);
     }
 
-    public ResponseData<StudyListRes> studyList(Club club) {
-        RoomCode requestedRoom = RoomCode.of(club.getCode());
-        List<StudyRes> studyList = StudyRes.of(userService.getRoomStudyList(requestedRoom));
-        StudyListRes result = new StudyListRes(requestedRoom, studyList);
+    public ResponseData<List<StudyRes>> studyList(Club club) {
+        RoomCode requestedRoom = RoomCode.of(club.getCode()); // 요청된 club의 실 코드 구하기
+        List<User> users = userService.getRoomStudyList(requestedRoom);
+        List<StudyRes> result = studentMapper.ofStudyRes(requestedRoom,users);
         return ResponseData.ok("스터디 구성원 조회 성공",result);
+    }
+
+    public ResponseData<List<StudyResByFloor>> studyListByFloor(Integer floor) {
+        List<RoomCode> roomsOnFloor = RoomCode.findByFloor(floor); // n층에 있는 모든 방을 조회
+        List<User> users = userService.getStudyListByFloor(roomsOnFloor);
+        List<StudyResByFloor> result = studentMapper.ofStudyResByFloor(users);
+        return ResponseData.ok("층별 스터디 리스트 조회 성공",result);
+    }
+
+    public ResponseData<GetStudentOrRoomRes> getStudentOrRoom(String keyword) {
+        List<MemberListRes> students = MemberListRes.of(userService.getStudentByName(keyword));
+        List<RoomRes> rooms = RoomRes.of(roomService.getRoomsByName(keyword));
+        GetStudentOrRoomRes result = new GetStudentOrRoomRes(students,rooms);
+        return ResponseData.ok("검색어로 학생/실 조회 성공",result);
     }
 }
