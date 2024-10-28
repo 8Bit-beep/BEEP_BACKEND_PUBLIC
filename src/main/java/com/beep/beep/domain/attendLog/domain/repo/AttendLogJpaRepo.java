@@ -17,6 +17,12 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 public interface AttendLogJpaRepo extends JpaRepository<AttendLog, Long> {
+
+
+    /**
+     * 출석 로그 저장
+     * - 모든 유저(student권한) 테이블에 저장된 current_room을 기록
+     * */
     @Modifying
     @Query(value = "INSERT INTO tb_attend_log (fk_user_id,current_room,last_updated,current_dt,time_table) "+
             "SELECT u.email,u.current_room,u.last_updated,:current_dt,:timeTable "+
@@ -24,6 +30,10 @@ public interface AttendLogJpaRepo extends JpaRepository<AttendLog, Long> {
     @Transactional(rollbackFor = Exception.class)
     void saveAllAttendLog(@Param("current_dt") LocalDateTime current_dt, @Param("timeTable") String timeTable);
 
+    /**
+     * 출석로그 조회
+     * - 년,월,일, 교시 로 그날의 출석로그 조회
+     * */
     @Query("select a from AttendLog a "+
             "join a.user u " +
             "where year(a.currentDt) = :year and " +
@@ -32,6 +42,10 @@ public interface AttendLogJpaRepo extends JpaRepository<AttendLog, Long> {
             "a.timeTable = :timeTable")
     List<AttendLog> findAllByCurrentDt(@Param("year") String year,@Param("month") String month,@Param("date") String date,@Param("timeTable") TimeTable timeTable);
 
+    /**
+     * 오늘자 저장된 출석로그 조회
+     * @return List<TodayLastLogs> (dto를 바로 반환)
+     * */
     @Query("SELECT new com.beep.beep.domain.student.presentation.dto.response.TodayLastLogs(a.timeTable,a.lastUpdated,a.currentRoom) " +
             "FROM AttendLog a " +
             "JOIN a.user u " +
@@ -39,6 +53,9 @@ public interface AttendLogJpaRepo extends JpaRepository<AttendLog, Long> {
             "a.user = :user")
     List<TodayLastLogs> findAllByCurrentDtAndUser(@Param("user") User user,@Param("now") LocalDate now);
 
+    /**
+     * 월별 출석로그 조회
+     * */
     @Query("select a from AttendLog a "+
             "join fetch a.user u " +
             "where year(a.currentDt) = :year and " +

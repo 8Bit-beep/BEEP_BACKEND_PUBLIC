@@ -10,6 +10,10 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
+/**
+ * study로 출석조회 응답 dto
+ * */
 @Builder
 public record StudyRes(
         RoomCode roomName,

@@ -44,9 +44,9 @@ public class StudentUseCase {
 
     @Transactional
     public Response signUp(StudentSignUpReq req) {
-        User user = userService.findByEmail(req.email());
-        user.saveStudentInfo(req);
-        userService.save(user);
+        User user = userService.findByEmail(req.email()); // 유저 찾기
+        user.saveStudentInfo(req); // entity 정보 수정
+        userService.save(user); // 저장
         return Response.created("학생 기본정보 저장 성공");
     }
 
@@ -64,9 +64,9 @@ public class StudentUseCase {
 
     @Transactional
     public ResponseData<AttendRes> attend(AttendReq req) {
-        User user = userSessionHolder.getUser().toUserEntity();
-        RoomCode currentRoomCode = user.getCurrentRoom();
-        RoomCode roomCodeToUpdate = RoomCode.of(req.code());
+        User user = userSessionHolder.getUser().toUserEntity(); // 유저 받기
+        RoomCode currentRoomCode = user.getCurrentRoom(); // 현재 출석한 실
+        RoomCode roomCodeToUpdate = RoomCode.of(req.code()); // 저장할 코드
 
         if (currentRoomCode.equals(NOTFOUND)) { // 입실 처리
             user.setCurrentRoom(roomCodeToUpdate);
@@ -76,23 +76,26 @@ public class StudentUseCase {
             throw NotAllowedExitException.EXCEPTION;
         }
 
-        User updatedUser = userService.updateCurrentRoom(user);
-        AttendRes result = AttendRes.of(updatedUser.getCurrentRoom());
+        User updatedUser = userService.updateCurrentRoom(user); // 실 업데이트
+        AttendRes result = AttendRes.of(updatedUser.getCurrentRoom()); // 저장된 코드 반환
 
         return ResponseData.ok("출석 성공", result);
     }
 
+    // 실별 조회
     public ResponseData<List<AttendListRes>> attendList(String code) {
         RoomCode requestedRoom = RoomCode.of(code);
         List<AttendListRes> result = AttendListRes.of(userService.getRoomAttendList(requestedRoom));
         return ResponseData.ok("출석부 조회 성공",result);
     }
 
+    // 반별 조회
     public ResponseData<List<MemberListRes>> memberList(Integer grade,Integer cls) {
         List<MemberListRes> result = MemberListRes.of(userService.getClassMemberList(grade,cls));
         return ResponseData.ok("반 구성원 조회 성공",result);
     }
 
+    // 스터디별 조회
     public ResponseData<List<StudyRes>> studyList(Club club) {
         RoomCode requestedRoom = RoomCode.of(club.getCode()); // 요청된 club의 실 코드 구하기
         List<User> users = userService.getRoomStudyList(requestedRoom);
@@ -100,6 +103,7 @@ public class StudentUseCase {
         return ResponseData.ok("스터디 구성원 조회 성공",result);
     }
 
+    // 층별 조회
     public ResponseData<List<StudyResByFloor>> studyListByFloor(Integer floor) {
         List<RoomCode> roomsOnFloor = RoomCode.findByFloor(floor); // n층에 있는 모든 방을 조회
         List<User> users = userService.getStudyListByFloor(roomsOnFloor);
@@ -107,6 +111,7 @@ public class StudentUseCase {
         return ResponseData.ok("층별 스터디 리스트 조회 성공",result);
     }
 
+    // 학생이름/실이름 조회
     public ResponseData<GetStudentOrRoomRes> getStudentOrRoom(String keyword) {
         List<MemberListRes> students = MemberListRes.of(userService.getStudentByName(keyword));
         List<RoomRes> rooms = RoomRes.of(roomService.getRoomsByName(keyword));

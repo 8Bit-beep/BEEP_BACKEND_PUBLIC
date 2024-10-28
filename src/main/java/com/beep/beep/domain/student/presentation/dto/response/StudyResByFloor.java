@@ -9,6 +9,9 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * 층별 모든 출석리스트 응답 dto
+ * */
 public record StudyResByFloor(
         String name,
         Integer grade,

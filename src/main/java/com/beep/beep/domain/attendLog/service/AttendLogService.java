@@ -25,6 +25,9 @@ public class AttendLogService {
         return attendLogJpaRepo.findAllByCurrentDt(year,month,date,timeTable);
     }
 
+    /**
+     * 오늘 저장된 출석로그 리스트 조회
+     * */
     public List<TodayLastLogs> getTodayLog(User user) {
         return attendLogJpaRepo.findAllByCurrentDtAndUser(user, LocalDate.now(ZoneId.of("Asia/Seoul")));
     }
