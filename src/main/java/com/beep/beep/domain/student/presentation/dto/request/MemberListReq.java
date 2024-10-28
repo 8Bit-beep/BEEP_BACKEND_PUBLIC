@@ -1,4 +1,10 @@
 package com.beep.beep.domain.student.presentation.dto.request;
 
-public record MemberListReq(Integer grade,Integer cls) {
+/**
+ * 반별 조회 요청 dto
+ * */
+public record MemberListReq(
+        Integer grade,
+        Integer cls
+) {
 }

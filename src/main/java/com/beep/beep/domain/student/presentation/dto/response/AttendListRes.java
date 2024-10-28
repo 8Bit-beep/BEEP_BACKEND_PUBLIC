@@ -6,7 +6,19 @@ import com.beep.beep.domain.user.domain.enums.RoomCode;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record AttendListRes(String name, Integer grade, Integer cls, Integer num, RoomCode fixedRoom, boolean isExist, LocalDateTime modifiedDate) {
+
+/**
+ * 실이름으로 출석부 조회 응답 dto
+ * */
+public record AttendListRes(
+        String name,
+        Integer grade,
+        Integer cls,
+        Integer num,
+        RoomCode fixedRoom,
+        boolean isExist,
+        LocalDateTime modifiedDate) {
+
     public static List<AttendListRes> of(List<User> users) {
         return users.parallelStream()
                 .map(AttendListRes::of)

@@ -6,6 +6,10 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalTime;
 import java.time.ZoneId;
 
+
+/**
+ * 교시 enum(EIGHT,NINE,TEN,ELEVEN,ETC)
+ * */
 @Getter
 @RequiredArgsConstructor
 public enum TimeTable {

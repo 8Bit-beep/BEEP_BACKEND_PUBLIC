@@ -7,7 +7,16 @@ import com.beep.beep.domain.user.domain.enums.RoomCode;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record MemberListRes(String name, Integer num, RoomCode currentRoom, String floor, LocalDateTime modifiedDate) {
+/**
+ * 반별 조회 응답 dto
+ * */
+public record MemberListRes(
+        String name,
+        Integer num,
+        RoomCode currentRoom,
+        String floor,
+        LocalDateTime modifiedDate) {
+
     public static List<MemberListRes> of(List<User> users) {
         return users.parallelStream()
                 .map(MemberListRes::of)

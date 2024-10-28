@@ -18,6 +18,7 @@ public class RoomController {
 
     private final RoomUseCase roomUseCase;
 
+
     @GetMapping("/{floor}")
     public ResponseData<List<RoomRes>> roomList(
             @PathVariable("floor") Integer floor

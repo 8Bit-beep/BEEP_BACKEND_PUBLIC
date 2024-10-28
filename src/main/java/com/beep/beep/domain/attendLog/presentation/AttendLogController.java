@@ -1,6 +1,6 @@
 package com.beep.beep.domain.attendLog.presentation;
 
-import com.beep.beep.domain.attendLog.presentation.dto.request.AttendListReq;
+import com.beep.beep.domain.attendLog.presentation.dto.request.AttendLogsReq;
 import com.beep.beep.domain.attendLog.presentation.dto.request.MonthlyAttendLogsReq;
 import com.beep.beep.domain.attendLog.presentation.dto.response.AttendLogRes;
 import com.beep.beep.domain.attendLog.presentation.dto.response.MonthlyAttendLogsRes;
@@ -25,7 +25,7 @@ public class AttendLogController {
     @GetMapping("")
     @Operation(summary = "출석 기록 조회", description = "춣석 기록을 조회합니다. (teacher)")
     public ResponseData<List<AttendLogRes>> attendLogList(
-            @ModelAttribute AttendListReq req
+            @ModelAttribute AttendLogsReq req
     ) {
         return attendLogUseCase.getAttendLogs(req);
     }

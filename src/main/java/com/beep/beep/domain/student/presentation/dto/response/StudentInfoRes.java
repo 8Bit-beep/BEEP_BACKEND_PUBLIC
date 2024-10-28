@@ -3,6 +3,10 @@ package com.beep.beep.domain.student.presentation.dto.response;
 import com.beep.beep.domain.user.presentation.dto.UserVO;
 import lombok.Builder;
 
+
+/**
+ * 학생 정보 조회 응답 dto
+ * */
 @Builder
 public record StudentInfoRes(String email,String name,Integer grade,Integer cls,Integer num) {
     public static StudentInfoRes of(UserVO user) {

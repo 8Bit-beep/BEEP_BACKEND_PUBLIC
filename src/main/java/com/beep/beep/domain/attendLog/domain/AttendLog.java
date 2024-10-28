@@ -35,16 +35,16 @@ public class AttendLog {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private RoomCode currentRoom;
+    private RoomCode currentRoom; // 출석했던 실
 
-    private LocalDateTime lastUpdated;
+    private LocalDateTime lastUpdated; // 마지막 출석시간
 
-    private LocalDateTime currentDt;
+    private LocalDateTime currentDt; // 로그가 저장되는 시간
 
     @Enumerated(EnumType.STRING)
-    private TimeTable timeTable;
+    private TimeTable timeTable; // 현재 교시
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_user_id")
-    private User user;
+    private User user; // user (student)
 }
