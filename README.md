@@ -82,6 +82,10 @@ header사용법 - https://m.blog.naver.com/pcmola/221980258911
 
 json - https://velog.io/@rkfksh/JMeter-%EB%AC%B4%EC%9E%91%EC%A0%95-%EB%94%B0%EB%9D%BC%ED%95%B4%EB%B3%B4%EA%B8%B0Windows
 
+내도메인.한국
+
+https://freewebserver.tistory.com/entry/%EB%AC%B4%EB%A3%8C-%EB%8F%84%EB%A9%94%EC%9D%B8-%EB%A7%8C%EB%93%A4%EA%B8%B0with-%EB%82%B4%EB%8F%84%EB%A9%94%EC%9D%B8%ED%95%9C%EA%B5%AD
+
 (나중에 할것)
 
 비동기처리
