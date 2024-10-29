@@ -39,14 +39,14 @@ public class StudentController {
 
     private final StudentUseCase studentUseCase;
 
-    @PostMapping("/info")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "학생 기본정보 저장", description = "회원가입 시 학생 기본 정보를 저장합니다. (unauthenticated)")
-    public Response studentSignUp(
-            @RequestBody StudentSignUpReq req
-    ){
-        return studentUseCase.signUp(req);
-    }
+//    @PostMapping("/info")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @Operation(summary = "학생 기본정보 저장", description = "회원가입 시 학생 기본 정보를 저장합니다. (unauthenticated)")
+//    public Response studentSignUp(
+//            @RequestBody StudentSignUpReq req
+//    ){
+//        return studentUseCase.signUp(req);
+//    }
 
     @GetMapping("/info")
     @Operation(summary = "학생프로필 조회", description = "학생프로필 조회입니다 (student)")

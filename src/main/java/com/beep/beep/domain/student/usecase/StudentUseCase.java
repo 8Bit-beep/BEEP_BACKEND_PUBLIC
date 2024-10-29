@@ -42,13 +42,13 @@ public class StudentUseCase {
     private final StudentMapper studentMapper;
     private final RoomService roomService;
 
-    @Transactional
-    public Response signUp(StudentSignUpReq req) {
-        User user = userService.findByEmail(req.email()); // 유저 찾기
-        user.saveStudentInfo(req); // entity 정보 수정
-        userService.save(user); // 저장
-        return Response.created("학생 기본정보 저장 성공");
-    }
+//    @Transactional
+//    public Response signUp(StudentSignUpReq req) {
+//        User user = userService.findByEmail(req.email()); // 유저 찾기
+//        user.saveStudentInfo(req); // entity 정보 수정
+//        userService.save(user); // 저장
+//        return Response.created("학생 기본정보 저장 성공");
+//    }
 
     public ResponseData<StudentInfoRes> studentInfo() {
         UserVO user = userSessionHolder.getUser();
