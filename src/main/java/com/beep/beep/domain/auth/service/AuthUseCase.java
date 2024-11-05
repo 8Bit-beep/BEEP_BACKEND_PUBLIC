@@ -22,6 +22,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.beep.beep.domain.user.domain.enums.UserType.STUDENT;
+import static com.beep.beep.domain.user.domain.enums.UserType.TEACHER;
+
 @Service
 @RequiredArgsConstructor
 public class AuthUseCase {
@@ -35,7 +38,12 @@ public class AuthUseCase {
     public Response signUp(SignUpReq req){
         userService.existsByEmail(req.email());
 
-        userService.save(req.toUserEntity(encoder.encode(req.password())));
+        if(req.authority() == TEACHER) {
+            userService.save(req.toTeacher(encoder.encode(req.password())));
+        }else if(req.authority() == STUDENT) {
+            userService.save(req.toStudent(encoder.encode(req.password())));
+        }
+
         return Response.created("회원가입 성공");
     }
 
