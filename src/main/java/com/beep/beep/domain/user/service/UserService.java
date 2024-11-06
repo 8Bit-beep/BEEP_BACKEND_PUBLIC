@@ -60,4 +60,9 @@ public class UserService {
     public List<User> getStudentByName(String keyword) {
         return userJpaRepo.findAllByName(keyword);
     }
+
+    public User findByStudentIdAndName(Integer grade, Integer cls, Integer num, String name) {
+        return userJpaRepo.findByGradeAndClsAndNumAndName(grade,cls,num,name)
+                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
+    }
 }
