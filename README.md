@@ -107,4 +107,12 @@ https://mangkyu.tistory.com/182
 
 https://www.youtube.com/watch?v=L3y3xk56SI8&list=PL8RgHPKtjlBjssE4aKLmdpup6AyrW9DE-
 
+jpa 심화
+
+https://mountain-noroo.tistory.com/196
+
+(1) - https://velog.io/@mobz/240619-JPA-%EC%8B%AC%ED%99%94-%EB%A7%88%EC%A7%80%EB%A7%89-%ED%95%99%EC%8A%B5-%EC%B1%95%ED%84%B0
+
+(2) - https://velog.io/@mobz/240619-JPA-%EC%8B%AC%ED%99%94-%EA%B3%B5%EB%B6%802
+
 
