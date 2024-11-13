@@ -7,12 +7,14 @@ import com.beep.beep.domain.schedule.presentation.dto.response.ScheduleRes;
 import com.beep.beep.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class ScheduleService {
 
     private final ScheduleJpaRepo scheduleJpaRepo;

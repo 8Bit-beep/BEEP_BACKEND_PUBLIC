@@ -50,7 +50,8 @@ public interface AttendLogJpaRepo extends JpaRepository<AttendLog, Long> {
             "FROM AttendLog a " +
             "JOIN a.user u " +
             "WHERE DATE(a.currentDt) = :now AND " +
-            "a.user = :user")
+            "a.user = :user AND " +
+            "a.timeTable != 'ETC'")
     List<TodayLastLogs> findAllByCurrentDtAndUser(@Param("user") User user,@Param("now") LocalDate now);
 
     /**
