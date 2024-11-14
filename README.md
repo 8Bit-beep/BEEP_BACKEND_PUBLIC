@@ -88,6 +88,8 @@ https://freewebserver.tistory.com/entry/%EB%AC%B4%EB%A3%8C-%EB%8F%84%EB%A9%94%EC
 
 (나중에 할것)
 
+CI/CD를 main에 적용X 
+
 비동기처리
 
 jpa - https://freedeveloper.tistory.com/139
