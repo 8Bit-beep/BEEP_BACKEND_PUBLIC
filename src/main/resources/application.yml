@@ -39,7 +39,7 @@ spring:
 
 application:
   jwt:
-    refresh-exp: 2592000000 #30일
+    refresh-exp: 2592000000 #30일 // 나중에 3일로 바꾸기
     access-exp: 86400000 # 24시간
     prefix: Bearer
     header: Authorization

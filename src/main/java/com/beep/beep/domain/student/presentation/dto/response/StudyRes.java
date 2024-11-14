@@ -1,11 +1,10 @@
 package com.beep.beep.domain.student.presentation.dto.response;
 
 import com.beep.beep.domain.attendLog.domain.enums.TimeTable;
-import com.beep.beep.domain.attendLog.domain.repo.AttendLogJpaRepo;
+import com.beep.beep.domain.schedule.presentation.dto.response.ScheduleRes;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.RoomCode;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,8 +24,9 @@ public record StudyRes(
         Integer cls,
         Integer num,
         boolean isExist,
-        LocalDateTime modifiedDate) {
-    public static StudyRes of(RoomCode requestedRoom, List<TodayLastLogs> todayLastLogs, User user) {
+        LocalDateTime modifiedDate,
+        ScheduleRes schedule) {
+    public static StudyRes of(RoomCode requestedRoom, List<TodayLastLogs> todayLastLogs, User user, ScheduleRes schedule) {
         return StudyRes.builder()
                 .roomName(requestedRoom)
                 .todayLastLogs(todayLastLogs)
@@ -37,6 +37,7 @@ public record StudyRes(
                 .cls(user.getCls())
                 .num(user.getNum())
                 .isExist(user.getFixedRoom().equals(user.getCurrentRoom()))
-                .modifiedDate(user.getLastUpdated()).build();
+                .modifiedDate(user.getLastUpdated())
+                .schedule(schedule).build();
     }
 }

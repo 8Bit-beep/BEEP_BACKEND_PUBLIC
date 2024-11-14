@@ -40,3 +40,6 @@ src/main/resources/application-local.yml
 
 src/main/java/com/beep/beep/keep/*
 
+src/main/resources/templates
+
+src/main/java/com/beep/beep/domain/TestController.java

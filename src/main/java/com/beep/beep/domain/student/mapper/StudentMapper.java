@@ -1,6 +1,9 @@
 package com.beep.beep.domain.student.mapper;
 
+import com.beep.beep.domain.attendLog.domain.enums.TimeTable;
 import com.beep.beep.domain.attendLog.service.AttendLogService;
+import com.beep.beep.domain.schedule.presentation.dto.response.ScheduleRes;
+import com.beep.beep.domain.schedule.service.ScheduleService;
 import com.beep.beep.domain.student.presentation.dto.response.StudyRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudyResByFloor;
 import com.beep.beep.domain.student.presentation.dto.response.TodayLastLogs;
@@ -11,11 +14,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static com.beep.beep.domain.user.domain.enums.RoomCode.NOTFOUND;
+
 @Component
 @RequiredArgsConstructor
 public class StudentMapper {
 
     private final AttendLogService attendLogService;
+    private final ScheduleService scheduleService;
 
     // record로 저거 구현할 생각에 아찔해진 본인은 일부 mapper 를 도입하게됨.
 
@@ -27,7 +33,12 @@ public class StudentMapper {
         return users.parallelStream()
                 .map(user -> {
                     List<TodayLastLogs> todayLastLogs = attendLogService.getTodayLog(user); // 오늘 저장된 user의 출석로그 조회
-                    return StudyResByFloor.of(todayLastLogs,user);  // res로 변환
+                    ScheduleRes schedule = null;
+                    if(user.getCurrentRoom() == NOTFOUND) {
+                        schedule = scheduleService.getCurrentSchedule(user, TimeTable.of());
+                    }
+                    StudyResByFloor res = StudyResByFloor.of(todayLastLogs,user,schedule);  // res로 변환
+                    return res;
                 })
                 .toList();
     }
@@ -40,7 +51,12 @@ public class StudentMapper {
         return users.parallelStream()
                 .map(user -> {
                     List<TodayLastLogs> todayLastLogs = attendLogService.getTodayLog(user); // 오늘 저장된 user의 출석로그 조회
-                    return StudyRes.of(requestedRoom,todayLastLogs,user); // res로 변환
+                    ScheduleRes schedule = null;
+                    if(user.getCurrentRoom() == NOTFOUND) {
+                        schedule = scheduleService.getCurrentSchedule(user, TimeTable.of());
+                    }
+                    StudyResByFloor res = StudyResByFloor.of(todayLastLogs,user,schedule);  // res로 변환
+                    return StudyRes.of(requestedRoom,todayLastLogs,user,schedule); // res로 변환
                 })
                 .toList();
     }

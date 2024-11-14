@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserJpaRepo extends JpaRepository<User,String> {
     List<User> findAllByCurrentRoom(RoomCode code);
@@ -29,4 +30,6 @@ public interface UserJpaRepo extends JpaRepository<User,String> {
             "WHERE REPLACE(u.name, ' ', '') LIKE CONCAT('%', REPLACE(:keyword, ' ', ''), '%') " +
             "AND u.authority = 'STUDENT'", nativeQuery = true)
     List<User> findAllByName(@Param("keyword") String keyword);
+
+    Optional<User> findByGradeAndClsAndNumAndName(Integer grade, Integer cls, Integer num, String name);
 }

@@ -2,9 +2,12 @@ package com.beep.beep.domain.student.presentation.dto.response;
 
 import com.beep.beep.domain.attendLog.domain.enums.TimeTable;
 import com.beep.beep.domain.room.domain.Club;
+import com.beep.beep.domain.schedule.domain.Schedule;
+import com.beep.beep.domain.schedule.presentation.dto.response.ScheduleRes;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.RoomCode;
 import lombok.Builder;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,9 +26,10 @@ public record StudyResByFloor(
         TimeTable currentPeriod,
         RoomCode fixedRoom,
         boolean isExist,
-        Club club) {
+        Club club,
+        ScheduleRes schedule) {
 
-    public static StudyResByFloor of(List<TodayLastLogs> todayLastLogs,User user) {
+    public static StudyResByFloor of(List<TodayLastLogs> todayLastLogs,User user,ScheduleRes schedule) {
         return new StudyResByFloor(
                 user.getName(),
                 user.getGrade(),
@@ -37,7 +41,9 @@ public record StudyResByFloor(
                 TimeTable.of(),
                 user.getFixedRoom(),
                 user.getFixedRoom().equals(user.getCurrentRoom()),
-                Club.of(user.getFixedRoom().getCode())
+                Club.of(user.getFixedRoom().getCode()),
+                schedule
         );
     }
+
 }
