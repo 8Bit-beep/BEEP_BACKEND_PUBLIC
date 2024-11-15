@@ -46,9 +46,10 @@ public interface AttendLogJpaRepo extends JpaRepository<AttendLog, Long> {
      * 오늘자 저장된 출석로그 조회
      * @return List<TodayLastLogs> (dto를 바로 반환)
      * */
-    @Query("SELECT new com.beep.beep.domain.student.presentation.dto.response.TodayLastLogs(a.timeTable,a.lastUpdated,a.currentRoom) " +
+    @Query("SELECT new com.beep.beep.domain.student.presentation.dto.response.TodayLastLogs(a.timeTable, " +
+            "CASE WHEN a.currentRoom = 'NOTFOUND' THEN null ELSE a.lastUpdated END, " +
+            "a.currentRoom) " +
             "FROM AttendLog a " +
-            "JOIN a.user u " +
             "WHERE DATE(a.currentDt) = :now AND " +
             "a.user = :user AND " +
             "a.timeTable != 'ETC'")
