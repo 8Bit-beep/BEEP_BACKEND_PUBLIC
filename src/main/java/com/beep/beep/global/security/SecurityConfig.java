@@ -57,6 +57,7 @@ public class SecurityConfig {
                         .requestMatchers("/student/attend-list","/student/member-list","/student/study-list","/student/{floor}/study-list").hasAuthority(TEACHER.getAuthority())
                         .requestMatchers(DELETE,"/user").authenticated()
                         .requestMatchers("/schedules/**").hasAuthority(TEACHER.getAuthority())
+                        .requestMatchers("/student/{floor}/study").hasAuthority(TEACHER.getAuthority())
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

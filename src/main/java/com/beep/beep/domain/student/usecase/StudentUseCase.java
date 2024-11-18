@@ -7,6 +7,7 @@ import com.beep.beep.domain.room.service.RoomService;
 import com.beep.beep.domain.student.mapper.StudentMapper;
 import com.beep.beep.domain.student.presentation.dto.response.GetStudentOrRoomRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudyResByFloor;
+import com.beep.beep.domain.student.presentation.dto.response.SummarizeStudiesRes;
 import com.beep.beep.domain.user.domain.enums.RoomCode;
 import com.beep.beep.domain.user.presentation.dto.UserVO;
 import com.beep.beep.global.common.repository.UserSessionHolder;
@@ -117,5 +118,11 @@ public class StudentUseCase {
         List<RoomRes> rooms = RoomRes.of(roomService.getRoomsByName(keyword));
         GetStudentOrRoomRes result = new GetStudentOrRoomRes(students,rooms);
         return ResponseData.ok("검색어로 학생/실 조회 성공",result);
+    }
+
+    public ResponseData<List<SummarizeStudiesRes>> summarizeStudies(Integer floor) {
+        List<Club> studiesOnFloor = Club.findByFloor(floor); // n층에 있는 모든 스터디를 조회
+        List<SummarizeStudiesRes> result = studentMapper.ofSummarizeStudiesRes(studiesOnFloor); // 각 스터디의 summarizedStudyInfo
+        return ResponseData.ok("스터디 미리보기 리스트 조회 성공",result);
     }
 }
