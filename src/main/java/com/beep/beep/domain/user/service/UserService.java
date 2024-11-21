@@ -1,5 +1,6 @@
 package com.beep.beep.domain.user.service;
 
+import com.beep.beep.domain.email.exception.EmailAlreadyExistsException;
 import com.beep.beep.domain.student.presentation.dto.response.SummarizeStudiesRes;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.RoomCode;
@@ -30,7 +31,7 @@ public class UserService {
 
     public void existsByEmail(String email) {
         if(userJpaRepo.existsById(email))
-            throw UserAlreadyExistsException.EXCEPTION;
+            throw EmailAlreadyExistsException.EXCEPTION;
     }
 
     public void save(User user) {

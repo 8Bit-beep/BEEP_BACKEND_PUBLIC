@@ -39,8 +39,10 @@ spring:
 
 application:
   jwt:
-    refresh-exp: 2592000000 #30일 // 나중에 3일로 바꾸기
-    access-exp: 86400000 # 24시간
+#    refresh-exp: 2592000000 #30일 // 나중에 3일로 바꾸기
+    refresh-exp: 60000 # 1분
+#    access-exp: 86400000 # 24시간
+    access-exp: 30000 # 24시간
     prefix: Bearer
     header: Authorization
     secretKey: 17e837880e3be483ceb38282686c6e274c9eda3ea4ecdb62f05f93ac8bc70e5a

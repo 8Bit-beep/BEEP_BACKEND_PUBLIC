@@ -1,5 +1,6 @@
 package com.beep.beep.domain.user.domain.enums;
 
+import com.beep.beep.domain.student.exception.RoomNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -34,7 +35,7 @@ public enum RoomCode {
         return Arrays.stream(values())
                 .filter(value -> value.code.equals(code))
                 .findAny()
-                .orElse(NOTFOUND);
+                .orElseThrow(() -> RoomNotFoundException.EXCEPTION);
     }
 
     // Find RoomCodes by floor
