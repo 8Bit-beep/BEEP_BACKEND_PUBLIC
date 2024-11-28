@@ -32,4 +32,8 @@ public interface UserJpaRepo extends JpaRepository<User,String> {
     List<User> findAllByName(@Param("keyword") String keyword);
 
     Optional<User> findByGradeAndClsAndNumAndName(Integer grade, Integer cls, Integer num, String name);
+
+    Integer countByFixedRoom(RoomCode room);
+
+    Integer countByCurrentRoom(RoomCode room);
 }

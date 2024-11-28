@@ -48,7 +48,9 @@ public interface AttendLogJpaRepo extends JpaRepository<AttendLog, Long> {
      * */
     @Query("SELECT new com.beep.beep.domain.student.presentation.dto.response.TodayLastLogs(a.timeTable, " +
             "CASE WHEN a.currentRoom = 'NOTFOUND' THEN null ELSE a.lastUpdated END, " +
-            "a.currentRoom) " +
+            "a.currentRoom, " +
+            "CASE WHEN a.user.fixedRoom = a.currentRoom THEN true ELSE false END," +
+            "false) " +
             "FROM AttendLog a " +
             "WHERE DATE(a.currentDt) = :now AND " +
             "a.user = :user AND " +

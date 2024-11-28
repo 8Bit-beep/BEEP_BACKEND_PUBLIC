@@ -4,6 +4,7 @@ import com.beep.beep.domain.attendLog.domain.enums.TimeTable;
 import com.beep.beep.domain.schedule.domain.Schedule;
 import com.beep.beep.domain.schedule.domain.repo.ScheduleJpaRepo;
 import com.beep.beep.domain.schedule.presentation.dto.response.ScheduleRes;
+import com.beep.beep.domain.schedule.usecase.ScheduleUseCase;
 import com.beep.beep.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,13 @@ public class ScheduleService {
 
     public ScheduleRes getCurrentSchedule(User user, TimeTable timeTable) {
         return scheduleJpaRepo.findByUserAndTimeTable(user,timeTable);
+    }
+
+    public void deleteAll() {
+        scheduleJpaRepo.deleteAll();
+    }
+
+    public List<Schedule> findAll() {
+        return scheduleJpaRepo.findAll();
     }
 }

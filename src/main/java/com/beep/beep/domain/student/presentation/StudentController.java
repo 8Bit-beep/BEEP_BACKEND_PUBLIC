@@ -12,6 +12,7 @@ import com.beep.beep.domain.student.presentation.dto.response.StudentInfoRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudyListRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudyRes;
 import com.beep.beep.domain.student.presentation.dto.response.StudyResByFloor;
+import com.beep.beep.domain.student.presentation.dto.response.SummarizeStudiesRes;
 import com.beep.beep.domain.student.usecase.StudentUseCase;
 import com.beep.beep.global.common.dto.response.Response;
 import com.beep.beep.global.common.dto.response.ResponseData;
@@ -99,6 +100,14 @@ public class StudentController {
             @PathVariable("floor") Integer floor
     ){
         return studentUseCase.studyListByFloor(floor);
+    }
+
+    @GetMapping("/{floor}/study")
+    @Operation(summary = "스터디 미리보기 리스트", description = "스터디 미리보기 리스트를 조회합니다.(teacher)")
+    public ResponseData<List<SummarizeStudiesRes>> summarizeStudies(
+            @PathVariable("floor") Integer floor
+    ){
+        return studentUseCase.summarizeStudies(floor);
     }
 
     @GetMapping("")

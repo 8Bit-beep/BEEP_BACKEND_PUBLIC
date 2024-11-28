@@ -1,5 +1,7 @@
 package com.beep.beep.domain.user.service;
 
+import com.beep.beep.domain.email.exception.EmailAlreadyExistsException;
+import com.beep.beep.domain.student.presentation.dto.response.SummarizeStudiesRes;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.RoomCode;
 import com.beep.beep.domain.user.domain.repo.UserJpaRepo;
@@ -29,7 +31,7 @@ public class UserService {
 
     public void existsByEmail(String email) {
         if(userJpaRepo.existsById(email))
-            throw UserAlreadyExistsException.EXCEPTION;
+            throw EmailAlreadyExistsException.EXCEPTION;
     }
 
     public void save(User user) {
@@ -64,5 +66,13 @@ public class UserService {
     public User findByStudentIdAndName(Integer grade, Integer cls, Integer num, String name) {
         return userJpaRepo.findByGradeAndClsAndNumAndName(grade,cls,num,name)
                 .orElseThrow(() -> UserNotFoundException.EXCEPTION);
+    }
+
+    public Integer countFixedRoom(RoomCode room) {
+        return userJpaRepo.countByFixedRoom(room);
+    }
+
+    public Integer countCurrentRoom(RoomCode room) {
+        return userJpaRepo.countByCurrentRoom(room);
     }
 }
