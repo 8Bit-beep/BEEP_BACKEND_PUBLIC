@@ -6,7 +6,9 @@ import com.beep.beep.global.common.dto.response.Response;
 import com.beep.beep.global.common.dto.response.ResponseData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +41,12 @@ public class ScheduleController {
             @RequestParam DayOfWeek dayOfWeek
     ){
         return scheduleUseCase.getTodaySchedules(dayOfWeek);
+    }
+
+    @GetMapping("/excel")
+    @Operation(summary = "엑셀 파일 다운로드", description = "엑셀 다운로드 (teacher)")
+    public void getScheduleExcel(HttpServletResponse response){
+        scheduleUseCase.getScheduleExcel(response);
     }
 
 }
