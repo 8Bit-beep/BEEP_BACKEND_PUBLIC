@@ -42,6 +42,8 @@ public class StudentMapper {
                     if(user.getCurrentRoom() == NOTFOUND) {
                         schedule = scheduleService.getCurrentSchedule(user, TimeTable.of());
                     }
+                    System.out.println("entered");
+                    todayLastLogs.add(TodayLastLogs.of(user,user.getFixedRoom()));
                     StudyResByFloor res = StudyResByFloor.of(todayLastLogs,user,schedule);  // res로 변환
                     return res;
                 })
@@ -60,7 +62,7 @@ public class StudentMapper {
                     if(user.getCurrentRoom() == NOTFOUND) {
                         schedule = scheduleService.getCurrentSchedule(user, TimeTable.of());
                     }
-                    StudyResByFloor res = StudyResByFloor.of(todayLastLogs,user,schedule);  // res로 변환
+                    todayLastLogs.add(TodayLastLogs.of(user,requestedRoom));
                     return StudyRes.of(requestedRoom,todayLastLogs,user,schedule); // res로 변환
                 })
                 .toList();

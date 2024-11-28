@@ -21,11 +21,7 @@ public record StudyResByFloor(
         Integer cls,
         Integer num,
         List<TodayLastLogs> todayLastLogs,
-        RoomCode currentRoom,
-        LocalDateTime lastUpdated,
-        TimeTable currentPeriod,
         RoomCode fixedRoom,
-        boolean isExist,
         Club club,
         ScheduleRes schedule) {
 
@@ -36,11 +32,7 @@ public record StudyResByFloor(
                 user.getCls(),
                 user.getNum(),
                 todayLastLogs,
-                user.getCurrentRoom(),
-                user.getLastUpdated(),
-                TimeTable.of(),
                 user.getFixedRoom(),
-                user.getFixedRoom().equals(user.getCurrentRoom()),
                 Club.of(user.getFixedRoom().getCode()),
                 schedule
         );
