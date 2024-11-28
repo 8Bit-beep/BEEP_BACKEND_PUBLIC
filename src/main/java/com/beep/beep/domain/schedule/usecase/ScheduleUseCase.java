@@ -98,8 +98,6 @@ public class ScheduleUseCase {
         headerRow.createCell(6).setCellValue("요일");
         headerRow.createCell(7).setCellValue("교시");
 
-        System.out.println("entered");
-
         for(Schedule schedule : schedules){
             Row row = sheet.createRow(rowNo++);
             row.createCell(0).setCellValue(schedule.getUser().getGrade());
