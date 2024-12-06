@@ -23,11 +23,11 @@ public class BatchScheduler {
         runJob("00:00 자정",true); // 초기화
     }
 
-    // 오후 5시 25분 (17:25)
-    @Scheduled(cron = "0 25 17 * * ?")
-    public void runCreateRepeatScheduleAt520PM() {
-        runJob("17:25 오후 5시 25분",false);
-    }
+//    // 오후 5시 25분 (17:25)
+//    @Scheduled(cron = "0 25 17 * * ?")
+//    public void runCreateRepeatScheduleAt520PM() {
+//        runJob("17:25 오후 5시 25분",false);
+//    }
 
     // 오후 6시 20분 (18:20)
     @Scheduled(cron = "0 20 18 * * ?")
