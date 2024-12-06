@@ -17,6 +17,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Ensure resources directory exists
+        run: mkdir -p ./src/main/resources
+
+      - name: make application.yml
+        run: |
+            cd ./src/main/resources
+            touch ./application.yml
+            echo "${{ secrets.APPLICATION_PROD }}" > ./application.yml
+
+
       - name: set chmod
         run: chmod +x ./gradlew
 
