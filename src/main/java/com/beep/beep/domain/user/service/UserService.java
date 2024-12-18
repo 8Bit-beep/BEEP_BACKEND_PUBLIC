@@ -75,4 +75,8 @@ public class UserService {
     public Integer countCurrentRoom(RoomCode room) {
         return userJpaRepo.countByCurrentRoom(room);
     }
+
+    public boolean isStudentIdAlreadyExists(Integer grade, Integer cls, Integer num) {
+        return userJpaRepo.existsByGradeAndClsAndNum(grade,cls,num);
+    }
 }
