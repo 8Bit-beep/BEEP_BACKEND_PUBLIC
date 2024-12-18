@@ -8,6 +8,7 @@ import com.beep.beep.domain.auth.presentation.dto.response.TokenRes;
 import com.beep.beep.domain.user.domain.User;
 import com.beep.beep.domain.user.domain.enums.UserType;
 import com.beep.beep.domain.user.exception.PasswordWrongException;
+import com.beep.beep.domain.user.exception.StudentIdAlreadyExistsException;
 import com.beep.beep.domain.user.service.UserService;
 import com.beep.beep.global.common.dto.response.Response;
 import com.beep.beep.global.common.dto.response.ResponseData;
@@ -41,6 +42,9 @@ public class AuthUseCase {
         if(req.authority() == TEACHER) {
             userService.save(req.toTeacher(encoder.encode(req.password())));
         }else if(req.authority() == STUDENT) {
+            if(userService.isStudentIdAlreadyExists(req.grade(),req.cls(),req.num())){
+                throw StudentIdAlreadyExistsException.EXCEPTION;
+            }
             userService.save(req.toStudent(encoder.encode(req.password())));
         }
 

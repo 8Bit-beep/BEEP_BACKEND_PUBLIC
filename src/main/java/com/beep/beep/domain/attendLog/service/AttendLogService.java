@@ -35,4 +35,5 @@ public class AttendLogService {
     public List<AttendLog> getMonthlyAttendLogs(String year, String month) {
         return attendLogJpaRepo.findAllByMonth(year,month);
     }
+
 }

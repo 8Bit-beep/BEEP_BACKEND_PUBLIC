@@ -36,4 +36,6 @@ public interface UserJpaRepo extends JpaRepository<User,String> {
     Integer countByFixedRoom(RoomCode room);
 
     Integer countByCurrentRoom(RoomCode room);
+
+    boolean existsByGradeAndClsAndNum(Integer grade, Integer cls, Integer num);
 }
